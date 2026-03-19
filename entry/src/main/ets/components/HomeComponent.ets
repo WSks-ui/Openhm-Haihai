@@ -341,7 +341,7 @@ export struct HomeComponent {
               FlowItem() {
                 PostCardItem({ item: item })
               }
-            }, (item: Post) => `${item.id}_${this.dataVersion}`)// 结合 dataVersion 确保重新渲染
+            }, (item: Post) => item.id)
           }
           // 响应式列数优化：手机2列，中屏3列，大屏4列，超大屏4列
           .columnsTemplate((this.currentBreakpoint === 'lg' || this.currentBreakpoint === 'xl' ? "1fr 1fr 1fr 1fr" :
