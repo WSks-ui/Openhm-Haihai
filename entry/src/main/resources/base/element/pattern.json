@@ -1,0 +1,125 @@
+{
+  "pattern": [
+    {
+      "name": "app_theme_pattern",
+      "value": [
+        { "name": "primary", "value": "#7B68EE" },
+        { "name": "secondary", "value": "#9370DB" },
+        { "name": "background", "value": "#FFFFFF" },
+        { "name": "textPrimary", "value": "#333333" },
+        { "name": "textSecondary", "value": "#666666" },
+        { "name": "border", "value": "#E0E0E0" }
+      ]
+    },
+    {
+      "name": "scrollable_pattern",
+      "value": [
+        { "name": "scrollBarColor", "value": "#7B68EE" },
+        { "name": "scrollBarWidth", "value": "4" },
+        { "name": "scrollBarRadius", "value": "2" }
+      ]
+    },
+    {
+      "name": "textfield_pattern",
+      "value": [
+        { "name": "borderColor", "value": "#E0E0E0" },
+        { "name": "borderWidth", "value": "1" },
+        { "name": "borderRadius", "value": "8" },
+        { "name": "backgroundColor", "value": "#F5F5F5" },
+        { "name": "paddingLeft", "value": "16" },
+        { "name": "paddingRight", "value": "16" },
+        { "name": "paddingTop", "value": "8" },
+        { "name": "paddingBottom", "value": "8" }
+      ]
+    },
+    {
+      "name": "text_overlay_pattern",
+      "value": [
+        { "name": "backgroundColor", "value": "rgba(0,0,0,0.5)" },
+        { "name": "textColor", "value": "#FFFFFF" },
+        { "name": "paddingLeft", "value": "8" },
+        { "name": "paddingRight", "value": "8" },
+        { "name": "paddingTop", "value": "4" },
+        { "name": "paddingBottom", "value": "4" },
+        { "name": "borderRadius", "value": "4" }
+      ]
+    },
+    {
+      "name": "button_primary_pattern",
+      "value": [
+        { "name": "backgroundColor", "value": "#7B68EE" },
+        { "name": "textColor", "value": "#FFFFFF" },
+        { "name": "borderRadius", "value": "20" },
+        { "name": "height", "value": "40" },
+        { "name": "paddingLeft", "value": "24" },
+        { "name": "paddingRight", "value": "24" }
+      ]
+    },
+    {
+      "name": "button_secondary_pattern",
+      "value": [
+        { "name": "backgroundColor", "value": "#F5F5F5" },
+        { "name": "textColor", "value": "#333333" },
+        { "name": "borderRadius", "value": "20" },
+        { "name": "height", "value": "40" },
+        { "name": "paddingLeft", "value": "24" },
+        { "name": "paddingRight", "value": "24" },
+        { "name": "borderWidth", "value": "1" },
+        { "name": "borderColor", "value": "#E0E0E0" }
+      ]
+    },
+    {
+      "name": "card_pattern",
+      "value": [
+        { "name": "backgroundColor", "value": "#FFFFFF" },
+        { "name": "borderRadius", "value": "16" },
+        { "name": "shadowRadius", "value": "12" },
+        { "name": "shadowColor", "value": "rgba(0,0,0,0.08)" },
+        { "name": "shadowOffsetY", "value": "4" },
+        { "name": "padding", "value": "16" }
+      ]
+    },
+    {
+      "name": "divider_pattern",
+      "value": [
+        { "name": "color", "value": "#F0F0F0" },
+        { "name": "strokeWidth", "value": "0.5" }
+      ]
+    },
+    {
+      "name": "avatar_pattern",
+      "value": [
+        { "name": "size", "value": "40" },
+        { "name": "borderRadius", "value": "20" },
+        { "name": "borderWidth", "value": "0" },
+        { "name": "borderColor", "value": "#FFFFFF" }
+      ]
+    },
+    {
+      "name": "icon_pattern",
+      "value": [
+        { "name": "size", "value": "24" },
+        { "name": "color", "value": "#666666" },
+        { "name": "activeColor", "value": "#7B68EE" }
+      ]
+    },
+    {
+      "name": "navigation_bar_pattern",
+      "value": [
+        { "name": "backgroundColor", "value": "#FFFFFF" },
+        { "name": "borderColor", "value": "#F0F0F0" },
+        { "name": "borderWidth", "value": "0.5" },
+        { "name": "height", "value": "60" },
+        { "name": "iconSize", "value": "24" },
+        { "name": "textSize", "value": "12" }
+      ]
+    },
+    {
+      "name": "safe_area_pattern",
+      "value": [
+        { "name": "topHeight", "value": "24" },
+        { "name": "bottomHeight", "value": "34" }
+      ]
+    }
+  ]
+}
