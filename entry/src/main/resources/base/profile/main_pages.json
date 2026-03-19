@@ -1,0 +1,16 @@
+{
+  "src": [
+    "pages/LoginPage",
+    "pages/RegisterPage",
+    "pages/Index",
+    "pages/PostDetailPage",
+    "pages/discover/TopicSquarePage",
+    "pages/discover/DailyPicksPage",
+    "pages/mine/EditProfilePage",
+    "pages/SearchResultPage",
+    "pages/CreatePostPage",
+    "pages/AIChatPage",
+    "pages/SettingsPage",
+    "pages/ChatDetailPage"
+  ]
+}

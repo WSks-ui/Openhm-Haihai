@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "海海"
+    },
+    {
+      "name": "microphone_permission_reason",
+      "value": "用于语音搜索和视频聊天功能，让对方能够听到您的声音。"
+    },
+    {
+      "name": "camera_permission_reason",
+      "value": "用于视频聊天功能，让对方能够看到您。"
+    }
+  ]
+}
