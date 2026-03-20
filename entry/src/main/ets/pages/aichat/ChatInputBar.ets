@@ -21,18 +21,21 @@ export struct ChatInputBar {
   build() {
     Column() {
       Column() {
-        TextInput({ placeholder: '发送消息或按住说话', text: $$this.inputText })
+        TextInput({
+          placeholder: '发送消息或按住说话',
+          text: $$this.inputText
+        })
           .enterKeyType(EnterKeyType.Send)
           .width('100%')
           .height(48)
-          .backgroundColor(Color.Transparent)
           .placeholderColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#666' :
             '#9AA1A9')
           .fontSize(16)
           .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E0E0E0' : '#1D2129')
-          .padding({ left: 0, right: 0 })
           .margin({ bottom: 12 })
           .enabled(!this.isTyping)
+          .focusable(true)
+          .focusOnTouch(true)
           .onSubmit(() => this.onSendMessage())
 
         Row() {
@@ -83,7 +86,7 @@ export struct ChatInputBar {
       top: 8
     })
     .backgroundColor(Color.Transparent)
-    .expandSafeArea([SafeAreaType.KEYBOARD, SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.BOTTOM])
+    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.BOTTOM])
   }
 
   @Builder

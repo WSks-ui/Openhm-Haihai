@@ -195,7 +195,7 @@ struct AIChatPage {
       const context = getContext(this) as common.UIAbilityContext;
       window.getLastWindow(context).then((win) => {
         win.on('keyboardHeightChange', (height: number) => {
-          this.keyboardHeight = height;
+          this.keyboardHeight = px2vp(height);
           if (height > 0) {
             setTimeout(() => {
               this.scroller.scrollEdge(Edge.Bottom);
@@ -416,10 +416,11 @@ struct AIChatPage {
         .constraintSize({ maxWidth: 860 })
         .padding({ left: 16, right: 16, bottom: 0, top: 8 })
         .backgroundColor(Color.Transparent)
-        .expandSafeArea([SafeAreaType.KEYBOARD, SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.BOTTOM])
+        .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.BOTTOM])
       }
       .height('100%')
       .width('100%')
+      .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
     }
     .width('100%')
     .height('100%')
