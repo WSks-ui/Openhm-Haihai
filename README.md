@@ -6,16 +6,10 @@
 
 | 属性 | 值 |
 |-----|-----|
-| 包名 | com.example.myapplication4 |
+| 包名 | com.haihai.app |
 | 版本 | 1.0.0 |
 | 平台 | HarmonyOS |
-| 设备支持 | 手机、平板、二合一设备、可穿戴设备 |{
-  "app": {
-    "bundleName": "com.haihai.app",  // 修改这里
-    "vendor": "haihai",
-    ...
-  }
-}
+| 设备支持 | 手机、平板、二合一设备、可穿戴设备 |
 
 ## 权限说明
 
