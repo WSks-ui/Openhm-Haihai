@@ -118,10 +118,15 @@ struct Index {
     const ctx = getContext(this);
     const store = await preferences.getPreferences(ctx, 'users');
     const isLoggedIn = await store.get('isLoggedIn', false) as boolean;
+    const isDevMode = AppStorage.get('devModeSession') === true;
 
-    if (!isLoggedIn) {
-      // 未登录则强制跳转至登录页，替换当前栈 — 防止用户通过返回键回到未授权页面
+    if (!isLoggedIn && !isDevMode) {
+      // 未登录且非开发者模式则强制跳转至登录页，替换当前栈 — 防止用户通过返回键回到未授权页面
       router.replaceUrl({ url: 'pages/LoginPage' });
+    } else if (isDevMode) {
+      // 开发者模式：初始化但不加载用户数据
+      const prefsStorage = PreferencesStorage.getInstance();
+      await prefsStorage.init(ctx);
     } else {
       // 已登录则初始化数据存储服务 — PreferencesStorage封装了preferences操作，支持多用户
       const prefsStorage = PreferencesStorage.getInstance();
