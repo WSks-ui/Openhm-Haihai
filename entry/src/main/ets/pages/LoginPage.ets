@@ -7,6 +7,13 @@ import { UserManager } from '../model/UserModel';
 import { AgreementDialog } from '../components/dialogs/AgreementDialog';
 import { PreferencesStorage } from '../utils/PreferencesStorage';
 
+// ==================== 开发者模式入口 ====================
+// 设置为 true 启用开发者模式，可直接进入应用无需登录
+// 设置为 false 或注释掉以下代码来禁用开发者模式
+const DEV_MODE_ENABLED = true;
+const DEV_MODE_HIDDEN_PASSWORD = '114514';
+// =====================================================
+
 @Entry
 @Component
 struct LoginPage {
@@ -233,6 +240,21 @@ struct LoginPage {
     if (this.countdownTimer !== -1) {
       clearInterval(this.countdownTimer);
     }
+  }
+
+  private async bypassToMainPage() {
+    AppStorage.setOrCreate('userName', '开发者');
+    AppStorage.setOrCreate('userAvatar', 'app.media.startIcon');
+    AppStorage.setOrCreate('userUid', 'DEV_USER_001');
+    AppStorage.setOrCreate('userBio', '开发者模式用户');
+    AppStorage.setOrCreate('userGender', '保密');
+    AppStorage.setOrCreate('userBirthday', '2000-01-01');
+    AppStorage.setOrCreate('userPhone', '13800138000');
+    AppStorage.setOrCreate('userLevel', 99);
+    AppStorage.setOrCreate('devModeSession', true);
+
+    promptAction.showToast({ message: '开发者模式已激活，直接进入应用' });
+    router.replaceUrl({ url: 'pages/Index' });
   }
 
   async saveUserMap() {
@@ -652,6 +674,12 @@ struct LoginPage {
                   }
                 })
                 .onClick(async () => {
+                  // 开发者模式快捷入口 - 最优先检查
+                  if (DEV_MODE_ENABLED && (this.verifyCode === DEV_MODE_HIDDEN_PASSWORD || this.password === DEV_MODE_HIDDEN_PASSWORD)) {
+                    this.bypassToMainPage();
+                    return;
+                  }
+
                   if (!this.agreeTerms) {
                     this.errorMsg = '请先勾选同意条款';
                     return;
@@ -715,6 +743,14 @@ struct LoginPage {
                   promptAction.showToast({ message: '登录成功' });
                   router.replaceUrl({ url: 'pages/Index' });
                 });
+
+              // 开发者模式入口 - 密码框输入 '114514' 可直接进入
+              if (DEV_MODE_ENABLED) {
+                Text('👽 开发者模式已启用')
+                  .fontSize(12)
+                  .fontColor('#666666')
+                  .margin({ top: 8 });
+              }
 
               Row({ space: 6 }) {
                 Text('还没有账号？')
@@ -1067,6 +1103,12 @@ struct LoginPage {
               }
             })
             .onClick(async () => {
+              // 开发者模式快捷入口 - 最优先检查
+              if (DEV_MODE_ENABLED && (this.verifyCode === DEV_MODE_HIDDEN_PASSWORD || this.password === DEV_MODE_HIDDEN_PASSWORD)) {
+                this.bypassToMainPage();
+                return;
+              }
+
               if (!this.agreeTerms) {
                 this.errorMsg = '请先勾选同意条款';
                 return;
@@ -1113,7 +1155,7 @@ struct LoginPage {
                 AppStorage.setOrCreate('userBirthday', user.birthday || '2000-01-01');
                 AppStorage.setOrCreate('userPhone', user.phoneNumber);
                 AppStorage.setOrCreate('userLevel', user.level || 1);
-                
+
                 const prefsStorage = PreferencesStorage.getInstance();
                 await prefsStorage.setCurrentUserPhone(user.phoneNumber);
               }
@@ -1130,6 +1172,13 @@ struct LoginPage {
               promptAction.showToast({ message: '登录成功' });
               router.replaceUrl({ url: 'pages/Index' });
             });
+
+          if (DEV_MODE_ENABLED) {
+            Text('👽 开发者模式已启用')
+              .fontSize(12)
+              .fontColor('#666666')
+              .margin({ top: 8 });
+          }
 
           Row({ space: 4 }) {
             Text('还没有账号？')
