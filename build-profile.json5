@@ -1,20 +1,5 @@
 {
   "app": {
-    "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "certpath": "C:\\Users\\v2383\\.ohos\\config\\default_MyApplication4_j1VwO_E-xRL7BLNSGVr_waJe9uIQusDVP1gsyghGpQs=.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001B60632F170C9A2729C9128B83B2466AE6500DA6ED322F097C9FEA4D51E747D3DA365DDCBA96ACEC",
-          "profile": "C:\\Users\\v2383\\.ohos\\config\\default_MyApplication4_j1VwO_E-xRL7BLNSGVr_waJe9uIQusDVP1gsyghGpQs=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\v2383\\.ohos\\config\\default_MyApplication4_j1VwO_E-xRL7BLNSGVr_waJe9uIQusDVP1gsyghGpQs=.p12",
-          "storePassword": "0000001BAF64A7C2577EAA61849547F4061E4262072209770E80E001DFE4CCF7FA0ED91249090DC0B32CCA"
-        }
-      }
-    ],
     "products": [
       {
         "name": "default",
@@ -32,10 +17,25 @@
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
+      }
+    ],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\v2383\\.ohos\\config\\default_Haihai_09Er3t1lb5MxTBRguAzuGemsmTiN_mikUocQ1JGP0KU=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B8564F04101DDA6B00DF8D1F0194DFE7F6551640904770CC9EFEF2C6F1CFA3D73B0E5F6ABD3F355",
+          "profile": "C:\\Users\\v2383\\.ohos\\config\\default_Haihai_09Er3t1lb5MxTBRguAzuGemsmTiN_mikUocQ1JGP0KU=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\v2383\\.ohos\\config\\default_Haihai_09Er3t1lb5MxTBRguAzuGemsmTiN_mikUocQ1JGP0KU=.p12",
+          "storePassword": "0000001B8471F0E37DB5F54578582F00C4C5BC293CEDABD9787D51F1A9F31107DE7029421A73D4B8B2AD38"
+        }
       }
     ]
   },
