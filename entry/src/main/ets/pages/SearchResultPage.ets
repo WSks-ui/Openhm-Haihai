@@ -5,11 +5,11 @@ import { ContentGenerator } from '../utils/ContentGenerator';
 import { USER_NAMES } from '../model/commentGenerator';
 import promptAction from '@ohos.promptAction';
 
-import { KeplerResultView } from '../components/search_result/KeplerResultView';
-import { AllResultsView } from '../components/search_result/AllResultsView';
-import { UserResultsView } from '../components/search_result/UserResultsView';
-import { SearchLoadingSkeleton } from '../components/search_result/SearchLoadingSkeleton';
-import { LiquidGlass } from '../components/LiquidGlass';
+import { KeplerResultView } from '../components/search/search_result/KeplerResultView';
+import { AllResultsView } from '../components/search/search_result/AllResultsView';
+import { UserResultsView } from '../components/search/search_result/UserResultsView';
+import { SearchLoadingSkeleton } from '../components/search/search_result/SearchLoadingSkeleton';
+import { LiquidGlass } from '../components/common/LiquidGlass';
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import { curves } from '@kit.ArkUI';
 

@@ -1,11 +1,11 @@
 // 主页面代码
 
-import { MineSidebar } from '../components/MineSidebar';
-import { HomeComponent } from '../components/HomeComponent';
-import { DiscoverComponent } from '../components/DiscoverComponent';
-import { MessageComponent } from '../components/MessageComponent';
-import { MineComponent } from '../components/MineComponent';
-import { PublishMenu } from '../components/PublishMenu';
+import { MineSidebar } from '../components/common/MineSidebar';
+import { HomeComponent } from '../components/home/HomeComponent';
+import { DiscoverComponent } from '../components/discover/DiscoverComponent';
+import { MessageComponent } from '../components/message/MessageComponent';
+import { MineComponent } from '../components/mine/MineComponent';
+import { PublishMenu } from '../components/common/PublishMenu';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 import preferences from '@ohos.data.preferences';

@@ -1,6 +1,6 @@
 import router from '@ohos.router';
 import { ConfigurationConstant } from '@kit.AbilityKit';
-import { LiquidGlass } from '../../components/LiquidGlass';
+import { LiquidGlass } from '../../components/common/LiquidGlass';
 
 @Component
 export struct ChatHeaderBar {

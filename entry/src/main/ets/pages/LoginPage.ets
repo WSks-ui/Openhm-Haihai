@@ -4,7 +4,7 @@ import preferences from '@ohos.data.preferences';
 import display from '@ohos.display';
 import { VerifyCodeManager } from '../utils/VerifyCodeManager';
 import { UserManager } from '../model/UserModel';
-import { AgreementDialog } from '../components/AgreementDialog';
+import { AgreementDialog } from '../components/dialogs/AgreementDialog';
 import { PreferencesStorage } from '../utils/PreferencesStorage';
 
 @Entry

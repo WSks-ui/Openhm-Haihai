@@ -1,5 +1,5 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
-import { LiquidGlass } from '../../components/LiquidGlass';
+import { LiquidGlass } from '../../components/common/LiquidGlass';
 
 @CustomDialog
 export struct ApiKeyDialog {

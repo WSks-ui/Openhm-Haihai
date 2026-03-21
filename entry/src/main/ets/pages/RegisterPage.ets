@@ -4,9 +4,9 @@ import display from '@ohos.display';
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import { UserManager, CheckResult } from '../model/UserModel';
 import { VerifyCodeManager, VerifyResult, SendCodeResult } from '../utils/VerifyCodeManager';
-import { SliderCaptchaDialog } from '../components/SliderCaptchaDialog';
-import { LiquidGlass } from '../components/LiquidGlass';
-import { AnimatedBackground } from '../components/AnimatedBackground';
+import { SliderCaptchaDialog } from '../components/dialogs/SliderCaptchaDialog';
+import { LiquidGlass } from '../components/common/LiquidGlass';
+import { AnimatedBackground } from '../components/common/AnimatedBackground';
 
 interface ThemeColors {
   bgColor: string;

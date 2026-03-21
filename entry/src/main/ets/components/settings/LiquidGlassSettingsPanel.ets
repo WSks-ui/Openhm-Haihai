@@ -1,5 +1,5 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
-import { GLASS_OPACITY_PRESETS, GlassOpacityPreset } from '../../components/LiquidGlass';
+import { GLASS_OPACITY_PRESETS, GlassOpacityPreset } from '../common/LiquidGlass';
 
 @Component
 export struct LiquidGlassSettingsPanel {
