@@ -97,6 +97,7 @@ export struct SearchPage {
     this.breakpointSystem.unregister();
     if (this.debounceTimer !== -1) {
       clearTimeout(this.debounceTimer);
+      this.debounceTimer = -1;
     }
   }
 
@@ -133,8 +134,10 @@ export struct SearchPage {
   private debouncedSearch(value: string): void {
     if (this.debounceTimer !== -1) {
       clearTimeout(this.debounceTimer);
+      this.debounceTimer = -1;
     }
     this.debounceTimer = setTimeout(() => {
+      this.debounceTimer = -1;
       this.updateSearchSuggestions(value);
     }, this.DEBOUNCE_DELAY);
   }
