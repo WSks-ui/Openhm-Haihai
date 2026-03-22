@@ -289,6 +289,10 @@ export struct DiscoverComponent {
   @State backgroundDimOpacity: number = 0;
   @State topicListOffsetX: number = 320;
   @State topicListOpacity: number = 0;
+  @State showTopicSelector: boolean = false;
+  @State topicSelectorScale: number = 1;
+  @State topicSelectorOpacity: number = 1;
+  @State topicSelectorOffsetX: number = 400;
   
   @State aiSummaryState: 'idle' | 'loading' | 'success' | 'error' = 'idle';
   @State aiSummaryContent: string = '';
@@ -309,7 +313,9 @@ export struct DiscoverComponent {
       isNew: index < 2
     }));
 
-  @State topicCircles: TopicCircle[] = [
+  @State topicCircles: TopicCircle[] = [];
+  
+  private availableTopics: TopicCircle[] = [
     { id: 1, name: '科技圈', icon: 'sys.symbol.laptopcomputer', memberCount: 12500, color: '#007AFF' },
     { id: 2, name: '美食圈', icon: 'sys.symbol.fork.knife', memberCount: 8900, color: '#FF6B6B' },
     { id: 3, name: '旅行圈', icon: 'sys.symbol.airplane', memberCount: 6700, color: '#34C759' },
@@ -475,6 +481,56 @@ export struct DiscoverComponent {
     });
   }
 
+  private openTopicSelector(): void {
+    this.showTopicSelector = true;
+    this.topicSelectorScale = 0.8;
+    this.topicSelectorOpacity = 0;
+    this.topicSelectorOffsetX = 400;
+    this.backgroundDimOpacity = 0;
+    
+    animateTo({
+      duration: 300,
+      curve: Curve.FastOutSlowIn
+    }, () => {
+      this.topicSelectorScale = 1;
+      this.topicSelectorOpacity = 1;
+      this.topicSelectorOffsetX = 0;
+      this.backgroundDimOpacity = 1;
+    });
+  }
+
+  private closeTopicSelector(): void {
+    animateTo({
+      duration: 250,
+      curve: Curve.FastOutSlowIn,
+      onFinish: () => {
+        this.showTopicSelector = false;
+        this.topicSelectorOffsetX = 400;
+        this.topicSelectorScale = 0.8;
+        this.topicSelectorOpacity = 0;
+        this.backgroundDimOpacity = 0;
+      }
+    }, () => {
+      this.topicSelectorScale = 0.8;
+      this.topicSelectorOpacity = 0;
+      this.topicSelectorOffsetX = 400;
+      this.backgroundDimOpacity = 0;
+    });
+  }
+
+  private toggleTopic(topic: TopicCircle): void {
+    const index = this.topicCircles.findIndex(t => t.id === topic.id);
+    if (index !== -1) {
+      this.topicCircles.splice(index, 1);
+    } else {
+      this.topicCircles.push(topic);
+    }
+  }
+
+  private isTopicSelected(topicId: number): boolean {
+    return this.topicCircles.some(t => t.id === topicId);
+  }
+
   build() {
     if (['lg', 'xl'].includes(this.currentBreakpoint)) {
       this.LargeTabletLayout()
@@ -602,6 +658,33 @@ export struct DiscoverComponent {
       })
       .edgeEffect(EdgeEffect.Spring)
 
+      if (this.showTopicSelector) {
+        Column()
+          .width('100%')
+          .height('100%')
+          .linearGradient({
+            angle: 180,
+            colors: [
+              ['rgba(0, 0, 0, 0.5)', 0.0],
+              ['rgba(0, 0, 0, 0.3)', 0.5],
+              ['rgba(0, 0, 0, 0.5)', 1.0]
+            ]
+          })
+          .opacity(this.backgroundDimOpacity)
+          .animation({ duration: 300, curve: Curve.FastOutSlowIn })
+        
+        Column() {
+          Blank()
+        }
+        .width('100%')
+        .height('100%')
+        .onClick(() => {
+          this.closeTopicSelector();
+        })
+
+        this.TopicSelectorPanel()
+      }
+
       if (this.showDetail && this.selectedPost) {
         this.RadialDimBackground()
         Column() {
@@ -645,6 +728,33 @@ export struct DiscoverComponent {
       .width('100%')
       .height('100%')
 
+      if (this.showTopicSelector) {
+        Column()
+          .width('100%')
+          .height('100%')
+          .linearGradient({
+            angle: 180,
+            colors: [
+              ['rgba(0, 0, 0, 0.5)', 0.0],
+              ['rgba(0, 0, 0, 0.3)', 0.5],
+              ['rgba(0, 0, 0, 0.5)', 1.0]
+            ]
+          })
+          .opacity(this.backgroundDimOpacity)
+          .animation({ duration: 300, curve: Curve.FastOutSlowIn })
+        
+        Column() {
+          Blank()
+        }
+        .width('100%')
+        .height('100%')
+        .onClick(() => {
+          this.closeTopicSelector();
+        })
+
+        this.TopicSelectorPanel()
+      }
+
       if (this.showDetail && this.selectedPost) {
         this.RadialDimBackground()
         Column() {
@@ -680,6 +790,33 @@ export struct DiscoverComponent {
       }
       .width('100%')
       .height('100%')
+
+      if (this.showTopicSelector) {
+        Column()
+          .width('100%')
+          .height('100%')
+          .linearGradient({
+            angle: 180,
+            colors: [
+              ['rgba(0, 0, 0, 0.5)', 0.0],
+              ['rgba(0, 0, 0, 0.3)', 0.5],
+              ['rgba(0, 0, 0, 0.5)', 1.0]
+            ]
+          })
+          .opacity(this.backgroundDimOpacity)
+          .animation({ duration: 300, curve: Curve.FastOutSlowIn })
+        
+        Column() {
+          Blank()
+        }
+        .width('100%')
+        .height('100%')
+        .onClick(() => {
+          this.closeTopicSelector();
+        })
+
+        this.TopicSelectorPanel()
+      }
 
       if (this.showDetail && this.selectedPost) {
         this.RadialDimBackground()
@@ -820,12 +957,24 @@ export struct DiscoverComponent {
   RightSidebar() {
     Column() {
       Column() {
-        Text('话题列表')
-          .fontSize(19)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#182431')
-          .width('100%')
-          .padding({ left: 18, top: 20, bottom: 16 })
+        Row() {
+          SymbolGlyph($r('sys.symbol.hash'))
+            .fontSize(18)
+            .fontColor(['#FF6B6B'])
+          Text('话题列表')
+            .fontSize(19)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#182431')
+          Blank()
+          SymbolGlyph($r('sys.symbol.plus'))
+            .fontSize(22)
+            .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#182431'])
+            .onClick(() => {
+              this.openTopicSelector();
+            })
+        }
+        .width('100%')
+        .padding({ left: 18, right: 18, top: 20, bottom: 16 })
 
         List({ space: 8 }) {
           ForEach(this.topicCircles, (circle: TopicCircle) => {
@@ -898,6 +1047,114 @@ export struct DiscoverComponent {
       .padding({ left: 18, right: 18, top: 10, bottom: 10 })
       .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.12)' : bgColor)
       .borderRadius(24)
+  }
+
+  @Builder
+  TopicSelectorItem(topic: TopicCircle) {
+    Row() {
+      Column() {
+        SymbolGlyph($r(topic.icon))
+          .fontSize(26)
+          .fontColor([topic.color])
+      }
+      .width(48)
+      .height(48)
+      .justifyContent(FlexAlign.Center)
+      .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.12)' : `${topic.color}18`)
+      .borderRadius(24)
+      .margin({ right: 14 })
+
+      Column({ space: 4 }) {
+        Text(topic.name)
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E5E5E5' : '#182431')
+        Text(`${(topic.memberCount / 1000).toFixed(1)}k 人`)
+          .fontSize(13)
+          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#888888')
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      if (this.isTopicSelected(topic.id)) {
+        SymbolGlyph($r('sys.symbol.checkmark_circle_fill'))
+          .fontSize(28)
+          .fontColor(['#34C759'])
+      } else {
+        SymbolGlyph($r('sys.symbol.circle'))
+          .fontSize(28)
+          .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#666666' : '#CCCCCC'])
+      }
+    }
+    .width('100%')
+    .padding(16)
+    .borderRadius(16)
+    .backgroundColor(this.isTopicSelected(topic.id) ? (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(52, 199, 89, 0.15)' : 'rgba(52, 199, 89, 0.08)') : Color.Transparent)
+    .onClick(() => {
+      this.toggleTopic(topic);
+    })
+  }
+
+  @Builder
+  TopicSelectorPanel() {
+    Stack({ alignContent: Alignment.TopEnd }) {
+      Column() {
+        LiquidGlass({
+          glassWidth: '100%',
+          glassHeight: '100%',
+          glassPadding: 0,
+          glassRadius: 28,
+          blurRadius: 24,
+          showBorder: true
+        }) {
+          Column() {
+            Row() {
+              Text('选择话题')
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#182431')
+              Blank()
+              SymbolGlyph($r('sys.symbol.xmark'))
+                .fontSize(22)
+                .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#666666' : '#999999'])
+                .onClick(() => {
+                  this.closeTopicSelector();
+                })
+            }
+            .width('100%')
+            .padding({ left: 20, right: 20, top: 20, bottom: 12 })
+
+            Text('选择你感兴趣的话题，定制你的发现体验')
+              .fontSize(13)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#666666')
+              .width('100%')
+              .padding({ left: 20, right: 20, bottom: 16 })
+
+            Scroll() {
+              Column({ space: 8 }) {
+                ForEach(this.availableTopics, (topic: TopicCircle) => {
+                  this.TopicSelectorItem(topic)
+                }, (topic: TopicCircle) => topic.id.toString())
+              }
+              .width('100%')
+              .padding({ left: 8, right: 8, bottom: 20 })
+            }
+            .layoutWeight(1)
+            .scrollBar(BarState.Off)
+          }
+          .width('100%')
+          .height('100%')
+        }
+      }
+      .width(320)
+      .height('75%')
+      .translate({ x: this.topicSelectorOffsetX, y: 50 })
+    }
+    .width('100%')
+    .height('100%')
+    .scale({ x: this.topicSelectorScale, y: this.topicSelectorScale })
+    .opacity(this.topicSelectorOpacity)
+    .zIndex(200)
   }
 
   @Builder
