@@ -1,7 +1,7 @@
 
 import { COMMENT_TEMPLATES, CommentCategory } from './commentTemplates';
 
-const AVATARS = [
+export const AVATARS = [
   'ID_Wa/20260308215510.jpg', 'ID_Wa/20260308215518.jpg', 'ID_Wa/20260308215521.jpg', 'ID_Wa/20260308215525.jpg',
   'ID_Wa/20260308215531.jpg', 'ID_Wa/20260308215534.jpg', 'ID_Wa/20260308215537.jpg', 'ID_Wa/20260308215541.jpg',
   'ID_Wa/20260308215546.jpg', 'ID_Wa/20260308215548.jpg', 'ID_Wa/20260308215552.jpg', 'ID_Wa/20260308215555.jpg',

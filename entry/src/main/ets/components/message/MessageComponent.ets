@@ -5,6 +5,7 @@ import { LiquidGlass } from '../common/LiquidGlass';
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import { AppStatistics } from '../../model/AppStatistics';
 import { ScanCodeService } from '../../utils/ScanCodeService';
+import { USER_NAMES, AVATARS, GeneratedComment } from '../../model/commentGenerator';
 import fs from '@ohos.file.fs';
 import util from '@ohos.util';
 import http from '@ohos.net.http';
@@ -55,6 +56,30 @@ interface APIPayload {
   max_tokens: number;
 }
 
+interface SearchableUser {
+  id: string;
+  userName: string;
+  avatar: string;
+}
+
+@Observed
+class SearchState {
+  keyword: string = '';
+  results: SearchableUser[] = [];
+
+  update(keyword: string, results: SearchableUser[]) {
+    this.keyword = keyword;
+    this.results = results;
+  }
+}
+
+enum ContactRequestState {
+  IDLE = 'idle',
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  FAILED = 'failed'
+}
+
 interface MessageItem {
   id: number;
   userName: string;
@@ -83,6 +108,46 @@ function truncateText(text: string, maxLength: number = 15): string {
   return text.substring(0, maxLength) + '...';
 }
 
+function fuzzyMatch(keyword: string, text: string): boolean {
+  if (!keyword || keyword.length === 0) {
+    return true;
+  }
+  const lowerKeyword = keyword.toLowerCase();
+  const lowerText = text.toLowerCase();
+  if (lowerText.includes(lowerKeyword)) {
+    return true;
+  }
+  let keywordIndex = 0;
+  for (let i = 0; i < lowerText.length && keywordIndex < lowerKeyword.length; i++) {
+    if (lowerText[i] === lowerKeyword[keywordIndex]) {
+      keywordIndex++;
+    }
+  }
+  return keywordIndex === lowerKeyword.length;
+}
+
+function searchUsers(keyword: string, existingContactIds: Set<string>): SearchableUser[] {
+  if (!keyword || keyword.trim().length === 0) {
+    return [];
+  }
+  const results: SearchableUser[] = [];
+  for (let i = 0; i < USER_NAMES.length; i++) {
+    const userName = USER_NAMES[i];
+    if (fuzzyMatch(keyword, userName) && !existingContactIds.has(`search_${i}`)) {
+      results.push({
+        id: `search_${i}`,
+        userName: userName,
+        avatar: AVATARS[i % AVATARS.length]
+      });
+    }
+  }
+  return results.slice(0, 20);
+}
+
+function isAlreadyContact(userId: string, messageItems: MessageItem[]): boolean {
+  return messageItems.some(item => `search_${item.id}` === userId || item.id.toString() === userId);
+}
+
 @Component
 export struct MessageComponent {
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
@@ -107,6 +172,9 @@ export struct MessageComponent {
   @State isVideoChat: boolean = false;
   @State videoChatUrl: string = 'https://huggingface.co/spaces/HumanAIGC-Engineering-Team/open-avatar-chat';
   @State webLoading: boolean = false;
+
+  @State showAddContactDialog: boolean = false;
+  @State searchState: SearchState = new SearchState();
 
   private scroller: Scroller = new Scroller();
   private rdbStore: relationalStore.RdbStore | null = null;
@@ -136,6 +204,21 @@ export struct MessageComponent {
     }),
     alignment: DialogAlignment.Center,
     autoCancel: false,
+    customStyle: true
+  })
+
+  private addContactDialogController: CustomDialogController = new CustomDialogController({
+    builder: AddContactDialog({
+      searchState: this.searchState,
+      onClose: () => {
+        this.closeAddContactDialog();
+      },
+      onAddContact: (user: SearchableUser) => {
+        this.addContact(user);
+      }
+    }),
+    alignment: DialogAlignment.Center,
+    autoCancel: true,
     customStyle: true
   })
 
@@ -302,6 +385,67 @@ export struct MessageComponent {
       console.error('删除 API Key 失败', e);
       promptAction.showToast({ message: '删除失败，请重试', duration: 2000 } as promptAction.ShowToastOptions);
     }
+  }
+
+  openAddContactDialog() {
+    this.searchState.update('', []);
+    this.addContactDialogController.open();
+  }
+
+  closeAddContactDialog() {
+    this.searchState.update('', []);
+  }
+
+  onSearchKeywordChange(keyword: string) {
+    if (keyword && keyword.trim().length > 0) {
+      const existingContactIds = this.getExistingContactIds();
+      const results = searchUsers(keyword, existingContactIds);
+      this.searchState.update(keyword, results);
+    } else {
+      this.searchState.update('', []);
+    }
+  }
+
+  getExistingContactIds(): Set<string> {
+    const ids = new Set<string>();
+    this.messageItems.forEach(item => {
+      ids.add(`search_${item.id}`);
+      ids.add(item.id.toString());
+    });
+    return ids;
+  }
+
+  addContact(user: SearchableUser) {
+    if (isAlreadyContact(user.id, this.messageItems)) {
+      promptAction.showToast({ message: '该用户已在好友列表中', duration: 2000 } as promptAction.ShowToastOptions);
+      return;
+    }
+
+    const existingIds = this.getExistingContactIds();
+    if (existingIds.has(user.id)) {
+      promptAction.showToast({ message: '该用户已在好友列表中', duration: 2000 } as promptAction.ShowToastOptions);
+      return;
+    }
+
+    promptAction.showToast({ message: '好友请求已发送，等待对方确认...', duration: 2000 } as promptAction.ShowToastOptions);
+
+    setTimeout(() => {
+      const newId = this.messageItems.length > 0 ? Math.max(...this.messageItems.map(item => item.id)) + 1 : 1;
+      const newContact: MessageItem = {
+        id: newId,
+        userName: user.userName,
+        avatar: user.avatar,
+        lastMessage: '你们已经成为好友了，快来打个招呼吧！',
+        time: '刚刚',
+        isPinned: false,
+        lastInteractionTime: Date.now()
+      };
+      this.messageItems.push(newContact);
+
+      promptAction.showToast({ message: `已添加 ${user.userName} 为好友`, duration: 2000 } as promptAction.ShowToastOptions);
+
+      this.closeAddContactDialog();
+    }, 60000);
   }
 
   loadHistory(userId: number) {
@@ -543,7 +687,7 @@ export struct MessageComponent {
         .bindMenu([
           {
             value: '添加联系人',
-            action: () => { promptAction.showToast({ message: '添加联系人' }); }
+            action: () => { this.openAddContactDialog(); }
           },
           {
             value: '新建群聊',
@@ -1118,6 +1262,155 @@ struct ApiKeyDialog {
         .padding(24)
         .borderRadius(24)
         .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+      }
+    }
+    .width('90%')
+    .constraintSize({ maxWidth: 480 })
+    .backgroundColor(Color.Transparent)
+  }
+}
+
+@CustomDialog
+struct AddContactDialog {
+  @ObjectLink searchState: SearchState;
+  controller: CustomDialogController;
+  onClose: () => void = () => {};
+  onAddContact: (user: SearchableUser) => void = () => {};
+  @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+
+  fuzzyMatchChars(keyword: string, text: string): boolean {
+    let keywordIndex = 0;
+    for (let i = 0; i < text.length && keywordIndex < keyword.length; i++) {
+      if (text[i] === keyword[keywordIndex]) {
+        keywordIndex++;
+      }
+    }
+    return keywordIndex === keyword.length;
+  }
+
+  @Builder
+  SearchResultItem(user: SearchableUser) {
+    Row() {
+      Image($rawfile(user.avatar))
+        .width(48)
+        .height(48)
+        .borderRadius(24)
+        .objectFit(ImageFit.Cover)
+
+      Text(user.userName)
+        .fontSize(16)
+        .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#1D2129')
+        .layoutWeight(1)
+        .margin({ left: 12 })
+
+      Button('添加')
+        .type(ButtonType.Normal)
+        .borderRadius(16)
+        .backgroundColor('#7B68EE')
+        .fontColor(Color.White)
+        .fontSize(14)
+        .height(32)
+        .onClick(() => {
+          this.onAddContact(user);
+        })
+    }
+    .width('100%')
+    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+    .alignItems(VerticalAlign.Center)
+  }
+
+  build() {
+    Column() {
+      Column() {
+        Column() {
+          Row() {
+            Text('添加联系人')
+              .fontSize(18)
+              .fontWeight(600)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E0E0E0' : '#1D2129')
+
+            Blank()
+
+            SymbolGlyph($r('sys.symbol.xmark'))
+              .fontSize(20)
+              .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E0E0E0' : '#1D2129'])
+              .onClick(() => {
+                this.onClose();
+                this.controller.close();
+              })
+          }
+          .width('100%')
+          .margin({ bottom: 16 })
+          .alignItems(VerticalAlign.Center)
+
+          TextInput({ placeholder: '搜索用户名...' })
+            .height(44)
+            .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ?
+              'rgba(255, 255, 255, 0.1)' : 'rgba(242, 243, 245, 0.2)')
+            .borderRadius(22)
+            .padding({ left: 16, right: 16 })
+            .placeholderColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#666' : '#86909C')
+            .fontSize(14)
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E0E0E0' : '#1D2129')
+            .onChange((value: string) => {
+              if (value && value.trim().length > 0) {
+                const lowerValue = value.toLowerCase();
+                const keywordResults: SearchableUser[] = [];
+                for (let i = 0; i < USER_NAMES.length; i++) {
+                  const userName = USER_NAMES[i];
+                  const lowerUserName = userName.toLowerCase();
+                  if (lowerUserName.includes(lowerValue) || this.fuzzyMatchChars(lowerValue, lowerUserName)) {
+                    keywordResults.push({
+                      id: `search_${i}`,
+                      userName: userName,
+                      avatar: AVATARS[i % AVATARS.length]
+                    });
+                  }
+                }
+                this.searchState.update(value, keywordResults.slice(0, 20));
+              } else {
+                this.searchState.update('', []);
+              }
+            })
+        }
+        .width('100%')
+        .padding(24)
+        .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+        .borderRadius({ topLeft: 24, topRight: 24 })
+
+        Column() {
+          if (this.searchState.results.length === 0 && this.searchState.keyword.length > 0) {
+            Column() {
+              SymbolGlyph($r('sys.symbol.xmark_circle'))
+                .fontSize(48)
+                .fontColor(['#8E8E93'])
+              Text('未找到匹配的用户')
+                .fontSize(14)
+                .fontColor('#8E8E93')
+                .margin({ top: 12 })
+            }
+            .width('100%')
+            .padding({ top: 40, bottom: 40 })
+            .alignItems(HorizontalAlign.Center)
+          } else {
+            Scroll() {
+              Column({ space: 0 }) {
+                ForEach(this.searchState.results, (user: SearchableUser) => {
+                  this.SearchResultItem(user)
+                  Divider()
+                    .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
+                }, (user: SearchableUser) => user.id)
+              }
+              .width('100%')
+            }
+            .layoutWeight(1)
+            .width('100%')
+            .constraintSize({ maxHeight: 400 })
+          }
+        }
+        .width('100%')
+        .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+        .borderRadius({ bottomLeft: 24, bottomRight: 24 })
       }
     }
     .width('90%')
