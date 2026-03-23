@@ -422,7 +422,7 @@ export struct MineComponent {
         }
 
         ListItem() {
-          this.MenuItem('设置', 'sys.symbol.gear', false, () => {
+          this.MenuItem('设置', 'sys.symbol.gearshape', false, () => {
             router.pushUrl({ url: 'pages/SettingsPage' });
           })
         }
