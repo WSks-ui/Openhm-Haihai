@@ -280,7 +280,6 @@ struct SearchResultPage {
               .width('100%')
               .layoutWeight(1)
           } else if (this.searchResults.length === 0) {
-            // 空状态
             Column() {
               SymbolGlyph($r('sys.symbol.magnifyingglass'))
                 .fontSize(80)
@@ -430,7 +429,7 @@ struct SearchResultPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F5F5')
+    .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#000000' : '#F5F5F5')
     // 沉浸式效果：扩展整个页面到顶部和底部安全区域
     .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
