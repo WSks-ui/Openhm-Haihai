@@ -28,6 +28,7 @@ struct SettingsPage {
   @State contentTranslateX: string = '0';
   @State mainContentOpacity: number = 1;
   @State mainContentTranslateX: string = '0';
+  @State mainContentScale: number = 1;
 
   private readonly ANIMATION_DURATION: number = 250;
   private readonly ENTER_DELAY: number = 10;
@@ -70,7 +71,6 @@ struct SettingsPage {
       setTimeout(() => {
         this.isAnimating = false;
         this.animationPhase = 'entered';
-        this.mainContentOpacity = 1;
       }, this.ANIMATION_DURATION);
     }, 30);
   }
@@ -81,11 +81,18 @@ struct SettingsPage {
     }
     this.isAnimating = true;
     this.animationPhase = 'exiting';
-    this.mainContentOpacity = 0;
-    this.mainContentTranslateX = this.isSmallScreen() ? '-2%' : '0%';
     this.contentOpacity = 0;
     this.contentScale = this.isSmallScreen() ? 0.95 : 0.9;
     this.contentTranslateX = this.isSmallScreen() ? '100%' : '5%';
+    this.mainContentOpacity = 0;
+    this.mainContentTranslateX = this.isSmallScreen() ? '-5%' : '0%';
+    this.mainContentScale = 0.92;
+
+    setTimeout(() => {
+      this.mainContentOpacity = 1;
+      this.mainContentTranslateX = '0';
+      this.mainContentScale = 1;
+    }, 30);
 
     setTimeout(() => {
       this.currentSubPage = 'none';
@@ -94,8 +101,6 @@ struct SettingsPage {
       this.contentOpacity = 0;
       this.contentScale = 0.92;
       this.contentTranslateX = '0';
-      this.mainContentOpacity = 1;
-      this.mainContentTranslateX = '0';
     }, this.ANIMATION_DURATION);
   }
 
@@ -357,7 +362,7 @@ struct SettingsPage {
       .height('100%')
       .opacity(this.mainContentOpacity)
       .translate({ x: this.mainContentTranslateX })
-      .scale({ x: this.mainContentOpacity > 0.5 ? 1 : 0.98, y: this.mainContentOpacity > 0.5 ? 1 : 0.98 })
+      .scale({ x: this.mainContentScale, y: this.mainContentScale })
       .animation({
         duration: this.ANIMATION_DURATION,
         curve: Curve.EaseOut,
