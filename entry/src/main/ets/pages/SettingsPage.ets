@@ -21,8 +21,17 @@ struct SettingsPage {
   @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
   @State currentSubPage: SubPageType = 'none';
   @State isAnimating: boolean = false;
-  @State animationType: 'none' | 'enter' | 'exit' = 'none';
   @State showSubPage: boolean = false;
+  @State animationPhase: 'idle' | 'entering' | 'entered' | 'exiting' = 'idle';
+  @State contentOpacity: number = 0;
+  @State contentScale: number = 0.92;
+  @State contentTranslateX: string = '0';
+  @State mainContentOpacity: number = 1;
+  @State mainContentTranslateX: string = '0';
+
+  private readonly ANIMATION_DURATION: number = 250;
+  private readonly ENTER_DELAY: number = 10;
+  private readonly EXIT_COMPLETE_DELAY: number = 50;
 
   aboutToAppear() {
   }
@@ -40,33 +49,54 @@ struct SettingsPage {
   }
 
   private navigateToSubPage(subPage: SubPageType): void {
-    if (subPage === 'none' || this.isAnimating) {
+    if (subPage === 'none' || this.isAnimating || this.animationPhase === 'entering') {
       return;
     }
-    this.animationType = 'enter';
     this.isAnimating = true;
+    this.animationPhase = 'entering';
     this.currentSubPage = subPage;
+    this.contentOpacity = 0;
+    this.contentScale = this.isSmallScreen() ? 0.95 : 0.9;
+    this.contentTranslateX = this.isSmallScreen() ? '100%' : '5%';
+    this.mainContentOpacity = 0.7;
+    this.mainContentTranslateX = this.isSmallScreen() ? '-2%' : '0%';
+
     setTimeout(() => {
-      this.showSubPage = true;
-    }, 50);
-    setTimeout(() => {
-      this.isAnimating = false;
-      this.animationType = 'none';
-    }, 300);
+      this.contentOpacity = 1;
+      this.contentScale = 1;
+      this.contentTranslateX = '0';
+      this.mainContentOpacity = 0;
+      this.mainContentTranslateX = '0';
+      setTimeout(() => {
+        this.isAnimating = false;
+        this.animationPhase = 'entered';
+        this.mainContentOpacity = 1;
+      }, this.ANIMATION_DURATION);
+    }, 30);
   }
 
   private navigateBack(): void {
-    if (this.isAnimating || this.currentSubPage === 'none') {
+    if (this.isAnimating || this.currentSubPage === 'none' || this.animationPhase === 'exiting') {
       return;
     }
-    this.animationType = 'exit';
     this.isAnimating = true;
-    this.showSubPage = false;
+    this.animationPhase = 'exiting';
+    this.mainContentOpacity = 0;
+    this.mainContentTranslateX = this.isSmallScreen() ? '-2%' : '0%';
+    this.contentOpacity = 0;
+    this.contentScale = this.isSmallScreen() ? 0.95 : 0.9;
+    this.contentTranslateX = this.isSmallScreen() ? '100%' : '5%';
+
     setTimeout(() => {
       this.currentSubPage = 'none';
       this.isAnimating = false;
-      this.animationType = 'none';
-    }, 300);
+      this.animationPhase = 'idle';
+      this.contentOpacity = 0;
+      this.contentScale = 0.92;
+      this.contentTranslateX = '0';
+      this.mainContentOpacity = 1;
+      this.mainContentTranslateX = '0';
+    }, this.ANIMATION_DURATION);
   }
 
   private async handleLogout(): Promise<void> {
@@ -318,11 +348,23 @@ struct SettingsPage {
 
   @Builder
   SmallScreenLayout() {
-    Column() {
-      if (this.currentSubPage === 'none') {
+    Stack({ alignContent: Alignment.Start }) {
+      Column() {
         this.MainSettingsHeader()
         this.MainSettingsList()
-      } else {
+      }
+      .width('100%')
+      .height('100%')
+      .opacity(this.mainContentOpacity)
+      .translate({ x: this.mainContentTranslateX })
+      .scale({ x: this.mainContentOpacity > 0.5 ? 1 : 0.98, y: this.mainContentOpacity > 0.5 ? 1 : 0.98 })
+      .animation({
+        duration: this.ANIMATION_DURATION,
+        curve: Curve.EaseOut,
+        playMode: PlayMode.Normal
+      })
+
+      if (this.currentSubPage !== 'none') {
         Column() {
           Row() {
             SymbolGlyph($r('sys.symbol.chevron_left'))
@@ -347,13 +389,17 @@ struct SettingsPage {
           }
           .width('100%')
           .layoutWeight(1)
-          .translate({ x: this.showSubPage ? 0 : '100%' })
-          .opacity(this.showSubPage ? 1 : 0)
-          .animation({
-            duration: 300,
-            curve: Curve.EaseInOut
-          })
         }
+        .width('100%')
+        .height('100%')
+        .opacity(this.contentOpacity)
+        .scale({ x: this.contentScale, y: this.contentScale })
+        .translate({ x: this.contentTranslateX })
+        .animation({
+          duration: this.ANIMATION_DURATION,
+          curve: Curve.EaseOut,
+          playMode: PlayMode.Normal
+        })
       }
     }
     .width('100%')
@@ -394,10 +440,12 @@ struct SettingsPage {
           }
           .width('100%')
           .height('100%')
-          .opacity(this.showSubPage ? 1 : 0)
+          .opacity(this.contentOpacity)
+          .scale({ x: this.contentScale, y: this.contentScale })
           .animation({
-            duration: 300,
-            curve: Curve.EaseInOut
+            duration: this.ANIMATION_DURATION,
+            curve: Curve.EaseOut,
+            playMode: PlayMode.Normal
           })
         }
       }
@@ -442,10 +490,12 @@ struct SettingsPage {
           }
           .width('100%')
           .height('100%')
-          .opacity(this.showSubPage ? 1 : 0)
+          .opacity(this.contentOpacity)
+          .scale({ x: this.contentScale, y: this.contentScale })
           .animation({
-            duration: 300,
-            curve: Curve.EaseInOut
+            duration: this.ANIMATION_DURATION,
+            curve: Curve.EaseOut,
+            playMode: PlayMode.Normal
           })
         }
       }
