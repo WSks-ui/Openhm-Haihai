@@ -1,7 +1,7 @@
 import http from '@ohos.net.http';
 
-const TAVILY_API_KEY = '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';
-const DEEPSEEK_API_KEY = 'sk-7e10c498229248a1a71b41e02c57267e';
+const TAVILY_API_KEY = '暂不提供';
+const DEEPSEEK_API_KEY = '暂不提供';
 
 interface TavilyResult {
   content: string;
