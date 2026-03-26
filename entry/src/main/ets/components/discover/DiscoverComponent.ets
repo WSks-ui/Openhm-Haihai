@@ -323,7 +323,6 @@ export struct DiscoverComponent {
   @State particle1Opacity: number = 0.6;
   @State particle2Opacity: number = 0.4;
   @State particle3Opacity: number = 0.5;
-  @State ringRotation: number = 0;
   @State glowOpacity: number = 0.3;
   @State isAnimPressed: boolean = false;
   @State animPressScale: number = 1;
@@ -353,7 +352,7 @@ export struct DiscoverComponent {
 
   private startPulseAnimation(): void {
     animateTo({
-      duration: 2000,
+      duration: 3000,
       curve: Curve.EaseInOut,
       iterations: -1,
       playMode: PlayMode.Alternate
@@ -363,7 +362,7 @@ export struct DiscoverComponent {
 
     setTimeout(() => {
       animateTo({
-        duration: 1500,
+        duration: 2500,
         curve: Curve.EaseInOut,
         iterations: -1,
         playMode: PlayMode.Alternate
@@ -373,7 +372,7 @@ export struct DiscoverComponent {
     }, 750);
 
     animateTo({
-      duration: 3000,
+      duration: 4000,
       curve: Curve.EaseInOut,
       iterations: -1,
       playMode: PlayMode.Alternate
@@ -384,7 +383,7 @@ export struct DiscoverComponent {
 
     setTimeout(() => {
       animateTo({
-        duration: 2500,
+        duration: 3500,
         curve: Curve.EaseInOut,
         iterations: -1,
         playMode: PlayMode.Alternate
@@ -396,7 +395,7 @@ export struct DiscoverComponent {
 
     setTimeout(() => {
       animateTo({
-        duration: 3500,
+        duration: 4500,
         curve: Curve.EaseInOut,
         iterations: -1,
         playMode: PlayMode.Alternate
@@ -407,16 +406,7 @@ export struct DiscoverComponent {
     }, 800);
 
     animateTo({
-      duration: 8000,
-      curve: Curve.Linear,
-      iterations: -1,
-      playMode: PlayMode.Normal
-    }, () => {
-      this.ringRotation = 360;
-    });
-
-    animateTo({
-      duration: 2000,
+      duration: 3000,
       curve: Curve.EaseInOut,
       iterations: -1,
       playMode: PlayMode.Alternate
