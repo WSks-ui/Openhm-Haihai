@@ -314,7 +314,24 @@ export struct DiscoverComponent {
     }));
 
   @State topicCircles: TopicCircle[] = [];
-  
+
+  @State pulseScale: number = 1;
+  @State iconScale: number = 1;
+  @State particle1Y: number = 0;
+  @State particle2Y: number = 0;
+  @State particle3Y: number = 0;
+  @State particle1Opacity: number = 0.6;
+  @State particle2Opacity: number = 0.4;
+  @State particle3Opacity: number = 0.5;
+  @State ringRotation: number = 0;
+  @State glowOpacity: number = 0.3;
+  @State isAnimPressed: boolean = false;
+  @State animPressScale: number = 1;
+  @State dragOffsetX: number = 0;
+  @State dragOffsetY: number = 0;
+  @State isDragging: boolean = false;
+  @State dragScale: number = 1;
+
   private availableTopics: TopicCircle[] = [
     { id: 1, name: '科技圈', icon: 'sys.symbol.laptopcomputer', memberCount: 12500, color: '#007AFF' },
     { id: 2, name: '美食圈', icon: 'sys.symbol.fork.knife', memberCount: 8900, color: '#FF6B6B' },
@@ -327,10 +344,117 @@ export struct DiscoverComponent {
   aboutToAppear() {
     this.breakpointSystem.register();
     aiSummaryService.init();
+    this.startPulseAnimation();
   }
 
   aboutToDisappear() {
     this.breakpointSystem.unregister();
+  }
+
+  private startPulseAnimation(): void {
+    animateTo({
+      duration: 2000,
+      curve: Curve.EaseInOut,
+      iterations: -1,
+      playMode: PlayMode.Alternate
+    }, () => {
+      this.pulseScale = 1.15;
+    });
+
+    setTimeout(() => {
+      animateTo({
+        duration: 1500,
+        curve: Curve.EaseInOut,
+        iterations: -1,
+        playMode: PlayMode.Alternate
+      }, () => {
+        this.iconScale = 1.12;
+      });
+    }, 750);
+
+    animateTo({
+      duration: 3000,
+      curve: Curve.EaseInOut,
+      iterations: -1,
+      playMode: PlayMode.Alternate
+    }, () => {
+      this.particle1Y = -20;
+      this.particle1Opacity = 0.9;
+    });
+
+    setTimeout(() => {
+      animateTo({
+        duration: 2500,
+        curve: Curve.EaseInOut,
+        iterations: -1,
+        playMode: PlayMode.Alternate
+      }, () => {
+        this.particle2Y = -15;
+        this.particle2Opacity = 0.8;
+      });
+    }, 400);
+
+    setTimeout(() => {
+      animateTo({
+        duration: 3500,
+        curve: Curve.EaseInOut,
+        iterations: -1,
+        playMode: PlayMode.Alternate
+      }, () => {
+        this.particle3Y = -25;
+        this.particle3Opacity = 0.7;
+      });
+    }, 800);
+
+    animateTo({
+      duration: 8000,
+      curve: Curve.Linear,
+      iterations: -1,
+      playMode: PlayMode.Normal
+    }, () => {
+      this.ringRotation = 360;
+    });
+
+    animateTo({
+      duration: 2000,
+      curve: Curve.EaseInOut,
+      iterations: -1,
+      playMode: PlayMode.Alternate
+    }, () => {
+      this.glowOpacity = 0.6;
+    });
+  }
+
+  private handleAnimPress(): void {
+    if (this.isAnimPressed) {
+      return;
+    }
+    this.isAnimPressed = true;
+
+    animateTo({
+      duration: 100,
+      curve: Curve.EaseOut
+    }, () => {
+      this.animPressScale = 0.92;
+    });
+
+    setTimeout(() => {
+      animateTo({
+        duration: 200,
+        curve: Curve.FastOutSlowIn
+      }, () => {
+        this.animPressScale = 1.02;
+      });
+      setTimeout(() => {
+        animateTo({
+          duration: 150,
+          curve: Curve.EaseOut
+        }, () => {
+          this.animPressScale = 1;
+          this.isAnimPressed = false;
+        });
+      }, 200);
+    }, 100);
   }
 
   onShowTopicListChange(): void {
@@ -976,17 +1100,21 @@ export struct DiscoverComponent {
         .width('100%')
         .padding({ left: 18, right: 18, top: 20, bottom: 16 })
 
-        List({ space: 8 }) {
-          ForEach(this.topicCircles, (circle: TopicCircle) => {
-            ListItem() {
-              TopicCircleItemComponent({
-                circle: circle
-              })
-            }
-          }, (circle: TopicCircle) => circle.id.toString())
+        if (this.topicCircles.length === 0) {
+          this.EmptyTopicGuide()
+        } else {
+          List({ space: 8 }) {
+            ForEach(this.topicCircles, (circle: TopicCircle) => {
+              ListItem() {
+                TopicCircleItemComponent({
+                  circle: circle
+                })
+              }
+            }, (circle: TopicCircle) => circle.id.toString())
+          }
+          .padding({ left: 18, right: 18, bottom: 20 })
+          .layoutWeight(1)
         }
-        .padding({ left: 18, right: 18, bottom: 20 })
-        .layoutWeight(1)
       }
       .width('100%')
       .height('100%')
@@ -1001,6 +1129,141 @@ export struct DiscoverComponent {
     }
     .width('100%')
     .height('100%')
+  }
+
+  @Builder
+  EmptyTopicGuide() {
+    Column({ space: 24 }) {
+      Column() {
+        Column() {
+          Stack({ alignContent: Alignment.Center }) {
+            Circle()
+              .width(120)
+              .height(120)
+              .fill(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,107,107,0.08)' : 'rgba(255,107,107,0.06)')
+              .opacity(this.glowOpacity)
+
+            Circle()
+              .width(100)
+              .height(100)
+              .fill(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,107,107,0.12)' : 'rgba(255,107,107,0.10)')
+              .scale({ x: this.pulseScale * this.animPressScale, y: this.pulseScale * this.animPressScale })
+
+            Circle()
+              .width(70)
+              .height(70)
+              .fill(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,107,107,0.20)' : '#FFF0F0')
+              .scale({ x: this.pulseScale * 0.95 * this.animPressScale, y: this.pulseScale * 0.95 * this.animPressScale })
+
+            Circle()
+              .width(50)
+              .height(50)
+              .fill(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,107,107,0.25)' : '#FFE4E4')
+              .scale({ x: this.iconScale * this.animPressScale, y: this.iconScale * this.animPressScale })
+
+            Circle()
+              .width(8)
+              .height(8)
+              .fill('#FF6B6B')
+              .translate({ y: this.particle1Y })
+              .opacity(this.particle1Opacity)
+              .offset({ x: 50, y: -30 })
+
+            Circle()
+              .width(6)
+              .height(6)
+              .fill('#FF9500')
+              .translate({ y: this.particle2Y })
+              .opacity(this.particle2Opacity)
+              .offset({ x: -45, y: -25 })
+
+            Circle()
+              .width(5)
+              .height(5)
+              .fill('#5856D6')
+              .translate({ y: this.particle3Y })
+              .opacity(this.particle3Opacity)
+              .offset({ x: 35, y: 35 })
+
+            Circle()
+              .width(4)
+              .height(4)
+              .fill('#34C759')
+              .translate({ y: this.particle1Y * 0.8 })
+              .opacity(this.particle1Opacity * 0.8)
+              .offset({ x: -40, y: 30 })
+          }
+          .width('100%')
+          .height(140)
+        }
+        .width('100%')
+        .scale({ x: this.animPressScale * this.dragScale, y: this.animPressScale * this.dragScale })
+        .translate({ x: this.dragOffsetX, y: this.dragOffsetY })
+        .animation({ duration: this.isDragging ? 0 : 200, curve: Curve.EaseOut })
+        .gesture(
+          PanGesture()
+            .onActionStart(() => {
+              this.isDragging = true;
+              this.dragScale = 1.08;
+            })
+            .onActionUpdate((event: GestureEvent) => {
+              this.dragOffsetX = event.offsetX * 0.25;
+              this.dragOffsetY = event.offsetY * 0.25;
+            })
+            .onActionEnd(() => {
+              this.isDragging = false;
+              animateTo({
+                duration: 150,
+                curve: Curve.FastOutLinearIn
+              }, () => {
+                this.dragScale = 0.95;
+              });
+              animateTo({
+                duration: 400,
+                curve: Curve.FastOutSlowIn
+              }, () => {
+                this.dragOffsetX = 0;
+                this.dragOffsetY = 0;
+              });
+              setTimeout(() => {
+                animateTo({
+                  duration: 250,
+                  curve: Curve.FastOutSlowIn
+                }, () => {
+                  this.dragScale = 1;
+                });
+              }, 150);
+            })
+        )
+        .onClick(() => {
+          if (!this.isDragging) {
+            this.handleAnimPress();
+          }
+        })
+      }
+      .width('100%')
+
+      Column({ space: 12 }) {
+        Text('还没有添加话题')
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E5E5E5' : '#182431')
+
+        Row({ space: 6 }) {
+          Text('›')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#FF6B6B')
+          Text('点击右上角 + 添加话题')
+            .fontSize(13)
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+        }
+      }
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
   }
 
   @Builder
