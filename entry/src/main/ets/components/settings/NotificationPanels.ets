@@ -72,6 +72,8 @@ export struct OfflineSettingsPanel {
         .width('100%')
         .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 32 })
     }
     .layoutWeight(1)
@@ -128,6 +130,8 @@ export struct PushSettingsPanel {
         .width('100%')
         .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 32 })
     }
     .layoutWeight(1)
@@ -205,6 +209,8 @@ export struct MessageSettingsPanel {
         .width('100%')
         .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 32 })
     }
     .layoutWeight(1)

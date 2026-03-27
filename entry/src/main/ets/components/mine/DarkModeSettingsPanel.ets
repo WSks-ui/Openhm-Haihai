@@ -306,6 +306,8 @@ export struct DarkModeSettingsPanel {
         }
         .width('100%')
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding(16)
     }
     .width('100%')

@@ -60,6 +60,8 @@ export struct PrivacySettingsPanel {
         .width('100%')
         .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ top: 8, bottom: 32 })
     }
     .layoutWeight(1)

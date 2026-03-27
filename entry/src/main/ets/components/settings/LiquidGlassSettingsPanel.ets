@@ -181,6 +181,8 @@ export struct LiquidGlassSettingsPanel {
             this.glassOpacity = this.previewOpacity;
           })
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ bottom: 32 })
     }
     .layoutWeight(1)

@@ -263,6 +263,8 @@ struct SettingsPage {
     }
     .width('100%')
     .height('100%')
+    .alignItems(HorizontalAlign.Start)
+    .justifyContent(FlexAlign.Start)
     .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#000000' : '#F2F2F7')
   }
 
