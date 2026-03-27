@@ -1,15 +1,19 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import promptAction from '@ohos.promptAction';
 import { SettingsConstants } from '../../types/SettingsTypes';
+import { UserManager } from '../../model/UserModel';
 
 @Component
 export struct ChangePasswordPanel {
-  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
+  @StorageLink('userPhone') userPhone: string = '';
 
   @State oldPassword: string = '';
   @State newPassword: string = '';
   @State confirmPassword: string = '';
   @State passwordStrength: string = '';
+
+  private userManager: UserManager = UserManager.getInstance();
 
   private checkPasswordStrength(password: string): void {
     if (password.length < SettingsConstants.PASSWORD_MIN_LENGTH) {
@@ -33,7 +37,7 @@ export struct ChangePasswordPanel {
     }
   }
 
-  private handleChangePassword(): void {
+  private async handleChangePassword(): Promise<void> {
     if (!this.oldPassword) {
       promptAction.showToast({ message: '请输入旧密码' });
       return;
@@ -54,11 +58,38 @@ export struct ChangePasswordPanel {
       promptAction.showToast({ message: '两次输入的密码不一致' });
       return;
     }
-    promptAction.showToast({ message: '密码修改成功' });
-    this.oldPassword = '';
-    this.newPassword = '';
-    this.confirmPassword = '';
-    this.passwordStrength = '';
+    if (this.oldPassword === this.newPassword) {
+      promptAction.showToast({ message: '新密码不能与旧密码相同' });
+      return;
+    }
+
+    try {
+      const passwordValid = await this.userManager.verifyPassword(this.userPhone, this.oldPassword);
+      if (!passwordValid) {
+        promptAction.showToast({ message: '旧密码错误，请重新输入' });
+        return;
+      }
+
+      const passwordCheck = this.userManager.checkPassword(this.newPassword);
+      if (!passwordCheck.isValid) {
+        promptAction.showToast({ message: passwordCheck.message });
+        return;
+      }
+
+      const success = await this.userManager.updateUserPassword(this.userPhone, this.newPassword);
+      if (success) {
+        promptAction.showToast({ message: '密码修改成功' });
+        this.oldPassword = '';
+        this.newPassword = '';
+        this.confirmPassword = '';
+        this.passwordStrength = '';
+      } else {
+        promptAction.showToast({ message: '密码修改失败，请重试' });
+      }
+    } catch (error) {
+      promptAction.showToast({ message: '密码修改异常，请重试' });
+      console.error('修改密码异常: ' + JSON.stringify(error));
+    }
   }
 
   build() {

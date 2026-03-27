@@ -33,8 +33,34 @@ struct SettingsPage {
   private readonly ANIMATION_DURATION: number = 250;
   private readonly ENTER_DELAY: number = 10;
   private readonly EXIT_COMPLETE_DELAY: number = 50;
+  private pendingSubPageTimer: number = -1;
+  private pageStack: SubPageType[] = [];
 
   aboutToAppear() {
+    const params = router.getParams() as Record<string, string>;
+    if (params && params['subPage']) {
+      const subPage = params['subPage'] as SubPageType;
+      if (subPage && subPage !== 'none') {
+        setTimeout(() => {
+          this.navigateToSubPage(subPage);
+        }, 100);
+      }
+    }
+
+    this.pendingSubPageTimer = setInterval(() => {
+      const pending = AppStorage.get<string>('pendingSubPage');
+      if (pending && pending !== '') {
+        AppStorage.set('pendingSubPage', '');
+        this.navigateToSubPage(pending as SubPageType);
+      }
+    }, 100);
+  }
+
+  aboutToDisappear() {
+    if (this.pendingSubPageTimer !== -1) {
+      clearInterval(this.pendingSubPageTimer);
+      this.pendingSubPageTimer = -1;
+    }
   }
 
   private isLargeScreen(): boolean {
@@ -52,6 +78,9 @@ struct SettingsPage {
   private navigateToSubPage(subPage: SubPageType): void {
     if (subPage === 'none' || this.isAnimating || this.animationPhase === 'entering') {
       return;
+    }
+    if (this.currentSubPage !== 'none' && this.currentSubPage !== subPage) {
+      this.pageStack.push(this.currentSubPage);
     }
     this.isAnimating = true;
     this.animationPhase = 'entering';
@@ -79,29 +108,50 @@ struct SettingsPage {
     if (this.isAnimating || this.currentSubPage === 'none' || this.animationPhase === 'exiting') {
       return;
     }
-    this.isAnimating = true;
-    this.animationPhase = 'exiting';
-    this.contentOpacity = 0;
-    this.contentScale = this.isSmallScreen() ? 0.95 : 0.9;
-    this.contentTranslateX = this.isSmallScreen() ? '100%' : '5%';
-    this.mainContentOpacity = 0;
-    this.mainContentTranslateX = this.isSmallScreen() ? '-5%' : '0%';
-    this.mainContentScale = 0.92;
 
-    setTimeout(() => {
-      this.mainContentOpacity = 1;
-      this.mainContentTranslateX = '0';
-      this.mainContentScale = 1;
-    }, 30);
-
-    setTimeout(() => {
-      this.currentSubPage = 'none';
-      this.isAnimating = false;
-      this.animationPhase = 'idle';
+    const previousPage = this.pageStack.pop();
+    if (previousPage) {
+      this.isAnimating = true;
+      this.animationPhase = 'exiting';
       this.contentOpacity = 0;
-      this.contentScale = 0.92;
-      this.contentTranslateX = '0';
-    }, this.ANIMATION_DURATION);
+      this.contentScale = this.isSmallScreen() ? 0.95 : 0.9;
+      this.contentTranslateX = this.isSmallScreen() ? '100%' : '5%';
+
+      setTimeout(() => {
+        this.currentSubPage = previousPage;
+        this.contentOpacity = 1;
+        this.contentScale = 1;
+        this.contentTranslateX = '0';
+        setTimeout(() => {
+          this.isAnimating = false;
+          this.animationPhase = 'entered';
+        }, this.ANIMATION_DURATION);
+      }, 30);
+    } else {
+      this.isAnimating = true;
+      this.animationPhase = 'exiting';
+      this.contentOpacity = 0;
+      this.contentScale = this.isSmallScreen() ? 0.95 : 0.9;
+      this.contentTranslateX = this.isSmallScreen() ? '100%' : '5%';
+      this.mainContentOpacity = 0;
+      this.mainContentTranslateX = this.isSmallScreen() ? '-5%' : '0%';
+      this.mainContentScale = 0.92;
+
+      setTimeout(() => {
+        this.mainContentOpacity = 1;
+        this.mainContentTranslateX = '0';
+        this.mainContentScale = 1;
+      }, 30);
+
+      setTimeout(() => {
+        this.currentSubPage = 'none';
+        this.isAnimating = false;
+        this.animationPhase = 'idle';
+        this.contentOpacity = 0;
+        this.contentScale = 0.92;
+        this.contentTranslateX = '0';
+      }, this.ANIMATION_DURATION);
+    }
   }
 
   private async handleLogout(): Promise<void> {

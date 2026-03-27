@@ -1,11 +1,17 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
+import { SubPageType } from '../../types/SettingsTypes';
 
 @Component
 export struct PrivacySettingsPanel {
-  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
+  @StorageLink('userPhone') userPhone: string = '';
+
+  private navigateToSubPage(subPage: SubPageType): void {
+    AppStorage.setOrCreate('pendingSubPage', subPage);
+  }
 
   @Builder
-  ArrowItem(title: string, onClick: () => void) {
+  ArrowItem(title: string, subPage: SubPageType) {
     Row() {
       Text(title)
         .fontSize(16)
@@ -21,7 +27,7 @@ export struct PrivacySettingsPanel {
     .padding({ left: 20, right: 20 })
     .justifyContent(FlexAlign.Start)
     .onClick(() => {
-      onClick();
+      this.navigateToSubPage(subPage);
     })
   }
 
@@ -29,23 +35,23 @@ export struct PrivacySettingsPanel {
     Scroll() {
       Column({ space: 16 }) {
         Column({ space: 0 }) {
-          this.ArrowItem('修改账号密码', () => { console.info('修改账号密码'); })
+          this.ArrowItem('修改账号密码', 'changePassword')
           Divider()
             .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)')
             .margin({ left: 20 })
-          this.ArrowItem('更换绑定的手机号', () => { console.info('更换绑定的手机号'); })
+          this.ArrowItem('更换绑定的手机号', 'changePhone')
           Divider()
             .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)')
             .margin({ left: 20 })
-          this.ArrowItem('实名认证', () => { console.info('实名认证'); })
+          this.ArrowItem('实名认证', 'realNameAuth')
           Divider()
             .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)')
             .margin({ left: 20 })
-          this.ArrowItem('邮箱添加', () => { console.info('邮箱添加'); })
+          this.ArrowItem('邮箱添加', 'addEmail')
           Divider()
             .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)')
             .margin({ left: 20 })
-          this.ArrowItem('密保问题', () => { console.info('密保问题'); })
+          this.ArrowItem('密保问题', 'securityQuestion')
         }
         .width('100%')
         .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')

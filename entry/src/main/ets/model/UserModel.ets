@@ -362,4 +362,28 @@ export class UserManager {
     console.info(`用户信息更新成功：${phoneNumber}`);
     return true;
   }
+
+  /**
+   * 更新用户密码
+   * @param phoneNumber 手机号
+   * @param newPassword 新密码（明文，会自动加密）
+   * @returns Promise<boolean> 是否更新成功
+   */
+  async updateUserPassword(phoneNumber: string, newPassword: string): Promise<boolean> {
+    const users = await this.getAllUsers();
+    const user = users[phoneNumber];
+    
+    if (!user) {
+      console.error(`更新密码失败：用户 ${phoneNumber} 不存在`);
+      return false;
+    }
+
+    const encryptedPassword = this.encryptPassword(newPassword);
+    user.password = encryptedPassword;
+
+    await this.saveAllUsers(users);
+    
+    console.info(`用户密码更新成功：${phoneNumber}`);
+    return true;
+  }
 }
