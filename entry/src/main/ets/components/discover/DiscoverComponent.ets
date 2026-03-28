@@ -353,6 +353,29 @@ export struct DiscoverComponent {
     { id: 6, name: '音乐圈', icon: 'sys.symbol.music.note', memberCount: 3800, color: '#AF52DE', description: '让音乐带你飞翔', postCount: 643, todayActive: 156 }
   ];
 
+  private getCirclePosts(circleId: number): Post[] {
+    const techPostIds = ['4', '7', '11', '20', '21', '22'];
+    const foodPostIds = ['6', '12', '23', '24'];
+    const travelPostIds = ['3', '9', '17'];
+    const photoPostIds = ['3', '17'];
+    const bookPostIds = ['14'];
+    const musicPostIds = ['16'];
+
+    let relevantIds: string[] = [];
+    switch (circleId) {
+      case 1: relevantIds = techPostIds; break;
+      case 2: relevantIds = foodPostIds; break;
+      case 3: relevantIds = travelPostIds; break;
+      case 4: relevantIds = photoPostIds; break;
+      case 5: relevantIds = bookPostIds; break;
+      case 6: relevantIds = musicPostIds; break;
+      default: relevantIds = [];
+    }
+
+    const posts = mockPosts.filter(p => relevantIds.includes(p.id));
+    return posts.length > 0 ? posts : mockPosts.slice(0, 3);
+  }
+
   aboutToAppear() {
     this.breakpointSystem.register();
     aiSummaryService.init();
@@ -1626,7 +1649,7 @@ export struct DiscoverComponent {
 
             if (this.selectedCircle) {
               List({ space: 12 }) {
-                ForEach(mockPosts.slice(0, 3), (post: Post) => {
+                ForEach(this.getCirclePosts(this.selectedCircle.id), (post: Post) => {
                   ListItem() {
                     this.CirclePostItem(post, (p: Post) => this.openPostDetail(p))
                   }
