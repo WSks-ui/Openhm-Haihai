@@ -95,6 +95,24 @@ export struct ChangePasswordPanel {
   build() {
     Scroll() {
       Column({ space: 16 }) {
+        Column() {
+          Row() {
+            SymbolGlyph($r('sys.symbol.lock_shield'))
+              .fontSize(24)
+              .fontColor(['#7B68EE'])
+            Text('修改账号密码')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#1C1C1E')
+              .margin({ left: 12 })
+          }
+          .width('100%')
+          .padding(20)
+        }
+        .width('100%')
+        .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+        .borderRadius(16)
+
         Column({ space: 0 }) {
           Column() {
             Text('旧密码')
@@ -133,10 +151,15 @@ export struct ChangePasswordPanel {
                 this.checkPasswordStrength(value);
               })
             if (this.passwordStrength) {
-              Text(this.passwordStrength)
-                .fontSize(12)
-                .fontColor(this.getPasswordStrengthColor())
-                .margin({ top: 8 })
+              Row({ space: 8 }) {
+                SymbolGlyph($r('sys.symbol.checkmark_circle'))
+                  .fontSize(12)
+                  .fontColor([this.getPasswordStrengthColor()])
+                Text(this.passwordStrength)
+                  .fontSize(12)
+                  .fontColor(this.getPasswordStrengthColor())
+              }
+              .margin({ top: 8 })
             }
           }
           .width('100%')
@@ -180,14 +203,21 @@ export struct ChangePasswordPanel {
           })
 
         Column() {
-          Text('密码要求：长度8-20位，需包含字母和数字')
-            .fontSize(14)
-            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-            .lineHeight(20)
+          Row({ space: 6 }) {
+            SymbolGlyph($r('sys.symbol.info_circle'))
+              .fontSize(14)
+              .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93'])
+            Text('密码要求：长度8-20位，需包含字母和数字')
+              .fontSize(14)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+              .lineHeight(20)
+          }
         }
         .width('100%')
         .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 32 })
     }
     .layoutWeight(1)
@@ -196,12 +226,13 @@ export struct ChangePasswordPanel {
 
 @Component
 export struct ChangePhonePanel {
-  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
   @StorageLink('userPhone') userPhone: string = '';
 
   @State newPhone: string = '';
   @State verifyCode: string = '';
   @State countdown: number = 0;
+  @State isCodeSent: boolean = false;
 
   private sendVerifyCode(): void {
     if (!this.newPhone) {
@@ -214,6 +245,7 @@ export struct ChangePhonePanel {
     }
     promptAction.showToast({ message: '验证码已发送' });
     this.countdown = 60;
+    this.isCodeSent = true;
     this.startCountdown();
   }
 
@@ -242,21 +274,46 @@ export struct ChangePhonePanel {
     promptAction.showToast({ message: '手机号更换成功' });
     this.newPhone = '';
     this.verifyCode = '';
+    this.isCodeSent = false;
   }
 
   build() {
     Scroll() {
       Column({ space: 16 }) {
+        Column() {
+          Row() {
+            SymbolGlyph($r('sys.symbol.phone'))
+              .fontSize(24)
+              .fontColor(['#7B68EE'])
+            Text('更换绑定的手机号')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#1C1C1E')
+              .margin({ left: 12 })
+          }
+          .width('100%')
+          .padding(20)
+        }
+        .width('100%')
+        .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+        .borderRadius(16)
+
         Column({ space: 0 }) {
           Column() {
             Text('当前绑定手机号')
               .fontSize(14)
               .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
               .margin({ bottom: 8 })
-            Text(this.userPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'))
-              .fontSize(16)
-              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#EBEBF5' : '#1C1C1E')
-              .fontWeight(FontWeight.Medium)
+            Row() {
+              Text(this.userPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'))
+                .fontSize(16)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#EBEBF5' : '#1C1C1E')
+                .fontWeight(FontWeight.Medium)
+              SymbolGlyph($r('sys.symbol.checkmark_shield'))
+                .fontSize(16)
+                .fontColor(['#34C759'])
+                .margin({ left: 8 })
+            }
           }
           .width('100%')
           .padding(20)
@@ -303,10 +360,10 @@ export struct ChangePhonePanel {
                 .onChange((value: string) => {
                   this.verifyCode = value;
                 })
-              Button(this.countdown > 0 ? `${this.countdown}s` : '获取验证码')
+              Button(this.countdown > 0 ? `${this.countdown}s` : (this.isCodeSent ? '重新获取' : '获取验证码'))
                 .width(110)
                 .height(48)
-                .backgroundColor(this.countdown > 0 ? '#CCCCCC' : '#7B68EE')
+                .backgroundColor(this.countdown > 0 ? '#4A4A4A' : '#7B68EE')
                 .fontColor('#FFFFFF')
                 .fontSize(14)
                 .borderRadius(12)
@@ -338,14 +395,21 @@ export struct ChangePhonePanel {
           })
 
         Column() {
-          Text('更换手机号后，原手机号将无法用于登录，请妥善保管新手机号')
-            .fontSize(14)
-            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-            .lineHeight(20)
+          Row({ space: 6 }) {
+            SymbolGlyph($r('sys.symbol.info_circle'))
+              .fontSize(14)
+              .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93'])
+            Text('更换手机号后，原手机号将无法用于登录，请妥善保管新手机号')
+              .fontSize(14)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+              .lineHeight(20)
+          }
         }
         .width('100%')
         .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 32 })
     }
     .layoutWeight(1)
@@ -354,10 +418,11 @@ export struct ChangePhonePanel {
 
 @Component
 export struct RealNameAuthPanel {
-  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
 
   @State realName: string = '';
   @State idCard: string = '';
+  @State isVerified: boolean = false;
 
   private handleRealNameAuth(): void {
     if (!this.realName) {
@@ -373,49 +438,22 @@ export struct RealNameAuthPanel {
       return;
     }
     promptAction.showToast({ message: '实名认证提交成功' });
-    this.realName = '';
-    this.idCard = '';
+    this.isVerified = true;
   }
 
   build() {
     Scroll() {
       Column({ space: 16 }) {
-        Column({ space: 0 }) {
-          Column() {
-            Text('真实姓名')
-              .fontSize(14)
-              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-              .margin({ bottom: 8 })
-            TextInput({ placeholder: '请输入真实姓名', text: this.realName })
-              .height(48)
-              .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F2F2F7')
-              .borderRadius(12)
-              .padding({ left: 16, right: 16 })
-              .maxLength(20)
-              .onChange((value: string) => {
-                this.realName = value;
-              })
-          }
-          .width('100%')
-          .padding(20)
-
-          Divider()
-            .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)')
-
-          Column() {
-            Text('身份证号')
-              .fontSize(14)
-              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-              .margin({ bottom: 8 })
-            TextInput({ placeholder: '请输入身份证号', text: this.idCard })
-              .height(48)
-              .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F2F2F7')
-              .borderRadius(12)
-              .padding({ left: 16, right: 16 })
-              .maxLength(18)
-              .onChange((value: string) => {
-                this.idCard = value;
-              })
+        Column() {
+          Row() {
+            SymbolGlyph($r('sys.symbol.person'))
+              .fontSize(24)
+              .fontColor(['#7B68EE'])
+            Text('实名认证')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#1C1C1E')
+              .margin({ left: 12 })
           }
           .width('100%')
           .padding(20)
@@ -424,27 +462,108 @@ export struct RealNameAuthPanel {
         .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
         .borderRadius(16)
 
-        Button('提交认证')
-          .width('100%')
-          .height(50)
-          .backgroundColor('#7B68EE')
-          .fontColor('#FFFFFF')
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-          .borderRadius(12)
-          .onClick(() => {
-            this.handleRealNameAuth();
-          })
+        if (this.isVerified) {
+          Column() {
+            Row() {
+              SymbolGlyph($r('sys.symbol.checkmark_circle'))
+                .fontSize(48)
+                .fontColor(['#34C759'])
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .padding({ top: 20, bottom: 12 })
 
-        Column() {
-          Text('实名认证信息仅用于身份验证，我们将严格保护您的隐私安全')
-            .fontSize(14)
-            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-            .lineHeight(20)
+            Text('实名认证已通过')
+              .fontSize(16)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#EBEBF5' : '#1C1C1E')
+              .width('100%')
+              .textAlign(TextAlign.Center)
+
+            Text('您的账号已完成实名认证')
+              .fontSize(14)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+              .width('100%')
+              .textAlign(TextAlign.Center)
+              .padding({ top: 8, bottom: 20 })
+          }
+          .width('100%')
+          .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+          .borderRadius(16)
+        } else {
+          Column({ space: 0 }) {
+            Column() {
+              Text('真实姓名')
+                .fontSize(14)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+                .margin({ bottom: 8 })
+              TextInput({ placeholder: '请输入真实姓名', text: this.realName })
+                .height(48)
+                .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F2F2F7')
+                .borderRadius(12)
+                .padding({ left: 16, right: 16 })
+                .maxLength(20)
+                .onChange((value: string) => {
+                  this.realName = value;
+                })
+            }
+            .width('100%')
+            .padding(20)
+
+            Divider()
+              .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)')
+
+            Column() {
+              Text('身份证号')
+                .fontSize(14)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+                .margin({ bottom: 8 })
+              TextInput({ placeholder: '请输入身份证号', text: this.idCard })
+                .height(48)
+                .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F2F2F7')
+                .borderRadius(12)
+                .padding({ left: 16, right: 16 })
+                .maxLength(18)
+                .onChange((value: string) => {
+                  this.idCard = value;
+                })
+            }
+            .width('100%')
+            .padding(20)
+          }
+          .width('100%')
+          .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+          .borderRadius(16)
+
+          Button('提交认证')
+            .width('100%')
+            .height(50)
+            .backgroundColor('#7B68EE')
+            .fontColor('#FFFFFF')
+            .fontSize(16)
+            .fontWeight(FontWeight.Medium)
+            .borderRadius(12)
+            .onClick(() => {
+              this.handleRealNameAuth();
+            })
+
+          Column() {
+            Row({ space: 6 }) {
+              SymbolGlyph($r('sys.symbol.lock_shield'))
+                .fontSize(14)
+                .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93'])
+              Text('实名认证信息仅用于身份验证，我们将严格保护您的隐私安全')
+                .fontSize(14)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+                .lineHeight(20)
+            }
+          }
+          .width('100%')
+          .padding(16)
         }
-        .width('100%')
-        .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 32 })
     }
     .layoutWeight(1)
@@ -453,11 +572,13 @@ export struct RealNameAuthPanel {
 
 @Component
 export struct AddEmailPanel {
-  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
+  @StorageLink('userEmail') userEmail: string = '';
 
   @State email: string = '';
   @State emailVerifyCode: string = '';
   @State countdown: number = 0;
+  @State isEmailBound: boolean = false;
 
   private sendEmailVerifyCode(): void {
     if (!this.email) {
@@ -496,6 +617,8 @@ export struct AddEmailPanel {
       return;
     }
     promptAction.showToast({ message: '邮箱添加成功' });
+    this.isEmailBound = true;
+    AppStorage.setOrCreate('userEmail', this.email);
     this.email = '';
     this.emailVerifyCode = '';
   }
@@ -503,58 +626,16 @@ export struct AddEmailPanel {
   build() {
     Scroll() {
       Column({ space: 16 }) {
-        Column({ space: 0 }) {
-          Column() {
-            Text('邮箱地址')
-              .fontSize(14)
-              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-              .margin({ bottom: 8 })
-            TextInput({ placeholder: '请输入邮箱地址', text: this.email })
-              .height(48)
-              .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F2F2F7')
-              .borderRadius(12)
-              .padding({ left: 16, right: 16 })
-              .onChange((value: string) => {
-                this.email = value;
-              })
-          }
-          .width('100%')
-          .padding(20)
-
-          Divider()
-            .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)')
-
-          Column() {
-            Text('验证码')
-              .fontSize(14)
-              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-              .margin({ bottom: 8 })
-            Row() {
-              TextInput({ placeholder: '请输入验证码', text: this.emailVerifyCode })
-                .type(InputType.Number)
-                .height(48)
-                .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F2F2F7')
-                .borderRadius(12)
-                .padding({ left: 16, right: 16 })
-                .layoutWeight(1)
-                .maxLength(6)
-                .onChange((value: string) => {
-                  this.emailVerifyCode = value;
-                })
-              Button(this.countdown > 0 ? `${this.countdown}s` : '获取验证码')
-                .width(110)
-                .height(48)
-                .backgroundColor(this.countdown > 0 ? '#CCCCCC' : '#7B68EE')
-                .fontColor('#FFFFFF')
-                .fontSize(14)
-                .borderRadius(12)
-                .margin({ left: 12 })
-                .enabled(this.countdown === 0)
-                .onClick(() => {
-                  this.sendEmailVerifyCode();
-                })
-            }
-            .width('100%')
+        Column() {
+          Row() {
+            SymbolGlyph($r('sys.symbol.envelope'))
+              .fontSize(24)
+              .fontColor(['#7B68EE'])
+            Text('邮箱添加')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#1C1C1E')
+              .margin({ left: 12 })
           }
           .width('100%')
           .padding(20)
@@ -563,27 +644,124 @@ export struct AddEmailPanel {
         .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
         .borderRadius(16)
 
-        Button('添加邮箱')
-          .width('100%')
-          .height(50)
-          .backgroundColor('#7B68EE')
-          .fontColor('#FFFFFF')
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-          .borderRadius(12)
-          .onClick(() => {
-            this.handleAddEmail();
-          })
+        if (this.isEmailBound || (this.userEmail && this.userEmail !== '')) {
+          Column() {
+            Row() {
+              SymbolGlyph($r('sys.symbol.envelope'))
+                .fontSize(48)
+                .fontColor(['#34C759'])
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .padding({ top: 20, bottom: 12 })
 
-        Column() {
-          Text('绑定邮箱可用于找回密码和接收重要通知')
-            .fontSize(14)
-            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-            .lineHeight(20)
+            Text('邮箱已绑定')
+              .fontSize(16)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#EBEBF5' : '#1C1C1E')
+              .width('100%')
+              .textAlign(TextAlign.Center)
+
+            Text(this.userEmail || this.email)
+              .fontSize(14)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+              .width('100%')
+              .textAlign(TextAlign.Center)
+              .padding({ top: 8, bottom: 20 })
+          }
+          .width('100%')
+          .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+          .borderRadius(16)
+        } else {
+          Column({ space: 0 }) {
+            Column() {
+              Text('邮箱地址')
+                .fontSize(14)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+                .margin({ bottom: 8 })
+              TextInput({ placeholder: '请输入邮箱地址', text: this.email })
+                .height(48)
+                .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F2F2F7')
+                .borderRadius(12)
+                .padding({ left: 16, right: 16 })
+                .onChange((value: string) => {
+                  this.email = value;
+                })
+            }
+            .width('100%')
+            .padding(20)
+
+            Divider()
+              .color(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)')
+
+            Column() {
+              Text('验证码')
+                .fontSize(14)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+                .margin({ bottom: 8 })
+              Row() {
+                TextInput({ placeholder: '请输入验证码', text: this.emailVerifyCode })
+                  .type(InputType.Number)
+                  .height(48)
+                  .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F2F2F7')
+                  .borderRadius(12)
+                  .padding({ left: 16, right: 16 })
+                  .layoutWeight(1)
+                  .maxLength(6)
+                  .onChange((value: string) => {
+                    this.emailVerifyCode = value;
+                  })
+                Button(this.countdown > 0 ? `${this.countdown}s` : '获取验证码')
+                  .width(110)
+                  .height(48)
+                  .backgroundColor(this.countdown > 0 ? '#4A4A4A' : '#7B68EE')
+                  .fontColor('#FFFFFF')
+                  .fontSize(14)
+                  .borderRadius(12)
+                  .margin({ left: 12 })
+                  .enabled(this.countdown === 0)
+                  .onClick(() => {
+                    this.sendEmailVerifyCode();
+                  })
+              }
+              .width('100%')
+            }
+            .width('100%')
+            .padding(20)
+          }
+          .width('100%')
+          .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+          .borderRadius(16)
+
+          Button('添加邮箱')
+            .width('100%')
+            .height(50)
+            .backgroundColor('#7B68EE')
+            .fontColor('#FFFFFF')
+            .fontSize(16)
+            .fontWeight(FontWeight.Medium)
+            .borderRadius(12)
+            .onClick(() => {
+              this.handleAddEmail();
+            })
+
+          Column() {
+            Row({ space: 6 }) {
+              SymbolGlyph($r('sys.symbol.info_circle'))
+                .fontSize(14)
+                .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93'])
+              Text('绑定邮箱可用于找回密码和接收重要通知')
+                .fontSize(14)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+                .lineHeight(20)
+            }
+          }
+          .width('100%')
+          .padding(16)
         }
-        .width('100%')
-        .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 32 })
     }
     .layoutWeight(1)
@@ -592,10 +770,11 @@ export struct AddEmailPanel {
 
 @Component
 export struct SecurityQuestionPanel {
-  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  @StorageLink('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
 
   @State securityQuestion: string = '';
   @State securityAnswer: string = '';
+  @State isSecuritySet: boolean = false;
 
   private handleSecurityQuestion(): void {
     if (!this.securityQuestion) {
@@ -607,13 +786,30 @@ export struct SecurityQuestionPanel {
       return;
     }
     promptAction.showToast({ message: '密保问题设置成功' });
-    this.securityQuestion = '';
-    this.securityAnswer = '';
+    this.isSecuritySet = true;
   }
 
   build() {
     Scroll() {
       Column({ space: 16 }) {
+        Column() {
+          Row() {
+            SymbolGlyph($r('sys.symbol.list_bullet'))
+              .fontSize(24)
+              .fontColor(['#7B68EE'])
+            Text('密保问题')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#1C1C1E')
+              .margin({ left: 12 })
+          }
+          .width('100%')
+          .padding(20)
+        }
+        .width('100%')
+        .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF')
+        .borderRadius(16)
+
         Column({ space: 0 }) {
           Column() {
             Text('选择密保问题')
@@ -682,14 +878,21 @@ export struct SecurityQuestionPanel {
           })
 
         Column() {
-          Text('密保问题可用于找回密码，请牢记您设置的答案')
-            .fontSize(14)
-            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
-            .lineHeight(20)
+          Row({ space: 6 }) {
+            SymbolGlyph($r('sys.symbol.info_circle'))
+              .fontSize(14)
+              .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93'])
+            Text('密保问题可用于找回密码，请牢记您设置的答案')
+              .fontSize(14)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#98989D' : '#8E8E93')
+              .lineHeight(20)
+          }
         }
         .width('100%')
         .padding(16)
       }
+      .alignItems(HorizontalAlign.Start)
+      .height('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 32 })
     }
     .layoutWeight(1)
