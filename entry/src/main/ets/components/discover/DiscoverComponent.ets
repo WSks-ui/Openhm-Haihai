@@ -19,6 +19,9 @@ interface TopicCircle {
   icon: string;
   memberCount: number;
   color: string;
+  description?: string;
+  postCount?: number;
+  todayActive?: number;
 }
 
 @Component
@@ -224,6 +227,7 @@ struct TopicCircleItemComponent {
   @State pressed: boolean = false;
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
   circle: TopicCircle = { id: 0, name: '', icon: '', memberCount: 0, color: '#000000' };
+  openCirclePanel: (circle: TopicCircle) => void = () => {};
 
   build() {
     Row() {
@@ -267,6 +271,9 @@ struct TopicCircleItemComponent {
         this.pressed = false;
       }
     })
+    .onClick(() => {
+      this.openCirclePanel(this.circle);
+    })
   }
 }
 
@@ -293,7 +300,13 @@ export struct DiscoverComponent {
   @State topicSelectorScale: number = 1;
   @State topicSelectorOpacity: number = 1;
   @State topicSelectorOffsetX: number = 400;
-  
+  @State showCirclePanel: boolean = false;
+  @State selectedCircle: TopicCircle | null = null;
+  @State circlePanelOffsetX: number = 400;
+  @State showPostDetail: boolean = false;
+  @State selectedPostForDetail: Post | null = null;
+  @State postDetailTranslateX: number = 400;
+
   @State aiSummaryState: 'idle' | 'loading' | 'success' | 'error' = 'idle';
   @State aiSummaryContent: string = '';
   @State aiSummaryError: string = '';
@@ -332,12 +345,12 @@ export struct DiscoverComponent {
   @State dragScale: number = 1;
 
   private availableTopics: TopicCircle[] = [
-    { id: 1, name: '科技圈', icon: 'sys.symbol.laptopcomputer', memberCount: 12500, color: '#007AFF' },
-    { id: 2, name: '美食圈', icon: 'sys.symbol.fork.knife', memberCount: 8900, color: '#FF6B6B' },
-    { id: 3, name: '旅行圈', icon: 'sys.symbol.airplane', memberCount: 6700, color: '#34C759' },
-    { id: 4, name: '摄影圈', icon: 'sys.symbol.camera', memberCount: 5200, color: '#FF9500' },
-    { id: 5, name: '读书圈', icon: 'sys.symbol.book', memberCount: 4100, color: '#5856D6' },
-    { id: 6, name: '音乐圈', icon: 'sys.symbol.music.note', memberCount: 3800, color: '#AF52DE' }
+    { id: 1, name: '科技圈', icon: 'sys.symbol.laptopcomputer', memberCount: 12500, color: '#007AFF', description: '最新科技资讯、数码产品分享', postCount: 2340, todayActive: 856 },
+    { id: 2, name: '美食圈', icon: 'sys.symbol.fork.knife', memberCount: 8900, color: '#FF6B6B', description: '发现美味、分享食谱', postCount: 1892, todayActive: 623 },
+    { id: 3, name: '旅行圈', icon: 'sys.symbol.airplane', memberCount: 6700, color: '#34C759', description: '世界那么大，一起去看看', postCount: 1456, todayActive: 412 },
+    { id: 4, name: '摄影圈', icon: 'sys.symbol.camera', memberCount: 5200, color: '#FF9500', description: '用镜头记录美好瞬间', postCount: 987, todayActive: 298 },
+    { id: 5, name: '读书圈', icon: 'sys.symbol.book', memberCount: 4100, color: '#5856D6', description: '阅读是一座随身携带的避难所', postCount: 756, todayActive: 187 },
+    { id: 6, name: '音乐圈', icon: 'sys.symbol.music.note', memberCount: 3800, color: '#AF52DE', description: '让音乐带你飞翔', postCount: 643, todayActive: 156 }
   ];
 
   aboutToAppear() {
@@ -632,6 +645,62 @@ export struct DiscoverComponent {
     });
   }
 
+  private openCirclePanel(circle: TopicCircle): void {
+    this.selectedCircle = circle;
+    this.showCirclePanel = true;
+    this.circlePanelOffsetX = 400;
+
+    animateTo({
+      duration: 350,
+      curve: Curve.FastOutSlowIn
+    }, () => {
+      this.circlePanelOffsetX = 0;
+    });
+  }
+
+  private closeCirclePanel(): void {
+    animateTo({
+      duration: 280,
+      curve: Curve.FastOutSlowIn,
+      onFinish: () => {
+        this.showCirclePanel = false;
+        this.selectedCircle = null;
+        this.circlePanelOffsetX = 400;
+      }
+    }, () => {
+      this.circlePanelOffsetX = 400;
+    });
+  }
+
+  private openPostDetail(post: Post): void {
+    this.selectedPostForDetail = post;
+    this.showPostDetail = true;
+
+    animateTo({
+      duration: 350,
+      curve: Curve.FastOutSlowIn
+    }, () => {
+      this.circlePanelOffsetX = -30;
+      this.postDetailTranslateX = 0;
+    });
+  }
+
+  private closePostDetail(): void {
+    animateTo({
+      duration: 280,
+      curve: Curve.FastOutSlowIn,
+      onFinish: () => {
+        this.showPostDetail = false;
+        this.selectedPostForDetail = null;
+        this.circlePanelOffsetX = 0;
+        this.postDetailTranslateX = 400;
+      }
+    }, () => {
+      this.circlePanelOffsetX = 0;
+      this.postDetailTranslateX = 400;
+    });
+  }
+
   private toggleTopic(topic: TopicCircle): void {
     const index = this.topicCircles.findIndex(t => t.id === topic.id);
     if (index !== -1) {
@@ -799,6 +868,24 @@ export struct DiscoverComponent {
         this.TopicSelectorPanel()
       }
 
+      if (this.showCirclePanel && this.selectedCircle) {
+        Column() {
+          this.CirclePanel()
+        }
+        .width(320)
+        .height('100%')
+        .translate({ x: this.circlePanelOffsetX })
+      }
+
+      if (this.showPostDetail && this.selectedPostForDetail) {
+        Column() {
+          this.PostDetailPanel()
+        }
+        .width(320)
+        .height('100%')
+        .translate({ x: this.postDetailTranslateX })
+      }
+
       if (this.showDetail && this.selectedPost) {
         this.RadialDimBackground()
         Column() {
@@ -869,6 +956,24 @@ export struct DiscoverComponent {
         this.TopicSelectorPanel()
       }
 
+      if (this.showCirclePanel && this.selectedCircle) {
+        Column() {
+          this.CirclePanel()
+        }
+        .width(320)
+        .height('100%')
+        .translate({ x: this.circlePanelOffsetX })
+      }
+
+      if (this.showPostDetail && this.selectedPostForDetail) {
+        Column() {
+          this.PostDetailPanel()
+        }
+        .width(320)
+        .height('100%')
+        .translate({ x: this.postDetailTranslateX })
+      }
+
       if (this.showDetail && this.selectedPost) {
         this.RadialDimBackground()
         Column() {
@@ -905,6 +1010,24 @@ export struct DiscoverComponent {
       .width('100%')
       .height('100%')
 
+      if (this.showCirclePanel && this.selectedCircle) {
+        Column() {
+          this.CirclePanel()
+        }
+        .width(320)
+        .height('100%')
+        .translate({ x: this.circlePanelOffsetX })
+      }
+
+      if (this.showPostDetail && this.selectedPostForDetail) {
+        Column() {
+          this.PostDetailPanel()
+        }
+        .width(320)
+        .height('100%')
+        .translate({ x: this.postDetailTranslateX })
+      }
+
       if (this.showTopicSelector) {
         Column()
           .width('100%')
@@ -919,7 +1042,7 @@ export struct DiscoverComponent {
           })
           .opacity(this.backgroundDimOpacity)
           .animation({ duration: 300, curve: Curve.FastOutSlowIn })
-        
+
         Column() {
           Blank()
         }
@@ -1097,7 +1220,8 @@ export struct DiscoverComponent {
             ForEach(this.topicCircles, (circle: TopicCircle) => {
               ListItem() {
                 TopicCircleItemComponent({
-                  circle: circle
+                  circle: circle,
+                  openCirclePanel: (c: TopicCircle) => this.openCirclePanel(c)
                 })
               }
             }, (circle: TopicCircle) => circle.id.toString())
@@ -1408,6 +1532,306 @@ export struct DiscoverComponent {
     .scale({ x: this.topicSelectorScale, y: this.topicSelectorScale })
     .opacity(this.topicSelectorOpacity)
     .zIndex(200)
+  }
+
+  @Builder
+  CirclePanel() {
+    Stack({ alignContent: Alignment.TopEnd }) {
+      Column() {
+        LiquidGlass({
+          glassWidth: '100%',
+          glassHeight: '100%',
+          glassPadding: 0,
+          glassRadius: 28,
+          blurRadius: 24,
+          showBorder: true
+        }) {
+          Column() {
+            Row() {
+              SymbolGlyph($r('sys.symbol.xmark'))
+                .fontSize(22)
+                .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#666666' : '#999999'])
+                .onClick(() => {
+                  this.closeCirclePanel();
+                })
+              Blank()
+              Text(this.selectedCircle?.name || '')
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#182431')
+              Blank()
+              Text('...')
+                .fontSize(22)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#666666' : '#999999')
+            }
+            .width('100%')
+            .padding({ left: 20, right: 20, top: 20, bottom: 16 })
+
+            if (this.selectedCircle) {
+              Column({ space: 12 }) {
+                Row({ space: 16 }) {
+                  Column() {
+                    Text(`${(this.selectedCircle.memberCount / 1000).toFixed(1)}k`)
+                      .fontSize(20)
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor(this.selectedCircle.color)
+                    Text('成员')
+                      .fontSize(12)
+                      .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+                  }
+
+                  Column() {
+                    Text(`${this.selectedCircle.postCount || 0}`)
+                      .fontSize(20)
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor(this.selectedCircle.color)
+                    Text('帖子')
+                      .fontSize(12)
+                      .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+                  }
+
+                  Column() {
+                    Text(`${this.selectedCircle.todayActive || 0}`)
+                      .fontSize(20)
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor(this.selectedCircle.color)
+                    Text('今日活跃')
+                      .fontSize(12)
+                      .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+                  }
+                }
+                .width('100%')
+                .justifyContent(FlexAlign.Center)
+                .padding({ top: 8, bottom: 12 })
+
+                Text(this.selectedCircle.description || '')
+                  .fontSize(13)
+                  .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#AAAAAA' : '#666666')
+                  .textAlign(TextAlign.Center)
+                  .width('100%')
+              }
+              .width('100%')
+              .padding({ left: 20, right: 20, bottom: 16 })
+              .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)')
+              .borderRadius(16)
+            }
+
+            Text('最新帖子')
+              .fontSize(15)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E5E5E5' : '#182431')
+              .width('100%')
+              .padding({ left: 20, right: 20, bottom: 12 })
+
+            if (this.selectedCircle) {
+              List({ space: 12 }) {
+                ForEach(mockPosts.slice(0, 3), (post: Post) => {
+                  ListItem() {
+                    this.CirclePostItem(post, (p: Post) => this.openPostDetail(p))
+                  }
+                }, (post: Post) => post.id)
+              }
+              .padding({ left: 20, right: 20, bottom: 20 })
+              .layoutWeight(1)
+            }
+          }
+          .width('100%')
+          .height('100%')
+        }
+      }
+      .width('85%')
+      .constraintSize({ maxWidth: 400 })
+      .height('80%')
+      .translate({ x: this.circlePanelOffsetX })
+    }
+    .width('100%')
+    .height('100%')
+    .zIndex(200)
+  }
+
+  @Builder
+  CirclePostItem(post: Post, onOpenDetail: (post: Post) => void) {
+    Column({ space: 10 }) {
+      Row() {
+        Column() {
+          Text(post.userName)
+            .fontSize(14)
+            .fontWeight(FontWeight.Medium)
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E5E5E5' : '#182431')
+          Text(post.time)
+            .fontSize(12)
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        SymbolGlyph($r('sys.symbol.heart'))
+          .fontSize(16)
+          .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999'])
+        Text(`${post.likes}`)
+          .fontSize(13)
+          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+          .margin({ left: 4 })
+      }
+      .width('100%')
+
+      Text(post.title || post.content.substring(0, 30))
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#182431')
+        .width('100%')
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+      Text(post.content)
+        .fontSize(13)
+        .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#AAAAAA' : '#666666')
+        .width('100%')
+        .maxLines(2)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+      Row({ space: 16 }) {
+        Row({ space: 4 }) {
+          SymbolGlyph($r('sys.symbol.heart'))
+            .fontSize(14)
+            .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999'])
+          Text(`${post.likes}`)
+            .fontSize(12)
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+        }
+
+        Row({ space: 4 }) {
+          Text('💬')
+            .fontSize(14)
+          Text(`${post.commentsCount}`)
+            .fontSize(12)
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+        }
+      }
+      .width('100%')
+      .padding({ top: 8 })
+    }
+    .width('100%')
+    .padding(14)
+    .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.06)' : '#FFFFFF')
+    .borderRadius(16)
+    .shadow({
+      radius: 8,
+      color: this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.04)',
+      offsetY: 2
+    })
+    .onClick(() => {
+      onOpenDetail(post);
+    })
+  }
+
+  @Builder
+  PostDetailPanel() {
+    Stack({ alignContent: Alignment.TopEnd }) {
+      Column() {
+        LiquidGlass({
+          glassWidth: '100%',
+          glassHeight: '100%',
+          glassPadding: 0,
+          glassRadius: 24,
+          blurRadius: 20,
+          showBorder: true
+        }) {
+          Column() {
+            Row() {
+              SymbolGlyph($r('sys.symbol.xmark'))
+                .fontSize(22)
+                .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#666666' : '#999999'])
+                .onClick(() => {
+                  this.closePostDetail();
+                })
+              Blank()
+              Text('帖子详情')
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#182431')
+              Blank()
+              SymbolGlyph($r('sys.symbol.heart'))
+                .fontSize(22)
+                .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FF6B6B' : '#FF6B6B'])
+                .onClick(() => {
+                  if (this.selectedPostForDetail) {
+                    this.isLiked = this.likeManager.toggleLike(this.selectedPostForDetail);
+                  }
+                })
+            }
+            .width('100%')
+            .padding({ left: 20, right: 20, top: 20, bottom: 16 })
+
+            if (this.selectedPostForDetail) {
+              Scroll() {
+                Column({ space: 16 }) {
+                  Row({ space: 12 }) {
+                    Text(this.selectedPostForDetail.userName)
+                      .fontSize(16)
+                      .fontWeight(FontWeight.Medium)
+                      .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E5E5E5' : '#182431')
+                    Text(this.selectedPostForDetail.time)
+                      .fontSize(13)
+                      .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+                  }
+                  .width('100%')
+
+                  if (this.selectedPostForDetail.title) {
+                    Text(this.selectedPostForDetail.title)
+                      .fontSize(18)
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#182431')
+                      .width('100%')
+                  }
+
+                  Text(this.selectedPostForDetail.content)
+                    .fontSize(15)
+                    .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#CCCCCC' : '#333333')
+                    .width('100%')
+                    .lineHeight(24)
+
+                  Row({ space: 20 }) {
+                    Row({ space: 4 }) {
+                      SymbolGlyph($r('sys.symbol.heart'))
+                        .fontSize(18)
+                        .fontColor([this.isLiked ? '#FF6B6B' : (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')])
+                      Text(`${this.selectedPostForDetail.likes}`)
+                        .fontSize(14)
+                        .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+                    }
+
+                    Row({ space: 4 }) {
+                      Text('💬')
+                        .fontSize(16)
+                      Text(`${this.selectedPostForDetail.commentsCount}`)
+                        .fontSize(14)
+                        .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+                    }
+                  }
+                  .width('100%')
+                  .padding({ top: 12 })
+                }
+                .width('100%')
+                .padding({ left: 20, right: 20, bottom: 20 })
+              }
+              .layoutWeight(1)
+              .scrollBar(BarState.Off)
+            }
+          }
+          .width('100%')
+          .height('100%')
+        }
+      }
+      .width('85%')
+      .constraintSize({ maxWidth: 400 })
+      .height('80%')
+      .translate({ x: this.postDetailTranslateX })
+    }
+    .width('100%')
+    .height('100%')
+    .zIndex(250)
   }
 
   @Builder
