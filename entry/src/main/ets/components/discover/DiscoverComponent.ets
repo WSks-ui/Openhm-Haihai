@@ -312,7 +312,8 @@ export struct DiscoverComponent {
   @State aiSummaryError: string = '';
   @State isLiked: boolean = false;
   @State likeScale: number = 1;
-  
+  @State forceUpdate: number = 0;
+
   private breakpointSystem: BreakpointSystem = new BreakpointSystem();
   private likeManager: LikeManager = LikeManager.getInstance();
 
@@ -1651,9 +1652,12 @@ export struct DiscoverComponent {
               List({ space: 12 }) {
                 ForEach(this.getCirclePosts(this.selectedCircle.id), (post: Post) => {
                   ListItem() {
-                    this.CirclePostItem(post, (p: Post) => this.openPostDetail(p))
+                    this.CirclePostItem(post, (p: Post) => {
+                      this.likeManager.toggleLike(p);
+                      this.forceUpdate++;
+                    }, (p: Post) => this.openPostDetail(p))
                   }
-                }, (post: Post) => post.id)
+                }, (post: Post) => `${post.id}-${this.forceUpdate}`)
               }
               .padding({ left: 20, right: 20, bottom: 20 })
               .layoutWeight(1)
@@ -1674,7 +1678,7 @@ export struct DiscoverComponent {
   }
 
   @Builder
-  CirclePostItem(post: Post, onOpenDetail: (post: Post) => void) {
+  CirclePostItem(post: Post, onLike: (post: Post) => void, onOpenDetail: (post: Post) => void) {
     Column({ space: 10 }) {
       Row() {
         Column() {
@@ -1689,13 +1693,17 @@ export struct DiscoverComponent {
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
 
-        SymbolGlyph($r('sys.symbol.heart'))
-          .fontSize(16)
-          .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999'])
-        Text(`${post.likes}`)
-          .fontSize(13)
-          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
-          .margin({ left: 4 })
+        Row({ space: 4 }) {
+          SymbolGlyph($r('sys.symbol.heart'))
+            .fontSize(16)
+            .fontColor([this.likeManager.isPostLiked(post.id) ? '#FF6B6B' : (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')])
+          Text(`${post.likes}`)
+            .fontSize(13)
+            .fontColor(this.likeManager.isPostLiked(post.id) ? '#FF6B6B' : (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999'))
+        }
+        .onClick(() => {
+          onLike(post);
+        })
       }
       .width('100%')
 
@@ -1718,10 +1726,10 @@ export struct DiscoverComponent {
         Row({ space: 4 }) {
           SymbolGlyph($r('sys.symbol.heart'))
             .fontSize(14)
-            .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999'])
+            .fontColor([this.likeManager.isPostLiked(post.id) ? '#FF6B6B' : (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')])
           Text(`${post.likes}`)
             .fontSize(12)
-            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
+            .fontColor(this.likeManager.isPostLiked(post.id) ? '#FF6B6B' : (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999'))
         }
 
         Row({ space: 4 }) {
