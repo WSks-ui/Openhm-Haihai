@@ -85,6 +85,10 @@ struct Index {
     { index: 3, title: '我的', icon: 'app.media.icon_my_copy' }
   ];
 
+  // ---------------- 登录状态标记（用于提前拦截） ----------------
+  @State isAuthChecked: boolean = false; // 认证检查是否完成
+  @State isLoggedIn: boolean = false; // 当前登录状态
+
   // ============================================================================
   // 生命周期方法
   // ============================================================================
@@ -114,20 +118,35 @@ struct Index {
       this.lightY = `${y}%`;
     }, 50);
 
-    // 4. 登录态校验与用户数据初始化 — 使用preferences和自定义存储类
-    const ctx = getContext(this);
-    const store = await preferences.getPreferences(ctx, 'users');
-    const isLoggedIn = await store.get('isLoggedIn', false) as boolean;
+    // 4. 检查开发者模式标记（同步获取，避免延迟）
     const isDevMode = AppStorage.get('devModeSession') === true;
 
-    if (!isLoggedIn && !isDevMode) {
-      // 未登录且非开发者模式则强制跳转至登录页，替换当前栈 — 防止用户通过返回键回到未授权页面
-      router.replaceUrl({ url: 'pages/LoginPage' });
-    } else if (isDevMode) {
+    // 5. 登录态校验与用户数据初始化 — 使用preferences和自定义存储类
+    const ctx = getContext(this);
+
+    if (isDevMode) {
       // 开发者模式：初始化但不加载用户数据
+      this.isAuthChecked = true;
+      this.isLoggedIn = true;
       const prefsStorage = PreferencesStorage.getInstance();
       await prefsStorage.init(ctx);
-    } else {
+      return;
+    }
+
+    try {
+      const store = await preferences.getPreferences(ctx, 'users');
+      const loggedIn = await store.get('isLoggedIn', false) as boolean;
+
+      if (!loggedIn) {
+        // 未登录则强制跳转至登录页，替换当前栈 — 防止用户通过返回键回到未授权页面
+        // 注意：先跳转再设置状态，确保在导航完成前一直显示加载页面
+        router.replaceUrl({ url: 'pages/LoginPage' }).then(() => {
+          this.isLoggedIn = false;
+          this.isAuthChecked = true;
+        });
+        return;
+      }
+
       // 已登录则初始化数据存储服务 — PreferencesStorage封装了preferences操作，支持多用户
       const prefsStorage = PreferencesStorage.getInstance();
       const userManager = UserManager.getInstance();
@@ -151,6 +170,18 @@ struct Index {
           AppStorage.setOrCreate('userLevel', user.level || 1);
         }
       }
+
+      // 所有初始化和数据加载完成后才标记认证检查完成
+      this.isLoggedIn = true;
+      this.isAuthChecked = true;
+    } catch (error) {
+      // 出错时视为未登录，跳转到登录页
+      // 注意：先跳转再设置状态，确保在导航完成前一直显示加载页面
+      console.error('登录状态检查失败：' + JSON.stringify(error));
+      router.replaceUrl({ url: 'pages/LoginPage' }).then(() => {
+        this.isAuthChecked = true;
+        this.isLoggedIn = false;
+      });
     }
   }
 
@@ -280,10 +311,46 @@ struct Index {
   // ============================================================================
 
   build() {
-    // 根容器：Stack 用于分层叠加 — HarmonyOS Stack支持绝对定位层叠，适合构建复杂UI
-    // 采用分层设计（背景、内容、遮罩、侧边栏、悬浮球）使各层独立，便于管理和动画
     Stack({ alignContent: Alignment.Start }) {
+      if (!this.isAuthChecked) {
+        this.LoadingView()
+      } else {
+        this.MainPageContent()
+      }
+    }
+    .width('100%')
+    .height('100%')
+    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+  }
 
+  @Builder
+  LoadingView() {
+    Column() {
+      Column()
+        .width('100%')
+        .height('100%')
+        .backgroundColor('#1A1A1E')
+
+      Column({ space: 16 }) {
+        LoadingProgress()
+          .width(48)
+          .height(48)
+          .color('#7B68EE')
+
+        Text('加载中...')
+          .fontSize(16)
+          .fontColor('#A0A0A0')
+      }
+      .alignItems(HorizontalAlign.Center)
+    }
+    .width('100%')
+    .height('100%')
+    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+  }
+
+  @Builder
+  MainPageContent() {
+    Stack({ alignContent: Alignment.Start }) {
       // --- 第 1 层：纯色背景 (根据深色/浅色模式切换) ---
       // 使用Column作为底层，通过backgroundColor响应模式变化
       Column()
@@ -438,9 +505,6 @@ struct Index {
     }
     .width('100%')
     .height('100%')
-    // 【关键】根容器扩展安全区域到顶部和底部，确保内容能绘制到状态栏和导航栏背后 (沉浸式)
-    // HarmonyOS expandSafeArea让应用内容真正全屏，同时自动避开交互区域，提升沉浸感
-    .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
   // ============================================================================
