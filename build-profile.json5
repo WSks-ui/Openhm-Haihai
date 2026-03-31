@@ -28,13 +28,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\v2383\\.ohos\\config\\default_Haihai_09Er3t1lb5MxTBRguAzuGemsmTiN_mikUocQ1JGP0KU=.cer",
+          "certpath": "C:\\Users\\v2383\\.ohos\\config\\default_Openhm-Haihai_ILEdLh6110ge6sj_7lDUz5AWXNJPNSkJLJJDQf8VGyM=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B8564F04101DDA6B00DF8D1F0194DFE7F6551640904770CC9EFEF2C6F1CFA3D73B0E5F6ABD3F355",
-          "profile": "C:\\Users\\v2383\\.ohos\\config\\default_Haihai_09Er3t1lb5MxTBRguAzuGemsmTiN_mikUocQ1JGP0KU=.p7b",
+          "keyPassword": "0000001B81C733C9FCEB76105D20F6919C30518C252ADB509F535B7619D21AA05E18BDF07C71F17E08875E",
+          "profile": "C:\\Users\\v2383\\.ohos\\config\\default_Openhm-Haihai_ILEdLh6110ge6sj_7lDUz5AWXNJPNSkJLJJDQf8VGyM=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\v2383\\.ohos\\config\\default_Haihai_09Er3t1lb5MxTBRguAzuGemsmTiN_mikUocQ1JGP0KU=.p12",
-          "storePassword": "0000001B8471F0E37DB5F54578582F00C4C5BC293CEDABD9787D51F1A9F31107DE7029421A73D4B8B2AD38"
+          "storeFile": "C:\\Users\\v2383\\.ohos\\config\\default_Openhm-Haihai_ILEdLh6110ge6sj_7lDUz5AWXNJPNSkJLJJDQf8VGyM=.p12",
+          "storePassword": "0000001B9C07A5338A613A2A1D7952CF4629BAFF2460E0CB0BE72DDC7647B8125D898AF3F6CD206BE34FB1"
         }
       }
     ]
