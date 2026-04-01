@@ -10,36 +10,73 @@
 ## ✨ 特性亮点
 
 ### 🎨 视觉设计
-- **玻璃态效果 (LiquidGlass)** - 毛玻璃拟物组件，支持可调模糊度、自动流光动画、触摸光效反馈
-- **动态渐变背景** - 柔和的紫色系渐变动画
-- **深色/浅色模式自适应** - 主题自动切换
+
+- **玻璃态效果 (LiquidGlass)** - 毛玻璃拟物组件，支持可调模糊度、自动流光动画、触摸光效反馈、3D物理反馈倾斜效果
+- **动态渐变背景** - 柔和的紫色系渐变动画，Lissajous 曲线光效漂浮
+- **深色/浅色模式自适应** - 主题自动切换，全局颜色方案统一管理
+- **AnimatedBackground** - 动态背景组件，提供沉浸式视觉体验
 
 ### 🔐 认证系统
+
 - 手机号 + 验证码登录 / 手机号 + 密码登录
-- 滑块验证码 - 注册/敏感操作防护
-- 开发者模式 - 快速进入应用（临时会话）
+- 滑块验证码 - 注册/敏感操作防护（SliderCaptcha）
+- 开发者模式 - 快速进入应用（密码 `114514`）
+- 用户协议与隐私政策弹窗（AgreementDialog）
 
 ### 📝 内容发布
-- 图文内容发布，支持相册/相机图片选择
-- 本地草稿自动保存
+
+- 图文内容发布，支持相册/相机图片选择（PhotoPickerService）
+- 本地草稿自动保存（DraftManager）
+- 发布菜单组件（PublishMenu）
 
 ### 🔍 智能搜索
-- 综合搜索 - 全部/用户/内容分类
-- Kepler AI 总结 - 搜索结果智能摘要
-- 瀑布流展示 + 骨架屏加载
+
+- 综合搜索 - 全部/用户/分类筛选
+- Kepler AI 总结 - 搜索结果智能摘要（基于 DeepSeek）
+- 瀑布流展示 + 骨架屏加载（SearchLoadingSkeleton）
+- 搜索历史/热搜/搜索发现
+- 语音搜索输入（VoiceInputDialog + SpeechRecognitionService）
+- 搜索建议（实时联想）
 
 ### 🤖 AI 聊天
-- DeepSeek 对话 - AI 智能对话
+
+- DeepSeek 对话 - AI 智能对话（支持推理模式）
 - Tavily 搜索增强 - 实时网络搜索
 - 语音输入 + 对话建议卡片
+- AI Summary 服务（AISummaryService）
+- API Key 配置管理
+- 聊天记录持久化存储
 
 ### 👤 用户中心
-- 个人资料管理、浏览历史、我的草稿、我的收藏
-- 深色模式切换、存储清理
+
+- 个人资料管理（EditProfilePage）
+- 浏览历史（HistoryManager）
+- 我的草稿（MyDraftsPanel）
+- 我的收藏/点赞（MyLikesPanel、LikeManager）
+- 深色模式切换（DarkModeSettingsPanel）
+- 存储清理（StorageCleanPanel）
+- 账户设置（AccountSettingsPanel）
+
+### ⚙️ 设置系统
+
+- 隐私设置（PrivacySettingsPanel）
+- 安全设置（SecurityPanels）
+- 通知设置（NotificationPanels）
+- 通知偏好设置（LiquidGlassSettingsPanel）
+- 个人资料编辑面板（EditProfilePanel）
+
+### 📱 响应式适配
+
+- BreakpointSystem 断点系统 - sm/md/lg/xl 四档适配
+- 握持手势检测（HoldingHandManager）- 左手/右手/双手握持状态
+- 多设备支持 - 手机、平板、二合一设备、可穿戴设备
+- 沉浸式安全区域处理（expandSafeArea）
+- 自适应布局 - 底部导航（手机）与侧边导航（平板）
 
 ## 📦 安装
 
 ### 环境要求
+
 - HarmonyOS SDK 4.0+
 - DevEco Studio 4.0+
 - Node.js 18+
@@ -74,74 +111,140 @@ cd haihai
 ```
 entry/src/main/ets/
 ├── components/                         # UI 组件库
-│   ├── common/                         # 通用组件
+│   ├── common/                        # 通用组件
 │   │   ├── AnimatedBackground.ets     # 动态背景
-│   │   ├── LiquidGlass.ets            # 玻璃态组件
-│   │   ├── MineSidebar.ets            # 侧边栏
-│   │   ├── PageHeader.ets             # 页面头部
-│   │   ├── PublishMenu.ets            # 发布菜单
-│   │   └── SliderCaptcha.ets           # 滑块验证
-│   ├── dialogs/                        # 对话框组件
-│   │   ├── AgreementDialog.ets         # 协议对话框
-│   │   ├── SliderCaptchaDialog.ets    # 滑块验证对话框
-│   │   └── VoiceInputDialog.ets       # 语音输入对话框
-│   ├── discover/                       # 发现页组件
-│   ├── home/                           # 首页组件
-│   ├── message/                        # 消息组件
-│   ├── mine/                           # "我的"页面组件
-│   ├── search/                         # 搜索组件
-│   └── settings/                       # 设置相关组件
+│   │   ├── LiquidGlass.ets           # 玻璃态组件
+│   │   ├── MineSidebar.ets           # 侧边栏
+│   │   ├── PageHeader.ets            # 页面头部
+│   │   ├── PublishMenu.ets           # 发布菜单
+│   │   └── SliderCaptcha.ets         # 滑块验证
+│   ├── dialogs/                       # 对话框组件
+│   │   ├── AgreementDialog.ets       # 协议对话框
+│   │   ├── SliderCaptchaDialog.ets  # 滑块验证对话框
+│   │   └── VoiceInputDialog.ets     # 语音输入对话框
+│   ├── discover/                      # 发现页组件
+│   │   └── DiscoverComponent.ets
+│   ├── home/                          # 首页组件
+│   │   └── HomeComponent.ets
+│   ├── message/                       # 消息组件
+│   │   ├── AccountSettingsPanel.ets  # 账户设置面板
+│   │   └── MessageComponent.ets
+│   ├── mine/                          # "我的"页面组件
+│   │   ├── DarkModeSettingsPanel.ets # 深色模式设置
+│   │   ├── MineComponent.ets
+│   │   ├── MyDraftsPanel.ets         # 我的草稿
+│   │   ├── MyHistoryPanel.ets        # 浏览历史
+│   │   ├── MyLikesPanel.ets          # 我的收藏
+│   │   └── StorageCleanPanel.ets     # 存储清理
+│   ├── search/                        # 搜索组件
+│   │   ├── SearchPage.ets            # 搜索主页
+│   │   └── search_result/            # 搜索结果视图
+│   │       ├── AllResultsView.ets     # 全部结果
+│   │       ├── KeplerResultView.ets  # Kepler总结
+│   │       ├── PostWaterFlow.ets     # 瀑布流
+│   │       ├── SearchLoadingSkeleton.ets # 骨架屏
+│   │       └── UserResultsView.ets    # 用户结果
+│   └── settings/                      # 设置相关组件
+│       ├── EditProfilePanel.ets       # 编辑资料
+│       ├── LiquidGlassSettingsPanel.ets # 玻璃设置
+│       ├── NotificationPanels.ets     # 通知设置
+│       ├── PrivacySettingsPanel.ets   # 隐私设置
+│       ├── SecurityPanels.ets         # 安全设置
+│       └── SettingItemBuilders.ets   # 设置项构建器
 │
-├── entryability/                       # 应用入口 Ability
-├── model/                              # 数据模型层
-├── pages/                              # 页面
-│   ├── AIChatPage.ets                  # AI 聊天主页
-│   ├── ChatDetailPage.ets             # 聊天详情
-│   ├── CreatePostPage.ets             # 创建帖子
-│   ├── Index.ets                       # 首页
-│   ├── LoginPage.ets                   # 登录页
-│   ├── PostDetailPage.ets             # 帖子详情
-│   ├── RegisterPage.ets                # 注册页
-│   ├── SearchResultPage.ets           # 搜索结果页
-│   ├── SettingsPage.ets                # 设置页
-│   ├── aichat/                         # AI 聊天子模块
-│   ├── discover/                       # 发现子模块
-│   └── mine/                           # "我的"子模块
+├── entryability/                      # 应用入口 Ability
+│   └── EntryAbility.ets
+├── entrybackupability/                # 备份能力
+│   └── EntryBackupAbility.ets
+├── model/                             # 数据模型层
+│   ├── AppStatistics.ets             # 应用统计
+│   ├── Post.ets                      # 帖子模型
+│   ├── SearchData.ets                # 搜索数据
+│   ├── SidebarItemModel.ets          # 侧边栏模型
+│   ├── User.ets                      # 用户模型
+│   ├── UserModel.ets                 # 用户管理
+│   ├── commentGenerator.ets          # 评论生成器
+│   └── commentTemplates.ets          # 评论模板
+├── pages/                             # 页面
+│   ├── AIChatPage.ets                # AI 聊天主页
+│   ├── ChatDetailPage.ets           # 聊天详情
+│   ├── ChatSplitPage.ets             # 分屏聊天
+│   ├── CreatePostPage.ets           # 创建帖子
+│   ├── Index.ets                     # 首页
+│   ├── LoginPage.ets                 # 登录页
+│   ├── PostDetailPage.ets           # 帖子详情
+│   ├── RegisterPage.ets              # 注册页
+│   ├── SearchResultPage.ets         # 搜索结果页
+│   ├── SettingsPage.ets              # 设置页
+│   ├── aichat/                       # AI 聊天子模块
+│   │   ├── ApiKeyDialog.ets         # API密钥对话框
+│   │   ├── ChatHeaderBar.ets        # 聊天头部
+│   │   ├── ChatInputBar.ets         # 聊天输入栏
+│   │   ├── MessageBubble.ets        # 消息气泡
+│   │   ├── SuggestionCards.ets      # 建议卡片
+│   │   ├── deepseek.ets             # DeepSeek服务
+│   │   ├── storage.ets               # 聊天存储
+│   │   ├── tavily.ets               # Tavily搜索
+│   │   └── types.ets                # 类型定义
+│   ├── discover/                      # 发现子模块
+│   │   ├── DailyPicksPage.ets       # 每日精选
+│   │   └── TopicSquarePage.ets       # 话题广场
+│   └── mine/                          # "我的"子模块
+│       └── EditProfilePage.ets       # 编辑资料页
 │
-├── types/                              # 类型定义
-└── utils/                              # 工具服务层
+├── types/                             # 类型定义
+│   └── SettingsTypes.ets
+└── utils/                             # 工具服务层
+    ├── AISummaryService.ets          # AI摘要服务
+    ├── AliyunSMSService.ets          # 阿里云短信
+    ├── BreakpointSystem.ets           # 断点系统
+    ├── ContentGenerator.ets          # 内容生成器
+    ├── DraftManager.ets              # 草稿管理
+    ├── HistoryManager.ets            # 历史管理
+    ├── HoldingHandManager.ets        # 握持管理
+    ├── LikeManager.ets               # 点赞管理
+    ├── PhotoPickerService.ets        # 图片选择器
+    ├── PreferencesStorage.ets         # 偏好存储
+    ├── SMSService.ets                # 短信服务
+    ├── ScanCodeService.ets           # 扫码服务
+    ├── SpeechRecognitionService.ets   # 语音识别
+    └── VerifyCodeManager.ets          # 验证码管理
 ```
 
 ## 🧩 功能模块
 
 | 模块 | 说明 |
-|-----|-----|
-| 首页 (Index) | 底部 Tab 主入口，响应式布局 |
+|-----|------|
+| 首页 (Index) | 底部 Tab 主入口，响应式布局，支持手机/平板自适应 |
 | 发现 (Discover) | 内容发现、话题广场、每日精选 |
-| 消息 (Message) | 通知、评论、点赞消息 |
-| 我的 (Mine) | 个人中心、设置、草稿箱、历史、收藏 |
-| AI 聊天 (AIChat) | DeepSeek / Tavily AI 对话 |
-| 搜索 (Search) | 综合搜索、分类展示、Kepler AI 总结 |
+| 消息 (Message) | 通知、评论、点赞消息、账户设置 |
+| 我的 (Mine) | 个人中心、浏览历史、草稿箱、收藏、存储清理 |
+| AI 聊天 (AIChat) | DeepSeek/Tavily AI 对话、语音输入、API 配置 |
+| 搜索 (Search) | 综合搜索、分类展示、Kepler AI 总结、语音搜索 |
+| 设置 (Settings) | 隐私设置、安全设置、通知设置、资料编辑 |
 
 ## 🔧 技术栈
 
 | 分类 | 技术 |
-|-----|-----|
+|-----|------|
 | 框架 | HarmonyOS SDK |
 | 语言 | ArkTS (TypeScript) |
 | UI | 自定义组件 + 玻璃态效果 (LiquidGlass) |
 | AI 服务 | DeepSeek API / Tavily Search API |
 | 存储 | PreferencesStorage / 本地草稿箱 |
 | 响应式 | BreakpointSystem 多设备适配 |
+| 手势 | HoldingHandManager 握持检测 |
+| 动画 | ArkUI 动画系统 + 曲线动画 |
+| 安全 | 滑块验证码、短信验证码、密码验证 |
 
 ## 🔑 权限说明
 
 | 权限 | 用途 |
-|-----|-----|
+|-----|------|
 | `ohos.permission.INTERNET` | 网络访问 |
 | `ohos.permission.MICROPHONE` | 麦克风（语音输入） |
 | `ohos.permission.CAMERA` | 相机（拍照发布） |
-| `ohos.permission.DETECT_GESTURE` | 手势检测 |
+| `ohos.permission.DETECT_GESTURE` | 手势检测（握持状态） |
 
 ## 🛠️ 开发者模式
 
@@ -174,14 +277,15 @@ entry/src/main/ets/
 
 ## 📊 代码统计
 
-| 目录 | 文件数 | 行数 |
-|-----|-------|-----|
-| 组件 (components) | 31 | 8,564 |
-| 页面 (pages) | 22 | 10,000+ |
-| 模型 (model) | 8 | ~1,000 |
-| 工具 (utils) | 14 | ~2,500 |
-| 其他 | 4 | ~300 |
-| **总计** | **78** | **20,367** |
+| 目录 | 文件数 | 说明 |
+|-----|-------|------|
+| 组件 (components) | 31 | 包含通用、对话框、各业务模块组件 |
+| 页面 (pages) | 22 | 主页面及子模块页面 |
+| 模型 (model) | 8 | 数据模型层 |
+| 工具 (utils) | 14 | 服务层工具类 |
+| 类型 (types) | 1 | TypeScript 类型定义 |
+| 其他 | 2 | 入口Ability、备份Ability |
+| **总计** | **78** | **核心业务代码模块** |
 
 ## 🤝 贡献
 
@@ -200,7 +304,6 @@ entry/src/main/ets/
 3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 创建 Pull Request
-
 
 ## 🔒 安全政策
 
