@@ -309,13 +309,13 @@ entry/src/main/ets/
 
 如果您发现任何安全漏洞，请通过以下方式联系：
 
-- 📧 发送邮件至：chr114614chr@gmail.com
+- 📧 发送邮件至：chr114514chr@gmail.com
 - 🐞 请勿在公开的 Issue 中提交安全漏洞
 
 ## 📧 联系我们
 
 - 🌐 网站：https://www.haihai.app(待定)
-- 📮 邮箱：chr114614chr@gmail.com
+- 📮 邮箱：chr114514chr@gmail.com
 - 🐞 问题反馈：[Issues](https://gitee.com/haihai-app/haihai/issues)
 
 ## 📝 应用信息
