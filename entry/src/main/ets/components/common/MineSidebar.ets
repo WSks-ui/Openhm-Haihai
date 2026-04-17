@@ -2,6 +2,7 @@ import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import { SidebarItemModel } from '../../model/SidebarItemModel';
+import { BRAND_PRIMARY, COLOR_DARK_BG_PRIMARY, COLOR_DARK_BG_SECONDARY } from '../../constants/ThemeTokens';
 
 @Component
 export struct MineSidebar {
@@ -19,11 +20,12 @@ export struct MineSidebar {
       Text(title)
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
+        .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#333333')
         .layoutWeight(1)
       if (hasCount) {
         Text(count?.toString())
           .fontSize(12)
-          .fontColor('#999')
+          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
       }
     }
     .width('100%')
@@ -38,7 +40,7 @@ export struct MineSidebar {
       })
     }
     .width('90%')
-    .backgroundColor(Color.White)
+    .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? COLOR_DARK_BG_PRIMARY : Color.White)
     .borderRadius(16)
     .padding({ left: 16, right: 16 })
     .margin({ bottom: 12 })
@@ -82,7 +84,7 @@ export struct MineSidebar {
             .margin({ bottom: 4 })
           Text('扫一扫')
             .fontSize(12)
-            .fontColor('#666')
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#666666')
         }
         .onClick(() => {
           try {
@@ -100,7 +102,7 @@ export struct MineSidebar {
             .margin({ bottom: 4 })
           Text('帮助与客服')
             .fontSize(12)
-            .fontColor('#666')
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#666666')
         }
         .onClick(() => {
           try {
@@ -133,10 +135,10 @@ export struct MineSidebar {
       .width('100%')
       .justifyContent(FlexAlign.SpaceAround)
       .padding({ top: 16, bottom: 32 })
-      .backgroundColor(Color.White)
+      .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? COLOR_DARK_BG_PRIMARY : Color.White)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#fff4f4f4')
+    .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#000000' : '#F4F4F4')
   }
 }
