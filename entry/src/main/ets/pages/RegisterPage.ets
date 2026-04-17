@@ -1,12 +1,12 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
-import display from '@ohos.display';
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import { UserManager, CheckResult } from '../model/UserModel';
 import { VerifyCodeManager, VerifyResult, SendCodeResult } from '../utils/VerifyCodeManager';
 import { SliderCaptchaDialog } from '../components/dialogs/SliderCaptchaDialog';
 import { LiquidGlass } from '../components/common/LiquidGlass';
 import { AnimatedBackground } from '../components/common/AnimatedBackground';
+import { BreakpointSystem } from '../utils/BreakpointSystem';
 
 interface ThemeColors {
   bgColor: string;
@@ -48,23 +48,29 @@ struct RegisterPage {
   @State isSendingCode: boolean = false;
   @State countdown: number = 0;
   @State isRegistering: boolean = false;
-  @State screenWidth: number = 0;
-  @State isLargeScreen: boolean = false;
 
+  // 使用断点系统响应屏幕变化
+  @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance();
+
+  // 计算属性：大屏模式
+  get isLargeScreen(): boolean {
+    return ['md', 'lg', 'xl'].includes(this.currentBreakpoint);
+  }
 
   private userManager: UserManager = UserManager.getInstance();
   private verifyCodeManager: VerifyCodeManager = VerifyCodeManager.getInstance();
   private sliderCaptchaDialogController: CustomDialogController | null = null;
 
   async aboutToAppear() {
+    // 注册断点监听，响应屏幕变化
+    this.breakpointSystem.register();
+
     try {
       const ctx = getContext(this);
       await this.userManager.init(ctx);
       await this.verifyCodeManager.init(ctx);
-
-      this.screenWidth = px2vp(display.getDefaultDisplaySync().width);
-      this.isLargeScreen = this.screenWidth >= 600;
     } catch (error) {
       console.error('初始化失败：' + JSON.stringify(error));
     }

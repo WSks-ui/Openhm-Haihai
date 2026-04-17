@@ -37,12 +37,12 @@ struct SearchResultPage {
   @State lastSearchedKeyword: string = '';
   @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
-  
+
   // 沉浸式效果：安全区域高度
   @StorageProp('safeAreaTop') safeAreaTop: number = 0;
   @StorageProp('safeAreaBottom') safeAreaBottom: number = 0;
-  
-  private breakpointSystem: BreakpointSystem = new BreakpointSystem();
+
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance(); // 使用单例
   // 标签动画状态
   @State tabIndicatorX: number = 0;
   @State tabIndicatorWidth: number = 0;
@@ -50,7 +50,7 @@ struct SearchResultPage {
   private tabInfos: TabInfo[] = [];
 
   aboutToAppear() {
-    this.breakpointSystem.register();
+    this.breakpointSystem.register(); // 单例内部会防止重复注册
     const params = router.getParams() as Record<string, string>;
     if (params && params['keyword']) {
       this.keyword = params['keyword'];
@@ -58,9 +58,7 @@ struct SearchResultPage {
     }
   }
 
-  aboutToDisappear() {
-    this.breakpointSystem.unregister();
-  }
+  // 页面销毁时无需注销，由单例统一管理
 
   // 处理标签切换的新方法
   onTabClick(index: number) {

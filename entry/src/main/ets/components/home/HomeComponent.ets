@@ -29,12 +29,12 @@ export struct HomeComponent {
   @StorageLink('openSearchPage') @Watch('onOpenSearchPageChange') openSearchPage: boolean = false; // 是否需要打开搜索页面
   @StorageLink('refreshHomeData') @Watch('onRefreshSignal') refreshHomeData: number = 0; // 监听刷新信号
 
-  // 断点监听器实例
-  private breakpointSystem: BreakpointSystem = new BreakpointSystem();
+  // 断点监听器实例 — 使用单例，由 Index.ets 统一注册
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance();
   private likeManager: LikeManager = LikeManager.getInstance();
 
   aboutToAppear() {
-    this.breakpointSystem.register();
+    // 断点监听由 Index.ets 统一管理，子组件无需重复注册
     this.refreshPosts();
   }
 
@@ -63,9 +63,7 @@ export struct HomeComponent {
     }
   }
 
-  aboutToDisappear() {
-    this.breakpointSystem.unregister();
-  }
+  // 子组件无需注销断点监听，由 Index.ets 统一管理
 
   // 辅助方法：生成随机新帖子
   private generateNewPosts(count: number): Post[] {

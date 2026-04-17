@@ -24,7 +24,7 @@ export struct SearchPage {
   @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
   
-  private breakpointSystem: BreakpointSystem = new BreakpointSystem();
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance();
   private debounceTimer: number = -1;
   private readonly DEBOUNCE_DELAY: number = 300;
 
@@ -75,8 +75,9 @@ export struct SearchPage {
   });
 
   aboutToAppear() {
+    // 断点监听由单例统一管理，防止重复注册
     this.breakpointSystem.register();
-    
+
     if (this.startVoiceInput) {
       setTimeout(() => {
         this.voiceController.open();
@@ -94,7 +95,7 @@ export struct SearchPage {
   }
 
   aboutToDisappear() {
-    this.breakpointSystem.unregister();
+    // 断点监听由单例统一管理，无需注销
     if (this.debounceTimer !== -1) {
       clearTimeout(this.debounceTimer);
       this.debounceTimer = -1;
@@ -152,17 +153,21 @@ export struct SearchPage {
       history.splice(index, 1);
     }
     history.unshift(trimmedValue);
-    
+
     if (history.length > 20) {
       history.length = 20;
     }
     this.searchHistory = history;
 
-    router.pushUrl({
-      url: 'pages/SearchResultPage',
-      params: { keyword: trimmedValue }
-    });
+    // 先关闭搜索页面，再跳转到搜索结果页
+    // 使用 setTimeout 确保模态页面关闭动画完成后再进行路由跳转
     this.isPresented = false;
+    setTimeout(() => {
+      router.pushUrl({
+        url: 'pages/SearchResultPage',
+        params: { keyword: trimmedValue }
+      });
+    }, 300);
   }
 
   clearHistory(): void {

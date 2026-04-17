@@ -1,11 +1,12 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import preferences from '@ohos.data.preferences';
-import display from '@ohos.display';
 import { VerifyCodeManager } from '../utils/VerifyCodeManager';
 import { UserManager } from '../model/UserModel';
 import { AgreementDialog } from '../components/dialogs/AgreementDialog';
 import { PreferencesStorage } from '../utils/PreferencesStorage';
+import { BreakpointSystem } from '../utils/BreakpointSystem';
+import { ConfigurationConstant } from '@kit.AbilityKit';
 
 const DEV_MODE_ENABLED = true;
 const DEV_MODE_HIDDEN_PASSWORD = '114514';
@@ -29,8 +30,17 @@ struct LoginPage {
   @State isSending: boolean = false;
   @State isPhoneRegistered: boolean = true;
   @State loginMode: 'code' | 'password' = 'code';
-  @State screenWidth: number = 0;
-  @State isLargeScreen: boolean = false;
+
+  // 使用断点系统响应屏幕变化
+  @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
+  @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance();
+
+  // 计算属性：大屏模式
+  get isLargeScreen(): boolean {
+    return ['md', 'lg', 'xl'].includes(this.currentBreakpoint);
+  }
+
   private countdownTimer: number = -1;
   private userDatabase: Record<string, string> = {};
   private verifyCodeManager: VerifyCodeManager = VerifyCodeManager.getInstance();
@@ -206,12 +216,12 @@ struct LoginPage {
 `;
 
   async aboutToAppear() {
+    // 注册断点监听，响应屏幕变化
+    this.breakpointSystem.register();
+
     const ctx = getContext(this);
     await this.verifyCodeManager.init(ctx);
     await this.userManager.init(ctx);
-
-    this.screenWidth = px2vp(display.getDefaultDisplaySync().width);
-    this.isLargeScreen = this.screenWidth >= 600;
 
     const store = await preferences.getPreferences(ctx, 'users');
     const raw = await store.get('userDatabase', '{}') as string;

@@ -315,7 +315,7 @@ export struct DiscoverComponent {
   @State likeScale: number = 1;
   @State forceUpdate: number = 0;
 
-  private breakpointSystem: BreakpointSystem = new BreakpointSystem();
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance(); // 使用单例
   private likeManager: LikeManager = LikeManager.getInstance();
 
   @State hotTopics: Array<TopicItem> = mockPosts
@@ -379,14 +379,12 @@ export struct DiscoverComponent {
   }
 
   aboutToAppear() {
-    this.breakpointSystem.register();
+    // 断点监听由 Index.ets 统一管理
     aiSummaryService.init();
     this.startPulseAnimation();
   }
 
-  aboutToDisappear() {
-    this.breakpointSystem.unregister();
-  }
+  // 子组件无需注销断点监听
 
   private startPulseAnimation(): void {
     animateTo({

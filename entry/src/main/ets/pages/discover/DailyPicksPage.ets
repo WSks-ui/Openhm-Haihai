@@ -12,13 +12,14 @@ struct DailyPicksPage {
   @StorageProp('safeAreaTop') safeAreaTop: number = 0;
   @StorageProp('safeAreaBottom') safeAreaBottom: number = 0;
   
-  private breakpointSystem: BreakpointSystem = new BreakpointSystem();
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance();
   
   @State scrollY: number = 0;
   
   @State selectedPosts: Post[] = [];
   
   aboutToAppear() {
+    // 断点监听由单例统一管理，防止重复注册
     this.breakpointSystem.register();
     this.selectedPosts = mockPosts
       .slice()
@@ -26,9 +27,7 @@ struct DailyPicksPage {
       .slice(0, 12);
   }
 
-  aboutToDisappear() {
-    this.breakpointSystem.unregister();
-  }
+  // 页面销毁时无需注销断点监听，由单例统一管理
 
   build() {
     Column() {

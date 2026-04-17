@@ -41,7 +41,7 @@ export struct MineComponent {
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
   @State statisticsUpdated: number = 0;
   @StorageLink('refreshMineData') @Watch('onRefreshSignal') refreshMineData: number = 0; // 监听刷新信号
-  private breakpointSystem: BreakpointSystem = new BreakpointSystem();
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance(); // 使用单例
   private appStatistics: AppStatistics = AppStatistics.getInstance();
   private likeManager: LikeManager = LikeManager.getInstance();
   private historyManager: HistoryManager = HistoryManager.getInstance();
@@ -82,7 +82,7 @@ export struct MineComponent {
   }
 
   aboutToAppear() {
-    this.breakpointSystem.register();
+    // 断点监听由 Index.ets 统一管理
     this.draftManager.init(getContext(this));
     this.statisticsUpdated = Date.now();
     this.loadLikedPosts();
@@ -246,9 +246,7 @@ export struct MineComponent {
     }, 500);
   }
 
-  aboutToDisappear() {
-    this.breakpointSystem.unregister();
-  }
+  // 子组件无需注销断点监听，由 Index.ets 统一管理
 
   @Builder
   LeftSidebar() {

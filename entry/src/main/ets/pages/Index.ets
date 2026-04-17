@@ -66,7 +66,7 @@ struct Index {
   @StorageProp('safeAreaBottom') safeAreaBottom: number = 0; // 底部安全区域高度
 
   // ---------------- 工具类实例 ----------------
-  private breakpointSystem: BreakpointSystem = new BreakpointSystem(); // 断点监听系统 — 基于媒体查询，响应式核心
+  private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance(); // 断点监听系统 — 单例模式
   private holdingHandManager: HoldingHandManager = HoldingHandManager.getInstance(); // 握持手势管理器 — 单例模式，节省资源
 
   @State private holdingHandStatus: HoldingHandStatus = HoldingHandStatus.UNKNOWN_STATUS; // 当前握持状态 — 用于UI调整
