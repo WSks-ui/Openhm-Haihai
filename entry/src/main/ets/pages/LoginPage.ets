@@ -32,13 +32,16 @@ struct LoginPage {
   @State loginMode: 'code' | 'password' = 'code';
 
   // 使用断点系统响应屏幕变化
-  @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
+  @StorageProp('currentBreakpoint') @Watch('onBreakpointChange') currentBreakpoint: string = 'sm';
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
   private breakpointSystem: BreakpointSystem = BreakpointSystem.getInstance();
 
-  // 计算属性：大屏模式
-  get isLargeScreen(): boolean {
-    return ['md', 'lg', 'xl'].includes(this.currentBreakpoint);
+  // 大屏模式状态 - 使用 @State 确保响应式更新
+  @State isLargeScreen: boolean = false;
+
+  // 监听断点变化
+  onBreakpointChange() {
+    this.isLargeScreen = ['md', 'lg', 'xl'].includes(this.currentBreakpoint);
   }
 
   private countdownTimer: number = -1;
@@ -218,6 +221,9 @@ struct LoginPage {
   async aboutToAppear() {
     // 注册断点监听，响应屏幕变化
     this.breakpointSystem.register();
+
+    // 立即根据当前断点初始化大屏状态
+    this.isLargeScreen = ['md', 'lg', 'xl'].includes(this.currentBreakpoint);
 
     const ctx = getContext(this);
     await this.verifyCodeManager.init(ctx);
