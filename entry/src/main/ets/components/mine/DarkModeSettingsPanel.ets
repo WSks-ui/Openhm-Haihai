@@ -2,6 +2,7 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
 import { PreferencesStorage } from '../../utils/PreferencesStorage';
+import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
 
 type ColorModeOption = 'system' | 'light' | 'dark';
 
@@ -107,7 +108,7 @@ export struct DarkModeSettingsPanel {
     }
     .width('30%')
     .padding({ top: 20, bottom: 20, left: 12, right: 12 })
-    .backgroundColor(this.isModeSelected(mode) ? '#007AFF' : 
+    .backgroundColor(this.isModeSelected(mode) ? 'BRAND_PRIMARY' : 
                    (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#FFFFFF'))
     .borderRadius(16)
     .shadow(this.isModeSelected(mode) ? { radius: 12, color: 'rgba(0,122,255,0.3)', offsetY: 4 } : { radius: 0 })
@@ -138,7 +139,7 @@ export struct DarkModeSettingsPanel {
               Column()
                 .width(20)
                 .height(20)
-                .backgroundColor('#007AFF')
+                .backgroundColor('BRAND_PRIMARY')
                 .borderRadius(4)
 
               Column()
@@ -235,7 +236,7 @@ export struct DarkModeSettingsPanel {
     Row() {
       SymbolGlyph($r('sys.symbol.info_circle'))
         .fontSize(20)
-        .fontColor(['#007AFF'])
+        .fontColor(['BRAND_PRIMARY'])
         .margin({ right: 12 })
 
       Column() {

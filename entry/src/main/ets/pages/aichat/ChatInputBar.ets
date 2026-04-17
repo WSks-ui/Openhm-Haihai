@@ -1,5 +1,6 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import promptAction from '@ohos.promptAction';
+import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
 
 @Component
 export struct ChatInputBar {
@@ -94,10 +95,10 @@ export struct ChatInputBar {
     Row() {
       SymbolGlyph($r('sys.symbol.arrow_clockwise'))
         .fontSize(16)
-        .fontColor(['#3478F6'])
+        .fontColor(['BRAND_PRIMARY'])
       Text('思考')
         .fontSize(14)
-        .fontColor(this.isReasoning ? '#3478F6' :
+        .fontColor(this.isReasoning ? 'BRAND_PRIMARY' :
           (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#AAAAAA' : '#666'))
         .fontWeight(FontWeight.Medium)
         .margin({ left: 6 })
@@ -108,7 +109,7 @@ export struct ChatInputBar {
     .borderRadius(16)
     .border({
       width: 1,
-      color: this.isReasoning ? '#3478F6' :
+      color: this.isReasoning ? 'BRAND_PRIMARY' :
         (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#333' : '#E5E7EB')
     })
     .onClick(() => {
@@ -121,10 +122,10 @@ export struct ChatInputBar {
     Row() {
       SymbolGlyph($r('sys.symbol.magnifyingglass'))
         .fontSize(16)
-        .fontColor(['#3478F6'])
+        .fontColor(['BRAND_PRIMARY'])
       Text('搜索')
         .fontSize(14)
-        .fontColor(this.isSearchEnabled ? '#3478F6' :
+        .fontColor(this.isSearchEnabled ? 'BRAND_PRIMARY' :
           (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#AAAAAA' : '#666'))
         .fontWeight(FontWeight.Medium)
         .margin({ left: 6 })
@@ -135,7 +136,7 @@ export struct ChatInputBar {
     .borderRadius(16)
     .border({
       width: 1,
-      color: this.isSearchEnabled ? '#3478F6' :
+      color: this.isSearchEnabled ? 'BRAND_PRIMARY' :
         (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#333' : '#E5E7EB')
     })
     .onClick(() => {
@@ -233,7 +234,7 @@ export struct ChatInputBar {
     Button({ type: ButtonType.Circle, stateEffect: true }) {
       SymbolGlyph($r('sys.symbol.paperplane_fill'))
         .fontSize(22)
-        .fontColor(['#3478F6'])
+        .fontColor(['BRAND_PRIMARY'])
     }
     .width(48)
     .height(48)

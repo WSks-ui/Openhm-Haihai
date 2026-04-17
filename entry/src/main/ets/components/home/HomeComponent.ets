@@ -6,6 +6,7 @@ import { ConfigurationConstant } from '@kit.AbilityKit';
 import { LiquidGlass } from '../common/LiquidGlass';
 import promptAction from '@ohos.promptAction';
 import { LikeManager } from '../../utils/LikeManager';
+import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
 
 // 初始化持久化存储
 PersistentStorage.persistProp('initialSearchKeyword', '');
@@ -301,7 +302,7 @@ export struct HomeComponent {
              //  AI 聊天入口
              SymbolGlyph($r('sys.symbol.message')) // 聊天气泡图标
                .fontSize(24)
-               .fontColor(['#007AFF'])
+               .fontColor(['BRAND_PRIMARY'])
                .margin({ left: 16 })
                .onClick(() => {
                   router.pushUrl({ url: 'pages/AIChatPage' });

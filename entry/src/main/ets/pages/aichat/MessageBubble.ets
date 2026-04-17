@@ -1,5 +1,6 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import { ChatMessage, MessageSegment } from './types';
+import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
 
 @Component
 export struct MessageBubble {
@@ -70,7 +71,7 @@ export struct MessageBubble {
         .lineHeight(24)
         .fontColor(Color.White)
         .padding(12)
-        .backgroundColor('#3478F6')
+        .backgroundColor('BRAND_PRIMARY')
         .borderRadius({
           topLeft: 20,
           topRight: 4,

@@ -1,6 +1,7 @@
 import { SpeechRecognitionService, SpeechRecognitionState, SpeechRecognitionError } from '../../utils/SpeechRecognitionService';
 import { common, Want, ConfigurationConstant } from '@kit.AbilityKit';
 import promptAction from '@ohos.promptAction';
+import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
 
 export interface VoiceInputCallbacks {
   onClose: () => void;
@@ -170,7 +171,7 @@ export struct VoiceInputDialog {
           Column()
             .width(4)
             .height(height)
-            .backgroundColor('#007AFF')
+            .backgroundColor('BRAND_PRIMARY')
             .borderRadius(2)
             .animation({ duration: 120, curve: Curve.EaseInOut })
         })
@@ -196,7 +197,7 @@ export struct VoiceInputDialog {
       LoadingProgress()
         .width(40)
         .height(40)
-        .color('#007AFF')
+        .color('BRAND_PRIMARY')
       
       Text('正在识别...')
         .fontSize(16)
@@ -236,7 +237,7 @@ export struct VoiceInputDialog {
 
       if (this.permissionDenied) {
         Button('去设置开启权限')
-          .backgroundColor('#007AFF')
+          .backgroundColor('BRAND_PRIMARY')
           .fontColor(Color.White)
           .height(40)
           .width(160)
@@ -249,7 +250,7 @@ export struct VoiceInputDialog {
         Button('重试')
           .height(36)
           .fontSize(14)
-          .backgroundColor('#007AFF')
+          .backgroundColor('BRAND_PRIMARY')
           .fontColor(Color.White)
           .onClick(() => {
             this.retry();
@@ -285,7 +286,7 @@ export struct VoiceInputDialog {
         .textAlign(TextAlign.Center)
 
       Button('去设置开启权限')
-        .backgroundColor('#007AFF')
+        .backgroundColor('BRAND_PRIMARY')
         .fontColor(Color.White)
         .height(44)
         .width(180)

@@ -71,6 +71,11 @@ struct Index {
   @State private holdingHandStatus: HoldingHandStatus = HoldingHandStatus.UNKNOWN_STATUS; // 当前握持状态 — 用于UI调整
   @StorageLink('showTopicList') showTopicList: boolean = false; // 控制发现页话题列表显示 — 全局状态，便于子组件响应
 
+  // ---------------- 握持手势监听回调（存为成员变量以便正确移除） ----------------
+  private handListener = (status: HoldingHandStatus) => {
+    this.holdingHandStatus = status;
+  };
+
   // ---------------- 动态背景动画变量 ----------------
   @State lightX: string = '50%'; // 光效中心 X 坐标 — 动态绑定，实现漂浮效果
   @State lightY: string = '50%'; // 光效中心 Y 坐标
@@ -200,16 +205,12 @@ struct Index {
   // ============================================================================
 
   private startHoldingHandMonitoring(): void {
-    this.holdingHandManager.addListener((status: HoldingHandStatus) => {
-      this.holdingHandStatus = status;
-      // 此处可根据握持状态触发其他 UI 变化，例如调整触摸区域
-    });
+    this.holdingHandManager.addListener(this.handListener);
     this.holdingHandManager.startMonitoring();
   }
 
   private stopHoldingHandMonitoring(): void {
-    // 移除监听器 — 实际项目中应传入具体回调引用，此处仅作示例
-    this.holdingHandManager.removeListener(() => {});
+    this.holdingHandManager.removeListener(this.handListener);
   }
 
   /**
@@ -533,7 +534,7 @@ struct Index {
       }
       .width(40)
       .height(40)
-      .backgroundColor(this.currentIndex === 1 && this.currentBreakpoint === 'md' ? ACTIVE_COLOR : '#007AFF')
+      .backgroundColor(this.currentIndex === 1 && this.currentBreakpoint === 'md' ? ACTIVE_COLOR : ACTIVE_COLOR)
       .onClick(() => {
         this.onFloatingBallClick();
       })

@@ -5,6 +5,7 @@ import { mockPosts, Post } from '../../model/Post';
 import { LiquidGlass } from '../common/LiquidGlass';
 import { aiSummaryService } from '../../utils/AISummaryService';
 import { LikeManager } from '../../utils/LikeManager';
+import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
 
 interface TopicItem {
   id: string;
@@ -346,7 +347,7 @@ export struct DiscoverComponent {
   @State dragScale: number = 1;
 
   private availableTopics: TopicCircle[] = [
-    { id: 1, name: '科技圈', icon: 'sys.symbol.laptopcomputer', memberCount: 12500, color: '#007AFF', description: '最新科技资讯、数码产品分享', postCount: 2340, todayActive: 856 },
+    { id: 1, name: '科技圈', icon: 'sys.symbol.laptopcomputer', memberCount: 12500, color: 'BRAND_PRIMARY', description: '最新科技资讯、数码产品分享', postCount: 2340, todayActive: 856 },
     { id: 2, name: '美食圈', icon: 'sys.symbol.fork.knife', memberCount: 8900, color: '#FF6B6B', description: '发现美味、分享食谱', postCount: 1892, todayActive: 623 },
     { id: 3, name: '旅行圈', icon: 'sys.symbol.airplane', memberCount: 6700, color: '#34C759', description: '世界那么大，一起去看看', postCount: 1456, todayActive: 412 },
     { id: 4, name: '摄影圈', icon: 'sys.symbol.camera', memberCount: 5200, color: '#FF9500', description: '用镜头记录美好瞬间', postCount: 987, todayActive: 298 },

@@ -1,5 +1,6 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import promptAction from '@ohos.promptAction';
+import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
 
 interface StorageItem {
   id: string;
@@ -20,7 +21,7 @@ export struct StorageCleanPanel {
   @State otherCacheSize: string = '22.2 MB';
 
   private storageItems: StorageItem[] = [
-    { id: 'chat', title: '聊天记录', size: '256.8 MB', icon: $r('sys.symbol.message'), color: '#007AFF' },
+    { id: 'chat', title: '聊天记录', size: '256.8 MB', icon: $r('sys.symbol.message'), color: 'BRAND_PRIMARY' },
     { id: 'image', title: '图片缓存', size: '64.2 MB', icon: $r('sys.symbol.heart'), color: '#34C759' },
     { id: 'video', title: '视频缓存', size: '45.3 MB', icon: $r('sys.symbol.checkmark_circle_fill'), color: '#FF9500' },
     { id: 'other', title: '其他缓存', size: '22.2 MB', icon: $r('sys.symbol.gearshape'), color: '#5856D6' }
@@ -189,7 +190,7 @@ export struct StorageCleanPanel {
             Progress({ value: 65, total: 100, type: ProgressType.Ring })
               .width(60)
               .height(60)
-              .color('#007AFF')
+              .color('BRAND_PRIMARY')
               .style({ strokeWidth: 6 })
 
             Text('65%')
@@ -231,7 +232,7 @@ export struct StorageCleanPanel {
     }
     .width('100%')
     .height(50)
-    .backgroundColor(this.isClearing ? '#CCCCCC' : '#007AFF')
+    .backgroundColor(this.isClearing ? '#CCCCCC' : 'BRAND_PRIMARY')
     .borderRadius(12)
     .enabled(!this.isClearing)
     .onClick(() => {
