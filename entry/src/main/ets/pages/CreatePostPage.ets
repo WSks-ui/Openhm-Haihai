@@ -258,7 +258,7 @@ struct CreatePostPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#000000' : COLOR_DARK_BG_PRIMARY)
+    .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#000000' : Color.White)
     // 沉浸式效果：扩展整个页面到顶部和底部安全区域
     .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
