@@ -74,3 +74,21 @@ export const RADIUS_MD = 8;
 export const RADIUS_LG = 12;
 export const RADIUS_XL = 16;
 export const RADIUS_FULL = 9999;
+
+// ============================================================================
+// 动画时长规范
+// ============================================================================
+export const ANIM_INSTANT = 100;    // 即时反馈：按下缩放、点赞弹跳
+export const ANIM_FAST = 150;       // 快速过渡：按钮松开、关闭动画
+export const ANIM_NORMAL = 250;     // 标准过渡：聚焦/失焦、滑入/滑出
+export const ANIM_SLOW = 400;       // 慢速过渡：面板展开、拖拽回弹
+export const ANIM_PAGE = 500;       // 页面级动画：页面淡入、呼吸效果
+export const ANIM_INTRO = 800;      // 入场动画：首屏淡入
+
+// ============================================================================
+// 动画曲线规范
+// ============================================================================
+export const CURVE_PRESS = Curve.Sharp;              // 按下：快速响应
+export const CURVE_RELEASE = Curve.Friction;         // 松开：弹性回弹
+export const CURVE_TRANSITION = Curve.FastOutSlowIn; // 通用过渡：减速停止
+export const CURVE_EASE = Curve.EaseInOut;           // 平滑过渡：对称缓入缓出

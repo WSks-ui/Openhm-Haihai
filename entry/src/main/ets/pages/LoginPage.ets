@@ -7,6 +7,7 @@ import { AgreementDialog } from '../components/dialogs/AgreementDialog';
 import { PreferencesStorage } from '../utils/PreferencesStorage';
 import { BreakpointSystem } from '../utils/BreakpointSystem';
 import { ConfigurationConstant } from '@kit.AbilityKit';
+import { ANIM_INSTANT, ANIM_FAST, ANIM_NORMAL, ANIM_INTRO, CURVE_PRESS, CURVE_RELEASE, CURVE_EASE } from '../constants/ThemeTokens';
 
 const DEV_MODE_ENABLED = true;
 const DEV_MODE_HIDDEN_PASSWORD = '114514';
@@ -243,7 +244,7 @@ struct LoginPage {
       this.checkPhoneNumberRegistration();
     }
 
-    animateTo({ duration: 800, curve: Curve.EaseOut }, () => {
+    animateTo({ duration: ANIM_INTRO, curve: Curve.EaseOut }, () => {
       this.pageOpacity = 1;
       this.titleScale = 1;
     });
@@ -437,7 +438,7 @@ struct LoginPage {
         .fontColor('#FFFFFF')
         .scale({ x: this.titleScale, y: this.titleScale })
         .animation({
-          duration: 800,
+          duration: ANIM_INTRO,
           curve: Curve.Friction,
           playMode: PlayMode.Normal
         });
@@ -481,14 +482,14 @@ struct LoginPage {
           color: this.phoneFocused ? '#7B68EE' : '#2A2A2A'
         })
         .backdropBlur(10)
-        .animation({ duration: 300, curve: Curve.EaseInOut })
+        .animation({ duration: ANIM_NORMAL, curve: CURVE_EASE })
         .onFocus(() => {
-          animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+          animateTo({ duration: ANIM_NORMAL, curve: Curve.EaseOut }, () => {
             this.phoneFocused = true;
           });
         })
         .onBlur(() => {
-          animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+          animateTo({ duration: ANIM_NORMAL, curve: Curve.EaseOut }, () => {
             this.phoneFocused = false;
           });
         })
@@ -569,14 +570,14 @@ struct LoginPage {
               color: this.codeFocused ? '#7B68EE' : '#2A2A2A'
             })
             .backdropBlur(10)
-            .animation({ duration: 300, curve: Curve.EaseInOut })
+            .animation({ duration: ANIM_NORMAL, curve: CURVE_EASE })
             .onFocus(() => {
-              animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+              animateTo({ duration: ANIM_NORMAL, curve: Curve.EaseOut }, () => {
                 this.codeFocused = true;
               });
             })
             .onBlur(() => {
-              animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+              animateTo({ duration: ANIM_NORMAL, curve: Curve.EaseOut }, () => {
                 this.codeFocused = false;
               });
             })
@@ -598,14 +599,14 @@ struct LoginPage {
               x: this.sendCodeBtnPressed ? 0.95 : 1,
               y: this.sendCodeBtnPressed ? 0.95 : 1
             })
-            .animation({ duration: 150, curve: Curve.EaseOut })
+            .animation({ duration: ANIM_FAST, curve: Curve.EaseOut })
             .onTouch((event: TouchEvent) => {
               if (event.type === TouchType.Down) {
-                animateTo({ duration: 100, curve: Curve.Sharp }, () => {
+                animateTo({ duration: ANIM_INSTANT, curve: CURVE_PRESS }, () => {
                   this.sendCodeBtnPressed = true;
                 });
               } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
-                animateTo({ duration: 150, curve: Curve.Friction }, () => {
+                animateTo({ duration: ANIM_FAST, curve: CURVE_RELEASE }, () => {
                   this.sendCodeBtnPressed = false;
                 });
               }
@@ -646,14 +647,14 @@ struct LoginPage {
             color: this.passwordFocused ? '#7B68EE' : '#2A2A2A'
           })
           .backdropBlur(10)
-          .animation({ duration: 300, curve: Curve.EaseInOut })
+          .animation({ duration: ANIM_NORMAL, curve: CURVE_EASE })
           .onFocus(() => {
-            animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+            animateTo({ duration: ANIM_NORMAL, curve: Curve.EaseOut }, () => {
               this.passwordFocused = true;
             });
           })
           .onBlur(() => {
-            animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+            animateTo({ duration: ANIM_NORMAL, curve: Curve.EaseOut }, () => {
               this.passwordFocused = false;
             });
           })
@@ -732,14 +733,14 @@ struct LoginPage {
         x: this.continueBtnPressed ? 0.97 : 1,
         y: this.continueBtnPressed ? 0.97 : 1
       })
-      .animation({ duration: 200, curve: Curve.EaseOut })
+      .animation({ duration: ANIM_FAST, curve: Curve.EaseOut })
       .onTouch((event: TouchEvent) => {
         if (event.type === TouchType.Down) {
-          animateTo({ duration: 100, curve: Curve.Sharp }, () => {
+          animateTo({ duration: ANIM_INSTANT, curve: CURVE_PRESS }, () => {
             this.continueBtnPressed = true;
           });
         } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
-          animateTo({ duration: 200, curve: Curve.Friction }, () => {
+          animateTo({ duration: ANIM_FAST, curve: CURVE_RELEASE }, () => {
             this.continueBtnPressed = false;
           });
         }
@@ -799,7 +800,7 @@ struct LoginPage {
           .height('100%')
           .justifyContent(FlexAlign.SpaceBetween)
           .opacity(this.pageOpacity)
-          .animation({ duration: 800, curve: Curve.EaseOut });
+          .animation({ duration: ANIM_INTRO, curve: Curve.EaseOut });
           Blank();
         }
         .width('100%')
@@ -819,7 +820,7 @@ struct LoginPage {
         .height('100%')
         .justifyContent(FlexAlign.SpaceBetween)
         .opacity(this.pageOpacity)
-        .animation({ duration: 800, curve: Curve.EaseOut });
+        .animation({ duration: ANIM_INTRO, curve: Curve.EaseOut });
       }
     }
     .width('100%')

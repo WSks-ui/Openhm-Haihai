@@ -5,12 +5,15 @@ export struct SearchLoadingSkeleton {
   @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
   @State shimmerOffset: number = 0;
+  @State isVisible: boolean = true;
   private shimmerTimer: number = -1;
 
   aboutToAppear() {
     this.shimmerTimer = setInterval(() => {
-      this.shimmerOffset = (this.shimmerOffset + 2) % 100;
-    }, 20);
+      if (this.isVisible) {
+        this.shimmerOffset = (this.shimmerOffset + 2) % 100;
+      }
+    }, 50);
   }
 
   aboutToDisappear() {

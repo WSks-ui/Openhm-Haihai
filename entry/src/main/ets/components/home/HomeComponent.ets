@@ -7,6 +7,7 @@ import { LiquidGlass } from '../common/LiquidGlass';
 import promptAction from '@ohos.promptAction';
 import { LikeManager } from '../../utils/LikeManager';
 import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
+import { PostDataSource } from '../../utils/BasicDataSource';
 
 // 初始化持久化存储
 PersistentStorage.persistProp('initialSearchKeyword', '');
@@ -15,13 +16,13 @@ PersistentStorage.persistProp('openSearchPage', false);
 @Component
 export struct HomeComponent {
 
-  @State posts: Post[] = mockPosts;                  // 当前展示的帖子列表（初始为模拟数据）
+  // 使用 LazyForEach 数据源
+  private postDataSource: PostDataSource = new PostDataSource([]);
   @State isRefreshing: boolean = false;              // 是否正在下拉刷新
   @State isSearchPresented: boolean = false;         // 搜索页面是否弹出
   @State isLoading: boolean = false;                 // 是否处于加载状态（用于骨架屏
   @State isLoadingMore: boolean = false;             // 是否正在加载更多
   @State isVoiceInput: boolean = false;              // 是否通过语音启动搜索
-  @State dataVersion: number = 0;                     // 数据版本号，用于强制刷新
 
   //  全局状态
   @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm'; // 当前屏幕断点（'sm'手机 'md'平板 'lg'大屏）
@@ -46,12 +47,11 @@ export struct HomeComponent {
   }
 
   private refreshPosts() {
-    this.dataVersion++;
     const newPosts: Post[] = [];
     for (let i = 0; i < mockPosts.length; i++) {
       newPosts.push(mockPosts[i].copy());
     }
-    this.posts = newPosts;
+    this.postDataSource.setData(newPosts);
   }
 
   // 监听搜索页面打开状态
@@ -72,9 +72,9 @@ export struct HomeComponent {
       // 随机选择一个现有帖子作为模板
       const templateIndex = Math.floor(Math.random() * mockPosts.length);
       const template = mockPosts[templateIndex];
-      
+
       const newId = `new_${Date.now()}_${i}`; // 生成唯一 ID
-      
+
       // 创建新帖子
       const newPost = new Post(
         newId,
@@ -101,15 +101,16 @@ export struct HomeComponent {
     this.isLoadingMore = true;
 
     setTimeout(() => {
-      // 生成 10 个新帖子作为“更多数据”
+      // 生成 10 个新帖子作为”更多数据”
       const morePosts = this.generateNewPosts(10);
-      
-      // 追加到列表末尾
-      this.posts = [...this.posts, ...morePosts];
-      
+
+      // 追加到数据源末尾
+      const currentData = this.postDataSource.getAllData();
+      this.postDataSource.setData([...currentData, ...morePosts]);
+
       // 同步更新全局 mockPosts
       mockPosts.push(...morePosts);
-      
+
       this.isLoadingMore = false;
     }, 1500); // 模拟网络延迟
   }
@@ -334,9 +335,9 @@ export struct HomeComponent {
            .padding({ left: 12, right: 12, top: 80, bottom: 100 }) // 顶部避开 Header，底部避开 TabBar
            .layoutWeight(1)
         } else {
-          // 显示真实帖子卡片
+          // 显示真实帖子卡片 - 使用 LazyForEach 实现懒加载
           WaterFlow({ footer: this.Footer() }) {
-            ForEach(this.posts, (item: Post) => {
+            LazyForEach(this.postDataSource, (item: Post) => {
               FlowItem() {
                 PostCardItem({ item: item })
               }
@@ -362,21 +363,22 @@ export struct HomeComponent {
         setTimeout(() => {
           this.isRefreshing = false;
           this.isLoading = false;
-          
+
           // 生成 10 个新帖子
           const newPosts = this.generateNewPosts(10);
-          
-          // 将新帖子添加到头部，并保留原有的帖子
-          this.posts = [...newPosts, ...this.posts];
-          
+
+          // 将新帖子添加到数据源头部
+          const currentData = this.postDataSource.getAllData();
+          this.postDataSource.setData([...newPosts, ...currentData]);
+
           // 同步更新全局 mockPosts，以便详情页能找到
           mockPosts.unshift(...newPosts);
-          
+
           promptAction.showToast({
             message: `为您推荐了 ${newPosts.length} 条新内容`,
             duration: 2000
           });
-          
+
         }, 2000)
       })
       .width('100%')

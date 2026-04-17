@@ -4,6 +4,7 @@ import { ConfigurationConstant } from '@kit.AbilityKit';
 import { LikeManager } from '../utils/LikeManager';
 import { HistoryManager } from '../utils/HistoryManager';
 import { currentUser } from '../model/User';
+import { ANIM_INSTANT, ANIM_FAST, ANIM_NORMAL, CURVE_TRANSITION } from '../constants/ThemeTokens';
 
 /**
  * PostDetailPage - 帖子详情页面
@@ -139,7 +140,7 @@ struct PostDetailPage {
                      .width('100%')
                      .height('100%')
                      .objectFit(ImageFit.Cover)
-                     .sharedTransition(this.post.id, { duration: 300, curve: Curve.EaseInOut })
+                     .sharedTransition(this.post.id, { duration: ANIM_NORMAL, curve: Curve.EaseInOut })
                  }
                  .width('60%')
                  .height('100%')
@@ -196,7 +197,7 @@ struct PostDetailPage {
                     .width('100%')
                     .height(400)
                     .objectFit(ImageFit.Cover)
-                    .sharedTransition(this.post.id, { duration: 300, curve: Curve.EaseInOut })
+                    .sharedTransition(this.post.id, { duration: ANIM_NORMAL, curve: Curve.EaseInOut })
                 }
                 this.PostContent()
               }
@@ -250,13 +251,13 @@ struct PostDetailPage {
                .onClick(() => {
                  if (this.post) {
                    this.likeScale = 1.3;
-                   animateTo({ duration: 100, curve: Curve.EaseOut }, () => {
+                   animateTo({ duration: ANIM_INSTANT, curve: Curve.EaseOut }, () => {
                      this.likeScale = 1.3;
                    });
-                   animateTo({ duration: 150, curve: Curve.EaseIn, delay: 100 }, () => {
+                   animateTo({ duration: ANIM_FAST, curve: Curve.EaseIn, delay: 100 }, () => {
                      this.likeScale = 0.9;
                    });
-                   animateTo({ duration: 100, curve: Curve.EaseOut, delay: 250 }, () => {
+                   animateTo({ duration: ANIM_INSTANT, curve: Curve.EaseOut, delay: 250 }, () => {
                      this.likeScale = 1;
                    });
                    

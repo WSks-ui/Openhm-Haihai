@@ -5,7 +5,7 @@ import { mockPosts, Post } from '../../model/Post';
 import { LiquidGlass } from '../common/LiquidGlass';
 import { aiSummaryService } from '../../utils/AISummaryService';
 import { LikeManager } from '../../utils/LikeManager';
-import { BRAND_PRIMARY } from '../../constants/ThemeTokens';
+import { BRAND_PRIMARY, ANIM_INSTANT, ANIM_FAST, ANIM_NORMAL, ANIM_SLOW, CURVE_TRANSITION, CURVE_EASE } from '../../constants/ThemeTokens';
 
 interface TopicItem {
   id: string;
@@ -56,7 +56,7 @@ struct FeatureCardComponent {
       offsetY: 2
     })
     .scale({ x: this.pressed ? 0.96 : 1, y: this.pressed ? 0.96 : 1 })
-    .animation({ duration: 150, curve: Curve.EaseInOut })
+    .animation({ duration: ANIM_FAST, curve: CURVE_EASE })
     .onTouch((event) => {
       if (event.type === TouchType.Down) {
         this.pressed = true;
@@ -130,7 +130,7 @@ struct HotTopicItemComponent {
     })
     .alignItems(VerticalAlign.Center)
     .scale({ x: this.pressed ? 0.98 : 1, y: this.pressed ? 0.98 : 1 })
-    .animation({ duration: 150, curve: Curve.EaseInOut })
+    .animation({ duration: ANIM_FAST, curve: CURVE_EASE })
     .onTouch((event) => {
       if (event.type === TouchType.Down) {
         this.pressed = true;
@@ -206,7 +206,7 @@ struct HotTopicGridItemComponent {
       offsetY: 2
     })
     .scale({ x: this.pressed ? 0.98 : 1, y: this.pressed ? 0.98 : 1 })
-    .animation({ duration: 150, curve: Curve.EaseInOut })
+    .animation({ duration: ANIM_FAST, curve: CURVE_EASE })
     .onTouch((event) => {
       if (event.type === TouchType.Down) {
         this.pressed = true;
@@ -264,7 +264,7 @@ struct TopicCircleItemComponent {
     .padding(14)
     .borderRadius(16)
     .backgroundColor(this.pressed ? (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)') : Color.Transparent)
-    .animation({ duration: 150, curve: Curve.EaseInOut })
+    .animation({ duration: ANIM_FAST, curve: CURVE_EASE })
     .onTouch((event) => {
       if (event.type === TouchType.Down) {
         this.pressed = true;
@@ -458,7 +458,7 @@ export struct DiscoverComponent {
     this.isAnimPressed = true;
 
     animateTo({
-      duration: 100,
+      duration: ANIM_INSTANT,
       curve: Curve.EaseOut
     }, () => {
       this.animPressScale = 0.92;
@@ -466,14 +466,14 @@ export struct DiscoverComponent {
 
     setTimeout(() => {
       animateTo({
-        duration: 200,
-        curve: Curve.FastOutSlowIn
+        duration: ANIM_FAST,
+        curve: CURVE_TRANSITION
       }, () => {
         this.animPressScale = 1.02;
       });
       setTimeout(() => {
         animateTo({
-          duration: 150,
+          duration: ANIM_FAST,
           curve: Curve.EaseOut
         }, () => {
           this.animPressScale = 1;
@@ -487,16 +487,16 @@ export struct DiscoverComponent {
     if (this.currentBreakpoint === 'md') {
       if (this.showTopicList) {
         animateTo({
-          duration: 300,
-          curve: Curve.EaseInOut
+          duration: ANIM_NORMAL,
+          curve: CURVE_EASE
         }, () => {
           this.topicListOffsetX = 0;
           this.topicListOpacity = 1;
         });
       } else {
         animateTo({
-          duration: 300,
-          curve: Curve.EaseInOut
+          duration: ANIM_NORMAL,
+          curve: CURVE_EASE
         }, () => {
           this.topicListOffsetX = 320;
           this.topicListOpacity = 0;
@@ -521,8 +521,8 @@ export struct DiscoverComponent {
     this.likeScale = 1;
     
     animateTo({
-      duration: 350,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_SLOW,
+      curve: CURVE_TRANSITION,
       iterations: 1,
       playMode: PlayMode.Normal,
       onFinish: () => {
@@ -591,13 +591,13 @@ export struct DiscoverComponent {
       return;
     }
     this.likeScale = 1.3;
-    animateTo({ duration: 100, curve: Curve.EaseOut }, () => {
+    animateTo({ duration: ANIM_INSTANT, curve: Curve.EaseOut }, () => {
       this.likeScale = 1.3;
     });
-    animateTo({ duration: 150, curve: Curve.EaseIn, delay: 100 }, () => {
+    animateTo({ duration: ANIM_FAST, curve: Curve.EaseIn, delay: 100 }, () => {
       this.likeScale = 0.9;
     });
-    animateTo({ duration: 100, curve: Curve.EaseOut, delay: 250 }, () => {
+    animateTo({ duration: ANIM_INSTANT, curve: Curve.EaseOut, delay: 250 }, () => {
       this.likeScale = 1;
     });
     
@@ -606,8 +606,8 @@ export struct DiscoverComponent {
 
   private closeDetailPanel(): void {
     animateTo({
-      duration: 300,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION,
       iterations: 1,
       playMode: PlayMode.Normal,
       onFinish: () => {
@@ -639,8 +639,8 @@ export struct DiscoverComponent {
     this.backgroundDimOpacity = 0;
     
     animateTo({
-      duration: 300,
-      curve: Curve.FastOutSlowIn
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION
     }, () => {
       this.topicSelectorScale = 1;
       this.topicSelectorOpacity = 1;
@@ -651,8 +651,8 @@ export struct DiscoverComponent {
 
   private closeTopicSelector(): void {
     animateTo({
-      duration: 250,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION,
       onFinish: () => {
         this.showTopicSelector = false;
         this.topicSelectorOffsetX = 400;
@@ -674,8 +674,8 @@ export struct DiscoverComponent {
     this.circlePanelOffsetX = 400;
 
     animateTo({
-      duration: 350,
-      curve: Curve.FastOutSlowIn
+      duration: ANIM_SLOW,
+      curve: CURVE_TRANSITION
     }, () => {
       this.circlePanelOffsetX = 0;
     });
@@ -683,8 +683,8 @@ export struct DiscoverComponent {
 
   private closeCirclePanel(): void {
     animateTo({
-      duration: 280,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION,
       onFinish: () => {
         this.showCirclePanel = false;
         this.selectedCircle = null;
@@ -700,8 +700,8 @@ export struct DiscoverComponent {
     this.showPostDetail = true;
 
     animateTo({
-      duration: 350,
-      curve: Curve.FastOutSlowIn
+      duration: ANIM_SLOW,
+      curve: CURVE_TRANSITION
     }, () => {
       this.circlePanelOffsetX = -30;
       this.postDetailTranslateX = 0;
@@ -710,8 +710,8 @@ export struct DiscoverComponent {
 
   private closePostDetail(): void {
     animateTo({
-      duration: 280,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION,
       onFinish: () => {
         this.showPostDetail = false;
         this.selectedPostForDetail = null;
@@ -775,7 +775,7 @@ export struct DiscoverComponent {
           .backdropBlur(20)
         }
         .zIndex(100)
-        .transition(TransitionEffect.OPACITY.animation({ duration: 200 }))
+        .transition(TransitionEffect.OPACITY.animation({ duration: ANIM_FAST }))
       }
 
       Scroll() {
@@ -788,7 +788,7 @@ export struct DiscoverComponent {
               .padding({ left: 24, top: 32, bottom: 4 })
               .width('100%')
               .opacity(Math.max(0, 1 - this.scrollY / 40))
-              .animation({ duration: 100 })
+              .animation({ duration: ANIM_INSTANT })
 
             Text('探索精彩内容，发现有趣话题')
               .fontSize(16)
@@ -796,7 +796,7 @@ export struct DiscoverComponent {
               .padding({ left: 24, right: 24 })
               .width('100%')
               .opacity(Math.max(0, 1 - this.scrollY / 40))
-              .animation({ duration: 100 })
+              .animation({ duration: ANIM_INSTANT })
           }
 
           Scroll() {
@@ -877,7 +877,7 @@ export struct DiscoverComponent {
             ]
           })
           .opacity(this.backgroundDimOpacity)
-          .animation({ duration: 300, curve: Curve.FastOutSlowIn })
+          .animation({ duration: ANIM_NORMAL, curve: CURVE_TRANSITION })
         
         Column() {
           Blank()
@@ -965,7 +965,7 @@ export struct DiscoverComponent {
             ]
           })
           .opacity(this.backgroundDimOpacity)
-          .animation({ duration: 300, curve: Curve.FastOutSlowIn })
+          .animation({ duration: ANIM_NORMAL, curve: CURVE_TRANSITION })
         
         Column() {
           Blank()
@@ -1064,7 +1064,7 @@ export struct DiscoverComponent {
             ]
           })
           .opacity(this.backgroundDimOpacity)
-          .animation({ duration: 300, curve: Curve.FastOutSlowIn })
+          .animation({ duration: ANIM_NORMAL, curve: CURVE_TRANSITION })
 
         Column() {
           Blank()
@@ -1113,7 +1113,7 @@ export struct DiscoverComponent {
           .backdropBlur(20)
         }
         .zIndex(100)
-        .transition(TransitionEffect.OPACITY.animation({ duration: 200 }))
+        .transition(TransitionEffect.OPACITY.animation({ duration: ANIM_FAST }))
       }
 
       Scroll() {
@@ -1126,7 +1126,7 @@ export struct DiscoverComponent {
               .padding({ left: 24, top: 32, bottom: 4 })
               .width('100%')
               .opacity(Math.max(0, 1 - this.scrollY / 40))
-              .animation({ duration: 100 })
+              .animation({ duration: ANIM_INSTANT })
 
             Text('探索精彩内容，发现有趣话题')
               .fontSize(16)
@@ -1134,7 +1134,7 @@ export struct DiscoverComponent {
               .padding({ left: 24, right: 24 })
               .width('100%')
               .opacity(Math.max(0, 1 - this.scrollY / 40))
-              .animation({ duration: 100 })
+              .animation({ duration: ANIM_INSTANT })
           }
 
           Scroll() {
@@ -1336,7 +1336,7 @@ export struct DiscoverComponent {
         .width('100%')
         .scale({ x: this.animPressScale * this.dragScale, y: this.animPressScale * this.dragScale })
         .translate({ x: this.dragOffsetX, y: this.dragOffsetY })
-        .animation({ duration: this.isDragging ? 0 : 200, curve: Curve.EaseOut })
+        .animation({ duration: this.isDragging ? 0 : ANIM_FAST, curve: Curve.EaseOut })
         .gesture(
           PanGesture()
             .onActionStart(() => {
@@ -1350,22 +1350,22 @@ export struct DiscoverComponent {
             .onActionEnd(() => {
               this.isDragging = false;
               animateTo({
-                duration: 150,
+                duration: ANIM_FAST,
                 curve: Curve.FastOutLinearIn
               }, () => {
                 this.dragScale = 0.95;
               });
               animateTo({
-                duration: 400,
-                curve: Curve.FastOutSlowIn
+                duration: ANIM_SLOW,
+                curve: CURVE_TRANSITION
               }, () => {
                 this.dragOffsetX = 0;
                 this.dragOffsetY = 0;
               });
               setTimeout(() => {
                 animateTo({
-                  duration: 250,
-                  curve: Curve.FastOutSlowIn
+                  duration: ANIM_NORMAL,
+                  curve: CURVE_TRANSITION
                 }, () => {
                   this.dragScale = 1;
                 });
@@ -1878,7 +1878,7 @@ export struct DiscoverComponent {
         ]
       })
       .opacity(this.backgroundDimOpacity)
-      .animation({ duration: 300, curve: Curve.FastOutSlowIn })
+      .animation({ duration: ANIM_NORMAL, curve: CURVE_TRANSITION })
   }
 
   @Builder

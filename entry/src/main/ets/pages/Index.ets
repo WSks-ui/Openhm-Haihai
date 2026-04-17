@@ -16,6 +16,7 @@ import { ConfigurationConstant } from '@kit.AbilityKit';
 import { curves } from '@kit.ArkUI';
 import { UserManager } from '../model/UserModel';
 import { PreferencesStorage } from '../utils/PreferencesStorage';
+import { ANIM_NORMAL, ANIM_PAGE, CURVE_EASE } from '../constants/ThemeTokens';
 
 /**
  * Index - 应用主页面入口
@@ -221,8 +222,8 @@ struct Index {
   private onFloatingBallClick(): void {
     if (this.currentIndex === 1 && this.currentBreakpoint === 'md') {
       animateTo({
-        duration: 300,
-        curve: Curve.EaseInOut
+        duration: ANIM_NORMAL,
+        curve: CURVE_EASE
       }, () => {
         this.showTopicList = !this.showTopicList;
       });
@@ -278,8 +279,8 @@ struct Index {
     if (this.isFirstShow) {
       this.isFirstShow = false;
       animateTo({
-        duration: 500,
-        curve: Curve.EaseInOut,
+        duration: ANIM_PAGE,
+        curve: CURVE_EASE,
         iterations: 2,           // 播放 2 次 — 呼吸效果
         playMode: PlayMode.Alternate, // 交替播放 (放大->缩小->放大->缩小)
         onFinish: () => {
@@ -479,7 +480,7 @@ struct Index {
           .backgroundColor('#80000000') // 50% 透明度黑色
           .onClick(() => {
             // 点击遮罩关闭侧边栏，带动画 — 使用animateTo实现平滑过渡
-            animateTo({ duration: 300, curve: Curve.EaseInOut }, () => {
+            animateTo({ duration: ANIM_NORMAL, curve: CURVE_EASE }, () => {
               this.isSidebarOpen = false;
             })
           })

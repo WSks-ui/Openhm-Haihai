@@ -11,6 +11,7 @@ import { MyDraftsPanel } from './MyDraftsPanel';
 import { MyLikesPanel } from './MyLikesPanel';
 import { MyHistoryPanel } from './MyHistoryPanel';
 import { DraftManager } from '../../utils/DraftManager';
+import { ANIM_NORMAL, ANIM_SLOW, CURVE_TRANSITION, CURVE_EASE } from '../../constants/ThemeTokens';
 
 interface PostItem {
   id: number;
@@ -96,8 +97,8 @@ export struct MineComponent {
     this.backgroundDimOpacity = 0;
 
     animateTo({
-      duration: 350,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_SLOW,
+      curve: CURVE_TRANSITION,
       iterations: 1,
       playMode: PlayMode.Normal
     }, () => {
@@ -110,8 +111,8 @@ export struct MineComponent {
 
   private closeDraftsPanel(): void {
     animateTo({
-      duration: 300,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION,
       iterations: 1,
       playMode: PlayMode.Normal,
       onFinish: () => {
@@ -132,8 +133,8 @@ export struct MineComponent {
     this.backgroundDimOpacity = 0;
 
     animateTo({
-      duration: 350,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_SLOW,
+      curve: CURVE_TRANSITION,
       iterations: 1,
       playMode: PlayMode.Normal
     }, () => {
@@ -146,8 +147,8 @@ export struct MineComponent {
 
   private closeLikesPanel(): void {
     animateTo({
-      duration: 300,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION,
       iterations: 1,
       playMode: PlayMode.Normal,
       onFinish: () => {
@@ -168,8 +169,8 @@ export struct MineComponent {
     this.backgroundDimOpacity = 0;
 
     animateTo({
-      duration: 350,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_SLOW,
+      curve: CURVE_TRANSITION,
       iterations: 1,
       playMode: PlayMode.Normal
     }, () => {
@@ -182,8 +183,8 @@ export struct MineComponent {
 
   private closeHistoryPanel(): void {
     animateTo({
-      duration: 300,
-      curve: Curve.FastOutSlowIn,
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION,
       iterations: 1,
       playMode: PlayMode.Normal,
       onFinish: () => {
@@ -994,7 +995,7 @@ export struct MineComponent {
         ]
       })
       .opacity(this.backgroundDimOpacity)
-      .animation({ duration: 300, curve: Curve.FastOutSlowIn })
+      .animation({ duration: ANIM_NORMAL, curve: CURVE_TRANSITION })
   }
 
   @Builder
@@ -1207,7 +1208,7 @@ export struct MineComponent {
               .height(28)
               .fontColor([this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E0E0E0' : '#1C1C1E'])
               .onClick(() => {
-                animateTo({ duration: 300, curve: Curve.EaseInOut }, () => {
+                animateTo({ duration: ANIM_NORMAL, curve: CURVE_EASE }, () => {
                   this.isSidebarOpen = true;
                 })
               })

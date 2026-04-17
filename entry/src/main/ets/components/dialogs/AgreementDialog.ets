@@ -1,4 +1,5 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
+import { ANIM_FAST, ANIM_NORMAL, CURVE_TRANSITION } from '../../constants/ThemeTokens';
 
 interface ThemeColors {
   textColor: string;
@@ -17,8 +18,8 @@ export struct AgreementDialog {
 
   aboutToAppear() {
     animateTo({
-      duration: 300,
-      curve: Curve.FastOutSlowIn
+      duration: ANIM_NORMAL,
+      curve: CURVE_TRANSITION
     }, () => {
       this.scaleValue = 1;
       this.opacityValue = 1;
@@ -35,8 +36,8 @@ export struct AgreementDialog {
 
   private closeDialog() {
     animateTo({
-      duration: 200,
-      curve: Curve.FastOutSlowIn
+      duration: ANIM_FAST,
+      curve: CURVE_TRANSITION
     }, () => {
       this.scaleValue = 0.8;
       this.opacityValue = 0;
