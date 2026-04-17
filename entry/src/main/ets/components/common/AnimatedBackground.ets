@@ -1,4 +1,11 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
+import { GlobalAnimationManager } from '../../utils/GlobalAnimationManager';
+
+// 生成唯一ID
+let bgIdCounter = 0;
+function generateBgId(): string {
+  return `AnimatedBackground_${bgIdCounter++}_${Date.now()}`;
+}
 
 @Component
 export struct AnimatedBackground {
@@ -7,21 +14,25 @@ export struct AnimatedBackground {
 
   @State lightX: string = '50%';
   @State lightY: string = '50%';
-  private bgTimer: number = -1;
-  private bgPhase: number = 0;
+
+  private bgId: string = generateBgId();
+  private animationManager: GlobalAnimationManager = GlobalAnimationManager.getInstance();
+  private animationUnsubscribe: (() => void) | null = null;
 
   aboutToAppear() {
-    this.bgTimer = setInterval(() => {
-      this.bgPhase += 0.02;
-      const x = 50 + Math.sin(this.bgPhase) * 30;
-      const y = 50 + Math.cos(this.bgPhase * 0.8) * 30;
-      this.lightX = `${x}%`;
-      this.lightY = `${y}%`;
-    }, 50);
+    // 订阅全局动画管理器
+    this.animationUnsubscribe = this.animationManager.subscribe(this.bgId, (phase) => {
+      const pos = this.animationManager.getLissajousPosition(0, 30, 30);
+      this.lightX = pos.x;
+      this.lightY = pos.y;
+    });
   }
 
   aboutToDisappear() {
-    clearInterval(this.bgTimer);
+    if (this.animationUnsubscribe) {
+      this.animationUnsubscribe();
+      this.animationUnsubscribe = null;
+    }
   }
 
   build() {

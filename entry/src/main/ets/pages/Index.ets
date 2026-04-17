@@ -11,6 +11,7 @@ import router from '@ohos.router';
 import preferences from '@ohos.data.preferences';
 import { BreakpointSystem } from '../utils/BreakpointSystem';
 import { HoldingHandManager, HoldingHandStatus } from '../utils/HoldingHandManager';
+import { GlobalAnimationManager } from '../utils/GlobalAnimationManager';
 import { ConfigurationConstant } from '@kit.AbilityKit';
 import { curves } from '@kit.ArkUI';
 import { UserManager } from '../model/UserModel';
@@ -79,8 +80,8 @@ struct Index {
   // ---------------- 动态背景动画变量 ----------------
   @State lightX: string = '50%'; // 光效中心 X 坐标 — 动态绑定，实现漂浮效果
   @State lightY: string = '50%'; // 光效中心 Y 坐标
-  private bgTimer: number = -1;  // 背景动画定时器 ID — 用于清理
-  private bgPhase: number = 0;   // 动画相位 — 通过正弦/余弦计算位置
+  private animationManager: GlobalAnimationManager = GlobalAnimationManager.getInstance();
+  private animationUnsubscribe: (() => void) | null = null; // 动画取消订阅函数
 
   // 底部导航栏配置 — 将UI定义与数据分离，便于维护
   private tabItems: TabItemConfig[] = [
@@ -112,16 +113,12 @@ struct Index {
     // 2. 启动握持状态监听 — 利用传感器数据，提升大屏单手操作体验
     this.startHoldingHandMonitoring();
 
-    // 3. 启动背景光效循环动画 — 使用setInterval驱动属性变化，触发UI重绘
-    // HarmonyOS的属性动画系统会高效地处理这些变化，只更新样式属性，不重新布局
-    this.bgTimer = setInterval(() => {
-      this.bgPhase += 0.02;
-      // 正弦/余弦组合产生Lissajous曲线效果，视觉上更自然
-      const x = 50 + Math.sin(this.bgPhase) * 30;
-      const y = 50 + Math.cos(this.bgPhase * 0.8) * 30;
-      this.lightX = `${x}%`;
-      this.lightY = `${y}%`;
-    }, 50);
+    // 3. 订阅全局动画管理器 — 统一管理光效动画，节省CPU和电量
+    this.animationUnsubscribe = this.animationManager.subscribe('Index_background', (phase) => {
+      const pos = this.animationManager.getLissajousPosition(0, 30, 30);
+      this.lightX = pos.x;
+      this.lightY = pos.y;
+    });
 
     // 4. 检查开发者模式标记（同步获取，避免延迟）
     const isDevMode = AppStorage.get('devModeSession') === true;
@@ -197,7 +194,10 @@ struct Index {
   aboutToDisappear() {
     this.breakpointSystem.unregister();   // 注销断点监听
     this.stopHoldingHandMonitoring();     // 停止握持监听
-    clearInterval(this.bgTimer);          // 清除背景动画定时器
+    if (this.animationUnsubscribe) {      // 取消动画订阅
+      this.animationUnsubscribe();
+      this.animationUnsubscribe = null;
+    }
   }
 
   // ============================================================================

@@ -1,4 +1,5 @@
 import { ConfigurationConstant } from '@kit.AbilityKit';
+import { GlobalAnimationManager } from '../../utils/GlobalAnimationManager';
 
 export interface GlassOpacityPreset {
   name: string;
@@ -14,6 +15,12 @@ export const GLASS_OPACITY_PRESETS: GlassOpacityPreset[] = [
 
 interface ICurve {
   interpolate(fraction: number): number;
+}
+
+// 生成唯一ID
+let glassIdCounter = 0;
+function generateGlassId(): string {
+  return `LiquidGlass_${glassIdCounter++}_${Date.now()}`;
 }
 
 @Component
@@ -42,41 +49,28 @@ export struct LiquidGlass {
     @State componentWidth: number = 0;
     @State componentHeight: number = 0;
 
-    // 自动流光动画相关
-    @State idlePhase: number = 0;
-    private timer: number = -1;
+    // 使用全局动画管理器
+    private glassId: string = generateGlassId();
+    private animationManager: GlobalAnimationManager = GlobalAnimationManager.getInstance();
+    private animationUnsubscribe: (() => void) | null = null;
     private isInteracting: boolean = false;
 
   aboutToAppear() {
-    // 启动闲置时的流光动画
-    this.timer = setInterval(() => {
+    // 订阅全局动画管理器
+    this.animationUnsubscribe = this.animationManager.subscribe(this.glassId, (phase) => {
       if (!this.isInteracting) {
-        this.idlePhase += 0.02;
-        // 让光点在中心附近缓慢做椭圆运动
-        const x = 50 + Math.cos(this.idlePhase) * 20;
-        const y = 50 + Math.sin(this.idlePhase * 0.7) * 20;
-        // 直接更新，让组件的动画系统处理平滑过渡
-        this.lightX = `${x}%`;
-        this.lightY = `${y}%`;
+        const pos = this.animationManager.getEllipsePosition(0, 20, 20);
+        this.lightX = pos.x;
+        this.lightY = pos.y;
       }
-    }, 50);
+    });
   }
 
   aboutToDisappear() {
-    clearInterval(this.timer);
-  }
-  
-  private startIdleAnimation(): void {
-    clearInterval(this.timer);
-    this.timer = setInterval(() => {
-      if (!this.isInteracting) {
-        this.idlePhase += 0.02;
-        const x = 50 + Math.cos(this.idlePhase) * 20;
-        const y = 50 + Math.sin(this.idlePhase * 0.7) * 20;
-        this.lightX = `${x}%`;
-        this.lightY = `${y}%`;
-      }
-    }, 50);
+    if (this.animationUnsubscribe) {
+      this.animationUnsubscribe();
+      this.animationUnsubscribe = null;
+    }
   }
 
   build() {
@@ -133,26 +127,25 @@ export struct LiquidGlass {
     .onTouch((event) => {
       if (event.type === TouchType.Down) {
         this.isInteracting = true;
-        clearInterval(this.timer);
         const x = event.touches[0].x;
         const y = event.touches[0].y;
-        
+
         animateTo({ curve: Curve.FastOutSlowIn, duration: 200 }, () => {
            this.scaleValue = 0.98;
         });
-        
+
         animateTo({ curve: Curve.FastOutSlowIn, duration: 300 }, () => {
           this.lightX = `${x}px`;
           this.lightY = `${y}px`;
         });
       } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
          this.isInteracting = false;
+         // 光源位置会在下一次动画回调中自动更新为椭圆轨迹
          animateTo({ curve: Curve.FastOutSlowIn, duration: 500 }, () => {
            this.scaleValue = 1;
            this.rotateX = 0;
            this.rotateY = 0;
          });
-         this.startIdleAnimation();
       } else if (event.type === TouchType.Move) {
          const x = event.touches[0].x;
          const y = event.touches[0].y;
