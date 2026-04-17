@@ -15,13 +15,31 @@
 - **动态渐变背景** - 柔和的紫色系渐变动画，Lissajous 曲线光效漂浮
 - **深色/浅色模式自适应** - 主题自动切换，全局颜色方案统一管理
 - **AnimatedBackground** - 动态背景组件，提供沉浸式视觉体验
+- **脉冲动画动画** - 话题引导区的呼吸光晕 + 浮动粒子效果（多层嵌套动画）
+- **拖拽交互效果** - 支持拖拽偏移、缩放回弹的弹性动画（PanGesture + 动画回调）
 
-### 🔐 认证系统
+### 📱 响应式适配
 
-- 手机号 + 验证码登录 / 手机号 + 密码登录
-- 滑块验证码 - 注册/敏感操作防护（SliderCaptcha）
-- 开发者模式 - 快速进入应用（密码 `114514`）
-- 用户协议与隐私政策弹窗（AgreementDialog）
+- BreakpointSystem 断点系统 - sm/md/lg/xl 四档适配
+- 握持手势检测（HoldingHandManager）- 左手/右手/双手握持状态
+- 多设备支持 - 手机、平板、二合一设备、可穿戴设备
+- 沉浸式安全区域处理（expandSafeArea）
+- 自适应布局 - 底部导航（手机）与侧边导航（平板）
+- **多布局自适应** - PhoneLayout / MediumTabletLayout / LargeTabletLayout 三种布局模式
+- **弹性面板系统** - 话题选择器、圈子面板、帖子详情等侧滑面板，支持平滑过渡动画
+
+### 👥 发现模块
+
+- **话题系统** - 话题广场、每日精选、兴趣圈子
+- **热门排序** - 根据点赞 + 评论数智能排序热门话题
+- **兴趣圈子** - 6 大主题圈子（科技圈/美食圈/旅行圈/摄影圈/读书圈/音乐圈）
+- **圈子详情面板** - 展示成员数、帖子数、今日活跃度统计
+- **圈子帖子流** - 根据圈子 ID 筛选相关帖子，支持点赞 + 详情浏览
+- **话题标签筛选** - #今日灵魂拷问、#附近的人、#我的年度总结、#周末去哪儿等热门标签
+- **空状态引导** - 未添加话题时展示脉冲动画 + 拖拽交互引导
+- **帖子详情页** - 支持图片展示、AI 摘要生成、点赞动画、评论展示
+- **AI 摘要生成** - 帖子详情页内生成智能摘要，支持加载/成功/错误状态切换
+- **帖子详情面板** - 支持手机/平板两种面板样式（底部弹出 / 右侧滑入）
 
 ### 📝 内容发布
 
@@ -65,13 +83,12 @@
 - 通知偏好设置（LiquidGlassSettingsPanel）
 - 个人资料编辑面板（EditProfilePanel）
 
-### 📱 响应式适配
+### 🔐 认证系统
 
-- BreakpointSystem 断点系统 - sm/md/lg/xl 四档适配
-- 握持手势检测（HoldingHandManager）- 左手/右手/双手握持状态
-- 多设备支持 - 手机、平板、二合一设备、可穿戴设备
-- 沉浸式安全区域处理（expandSafeArea）
-- 自适应布局 - 底部导航（手机）与侧边导航（平板）
+- 手机号 + 验证码登录 / 手机号 + 密码登录
+- 滑块验证码 - 注册/敏感操作防护（SliderCaptcha）
+- 开发者模式 - 快速进入应用（密码 `114514`）
+- 用户协议与隐私政策弹窗（AgreementDialog）
 
 ## 📦 安装
 
@@ -158,13 +175,13 @@ entry/src/main/ets/
 │   └── EntryBackupAbility.ets
 ├── model/                             # 数据模型层
 │   ├── AppStatistics.ets             # 应用统计
-│   ├── Post.ets                      # 帖子模型
+│   ├── Post.ets                      # 帖子模型（含评论生成器）
 │   ├── SearchData.ets                # 搜索数据
 │   ├── SidebarItemModel.ets          # 侧边栏模型
 │   ├── User.ets                      # 用户模型
-│   ├── UserModel.ets                 # 用户管理
-│   ├── commentGenerator.ets          # 评论生成器
-│   └── commentTemplates.ets          # 评论模板
+│   ├── UserModel.ets                 # 用户管理（基于 preferences）
+│   ├── commentGenerator.ets          # 评论生成器（API 响应接口）
+│   └── commentTemplates.ets          # 评论模板（预设评论内容）
 ├── pages/                             # 页面
 │   ├── AIChatPage.ets                # AI 聊天主页
 │   ├── ChatDetailPage.ets           # 聊天详情
@@ -216,12 +233,13 @@ entry/src/main/ets/
 | 模块 | 说明 |
 |-----|------|
 | 首页 (Index) | 底部 Tab 主入口，响应式布局，支持手机/平板自适应 |
-| 发现 (Discover) | 内容发现、话题广场、每日精选 |
+| 发现 (Discover) | 内容发现、话题广场、每日精选、兴趣圈子、帖子详情、AI 摘要 |
 | 消息 (Message) | 通知、评论、点赞消息、账户设置 |
-| 我的 (Mine) | 个人中心、浏览历史、草稿箱、收藏、存储清理 |
-| AI 聊天 (AIChat) | DeepSeek/Tavily AI 对话、语音输入、API 配置 |
-| 搜索 (Search) | 综合搜索、分类展示、Kepler AI 总结、语音搜索 |
+| 我的 (Mine) | 个人中心、浏览历史、草稿箱、收藏、存储清理、侧边栏导航 |
+| AI 聊天 (AIChat) | DeepSeek/Tavily AI 对话、语音输入、API 配置、分屏聊天 |
+| 搜索 (Search) | 综合搜索、分类展示、Kepler AI 总结、语音搜索、搜索结果瀑布流 |
 | 设置 (Settings) | 隐私设置、安全设置、通知设置、资料编辑 |
+| 登录/注册 | 手机号登录、滑块验证码、用户协议、开发者模式 |
 
 ## 🔧 技术栈
 
@@ -230,12 +248,14 @@ entry/src/main/ets/
 | 框架 | HarmonyOS SDK |
 | 语言 | ArkTS (TypeScript) |
 | UI | 自定义组件 + 玻璃态效果 (LiquidGlass) |
-| AI 服务 | DeepSeek API / Tavily Search API |
-| 存储 | PreferencesStorage / 本地草稿箱 |
-| 响应式 | BreakpointSystem 多设备适配 |
-| 手势 | HoldingHandManager 握持检测 |
-| 动画 | ArkUI 动画系统 + 曲线动画 |
+| AI 服务 | DeepSeek API / Tavily Search API / AISummaryService |
+| 存储 | PreferencesStorage / 本地草稿箱 / 聊天记录存储 |
+| 响应式 | BreakpointSystem 多设备适配 (sm/md/lg/xl) |
+| 手势 | HoldingHandManager 握持检测 / PanGesture 拖拽手势 |
+| 动画 | ArkUI 动画系统 + 曲线动画 + 脉冲动画 + 弹性回弹 |
 | 安全 | 滑块验证码、短信验证码、密码验证 |
+| 图片 | PhotoPickerService 图片选择器 |
+| 语音 | SpeechRecognitionService 语音识别 |
 
 ## 🔑 权限说明
 
@@ -280,9 +300,9 @@ entry/src/main/ets/
 | 目录 | 文件数 | 说明 |
 |-----|-------|------|
 | 组件 (components) | 31 | 包含通用、对话框、各业务模块组件 |
-| 页面 (pages) | 22 | 主页面及子模块页面 |
-| 模型 (model) | 8 | 数据模型层 |
-| 工具 (utils) | 14 | 服务层工具类 |
+| 页面 (pages) | 22 | 主页面及子模块页面（含 AI 聊天/发现/我的子模块） |
+| 模型 (model) | 8 | 数据模型层、评论生成器、用户管理 |
+| 工具 (utils) | 14 | 服务层工具类（AI/语音/图片/历史/草稿等） |
 | 类型 (types) | 1 | TypeScript 类型定义 |
 | 其他 | 2 | 入口Ability、备份Ability |
 | **总计** | **78** | **核心业务代码模块** |
