@@ -7,12 +7,8 @@ import { UserManager } from '../model/UserModel';
 import { AgreementDialog } from '../components/dialogs/AgreementDialog';
 import { PreferencesStorage } from '../utils/PreferencesStorage';
 
-// ==================== 开发者模式入口 ====================
-// 设置为 true 启用开发者模式，可直接进入应用无需登录
-// 设置为 false 或注释掉以下代码来禁用开发者模式
 const DEV_MODE_ENABLED = true;
 const DEV_MODE_HIDDEN_PASSWORD = '114514';
-// =====================================================
 
 @Entry
 @Component
@@ -46,7 +42,7 @@ struct LoginPage {
 版本更新日期：2026年3月8日
 版本生效日期：2026年3月8日
 
-欢迎使用我们的应用（以下简称“本应用”）。本用户协议（以下简称“本协议”）是您与本应用运营者（以下简称“我们”或“平台”）之间关于使用本应用服务所订立的协议。
+欢迎使用我们的应用（以下简称"本应用"）。本用户协议（以下简称"本协议"）是您与本应用运营者（以下简称"我们"或"平台"）之间关于使用本应用服务所订立的协议。
 **请您在开始使用前，务必仔细阅读并充分理解本协议的全部内容，特别是以粗体/下划线标识的涉及免除或者限制责任、法律适用和争议解决的条款。如果您不同意本协议的任何内容，或者无法准确理解条款含义，请立即停止使用本应用。**
 
 1. 服务内容与变更
@@ -92,7 +88,7 @@ struct LoginPage {
 6.3 您应通过官方认可的渠道进行支付，切勿向个人或非官方账户转账。
 
 7. 免责声明
-7.1 本应用按“现状”和“可用”状态提供。我们不保证服务一定能满足您的要求，也不保证服务不会中断、无错误、无病毒或完全安全。
+7.1 本应用按"现状"和"可用"状态提供。我们不保证服务一定能满足您的要求，也不保证服务不会中断、无错误、无病毒或完全安全。
 7.2 因不可抗力（如自然灾害、政府行为、黑客攻击、电信部门技术调整等）导致的服务中断或数据丢失，我们不承担责任，但将尽力减少损失。
 7.3 您因使用本应用而引发的任何直接或间接损失（包括利润损失、数据丢失、商业中断等），我们在法律允许的最大范围内不承担赔偿责任。
 
@@ -108,7 +104,7 @@ struct LoginPage {
 10. 其他
 10.1 本协议中的标题仅为方便阅读而设，不影响条款含义。
 10.2 如本协议某一条款被认定无效，不影响其他条款的效力。
-10.3 联系方式：如您对本协议有任何疑问，请通过应用内“帮助与反馈”或邮箱 'chr114514chr@gmail.com' 与我们联系。
+10.3 联系方式：如您对本协议有任何疑问，请通过应用内"帮助与反馈"或邮箱 'chr114514chr@gmail.com' 与我们联系。
 
 感谢您的理解与支持！
 `;
@@ -119,11 +115,11 @@ struct LoginPage {
 版本生效日期：2026年3月8日
 
 引言
-我们（[含章队开发团队]）非常重视您的隐私保护。本隐私政策（以下简称“本政策”）旨在向您说明在您使用我们的应用（以下简称“本应用”）时，我们如何收集、使用、存储、共享、转让、公开披露和保护您的个人信息，以及您享有的权利。
+我们（[含章队开发团队]）非常重视您的隐私保护。本隐私政策（以下简称"本政策"）旨在向您说明在您使用我们的应用（以下简称"本应用"）时，我们如何收集、使用、存储、共享、转让、公开披露和保护您的个人信息，以及您享有的权利。
 **请您在使用本应用前，仔细阅读并了解本政策。一旦您开始使用本应用，即表示您已充分理解并同意本政策。**
 
 一、我们如何收集和使用您的个人信息
-我们遵循“合法、正当、必要”和“最小化”原则，仅在实现产品功能所必需的范围内收集您的信息。
+我们遵循"合法、正当、必要"和"最小化"原则，仅在实现产品功能所必需的范围内收集您的信息。
 
 1. 账号注册与登录
    - 收集信息：手机号码、验证码、昵称、头像（可选）、密码（加密存储）。
@@ -149,7 +145,7 @@ struct LoginPage {
 
 5. 个性化推荐
    - 我们可能利用您的浏览记录、兴趣标签进行算法分析，向您推荐感兴趣的内容。
-   - **您有权关闭个性化推荐**：您可以在“设置” > “隐私设置” > “个性化推荐管理”中一键关闭。关闭后，您将看到随机推荐内容。
+   - **您有权关闭个性化推荐**：您可以在"设置" > "隐私设置" > "个性化推荐管理"中一键关闭。关闭后，您将看到随机推荐内容。
 
 二、我们如何共享、转让、公开披露您的个人信息
 1. 共享
@@ -177,14 +173,14 @@ struct LoginPage {
 
 四、您的权利
 按照中国法律法规，我们保障您对自己的个人信息行使以下权利：
-1. 查阅与复制：您可以在“个人中心”查看您的基本信息。如需导出副本，请联系客服。
+1. 查阅与复制：您可以在"个人中心"查看您的基本信息。如需导出副本，请联系客服。
 2. 更正与补充：发现信息有误时，您可自行修改或联系我们更正。
 3. 删除：在以下情形下，您可以向我们提出删除个人信息的请求：
    - 我们处理行为违反法律法规；
    - 我们收集、使用您的个人信息，却未征得您的同意；
    - 您不再使用我们的产品或服务，或您注销了账号。
 4. 撤回同意：您可以通过关闭权限、注销账号或联系客服撤回之前给予的授权。撤回后，我们将不再处理相应的个人信息，但不会影响撤回前基于您的授权已开展的业务。
-5. 注销账号：您可以在“设置” > “账号安全” > “注销账号”中申请注销。注销后，我们将删除或匿名化处理您的个人信息（法律法规另有规定的除外）。
+5. 注销账号：您可以在"设置" > "账号安全" > "注销账号"中申请注销。注销后，我们将删除或匿名化处理您的个人信息（法律法规另有规定的除外）。
 
 五、未成年人保护
 1. 我们非常重视未成年人的个人信息保护。
@@ -208,6 +204,7 @@ struct LoginPage {
 
 感谢您的信任！
 `;
+
   async aboutToAppear() {
     const ctx = getContext(this);
     await this.verifyCodeManager.init(ctx);
@@ -346,6 +343,418 @@ struct LoginPage {
     this.agreementDialogController.open();
   }
 
+  private async handleLogin() {
+    if (DEV_MODE_ENABLED && (this.verifyCode === DEV_MODE_HIDDEN_PASSWORD || this.password === DEV_MODE_HIDDEN_PASSWORD)) {
+      this.bypassToMainPage();
+      return;
+    }
+
+    if (!this.agreeTerms) {
+      this.errorMsg = '请先勾选同意条款';
+      return;
+    }
+
+    if (!this.validatePhoneNumber(this.phoneNumber)) {
+      this.errorMsg = '请输入正确的手机号码';
+      return;
+    }
+
+    if (this.loginMode === 'code') {
+      if (this.verifyCode.trim() === '') {
+        this.errorMsg = '请输入验证码';
+        return;
+      }
+
+      const verifyResult = await this.verifyCodeManager.verifyCode(this.phoneNumber, this.verifyCode);
+      if (!verifyResult.success) {
+        this.errorMsg = verifyResult.message;
+        return;
+      }
+    } else {
+      if (this.password.trim() === '') {
+        this.errorMsg = '请输入密码';
+        return;
+      }
+
+      const passwordValid = await this.userManager.verifyPassword(this.phoneNumber, this.password);
+      if (!passwordValid) {
+        this.errorMsg = '密码错误，请重新输入';
+        return;
+      }
+    }
+
+    this.errorMsg = '';
+
+    const user = await this.userManager.getUserByPhone(this.phoneNumber);
+    if (user) {
+      AppStorage.setOrCreate('userName', user.nickname);
+      AppStorage.setOrCreate('userAvatar', user.avatar || 'ID_Wa/20260308215703.jpg');
+      AppStorage.setOrCreate('userUid', user.uid);
+      AppStorage.setOrCreate('userBio', user.bio || '记录生活，发现美好');
+      AppStorage.setOrCreate('userGender', user.gender || '保密');
+      AppStorage.setOrCreate('userBirthday', user.birthday || '2000-01-01');
+      AppStorage.setOrCreate('userPhone', user.phoneNumber);
+      AppStorage.setOrCreate('userLevel', user.level || 1);
+
+      const prefsStorage = PreferencesStorage.getInstance();
+      await prefsStorage.setCurrentUserPhone(user.phoneNumber);
+    }
+
+    const ctx = getContext(this);
+    const store = await preferences.getPreferences(ctx, 'users');
+    await store.put('isLoggedIn', true);
+    await store.put('lastLoginUsername', this.phoneNumber);
+    await store.flush();
+
+    this.userDatabase[this.phoneNumber] = 'verified';
+    await this.saveUserMap();
+
+    promptAction.showToast({ message: '登录成功' });
+    router.replaceUrl({ url: 'pages/Index' });
+  }
+
+  @Builder titleSection() {
+    Column({ space: 12 }) {
+      Text('欢迎登录')
+        .fontSize(this.isLargeScreen ? 40 : 32)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('#FFFFFF')
+        .scale({ x: this.titleScale, y: this.titleScale })
+        .animation({
+          duration: 800,
+          curve: Curve.Friction,
+          playMode: PlayMode.Normal
+        });
+
+      Text('请使用手机号登录或注册')
+        .fontSize(this.isLargeScreen ? 18 : 16)
+        .fontWeight(300)
+        .fontColor('#A0A0A0')
+        .textAlign(TextAlign.Center)
+        .margin({ top: this.isLargeScreen ? 12 : 8 });
+    }
+    .width('100%')
+    .margin({ top: this.isLargeScreen ? 60 : 80 });
+  }
+
+  @Builder formFields() {
+    Column({ space: this.isLargeScreen ? 8 : 6 }) {
+      Text('手机号码')
+        .fontSize(this.isLargeScreen ? 16 : 14)
+        .fontWeight(400)
+        .fontColor('#A0A0A0')
+        .width(this.isLargeScreen ? '100%' : '88%')
+        .textAlign(TextAlign.Start);
+
+      TextInput({
+        placeholder: '请输入您的手机号',
+        text: this.phoneNumber
+      })
+        .width(this.isLargeScreen ? '100%' : '88%')
+        .height(this.isLargeScreen ? 56 : 52)
+        .backgroundColor('rgba(45, 50, 55, 0.85)')
+        .borderRadius(this.isLargeScreen ? 12 : 8)
+        .fontSize(this.isLargeScreen ? 18 : 16)
+        .fontColor('#FFFFFF')
+        .placeholderColor('#505050')
+        .type(InputType.PhoneNumber)
+        .maxLength(11)
+        .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+        .border({
+          width: this.phoneFocused ? (this.isLargeScreen ? 2 : 1.5) : 1,
+          color: this.phoneFocused ? '#7B68EE' : '#2A2A2A'
+        })
+        .backdropBlur(10)
+        .animation({ duration: 300, curve: Curve.EaseInOut })
+        .onFocus(() => {
+          animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+            this.phoneFocused = true;
+          });
+        })
+        .onBlur(() => {
+          animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+            this.phoneFocused = false;
+          });
+        })
+        .onChange(async (value: string) => {
+          this.phoneNumber = value;
+          this.errorMsg = '';
+          await this.checkPhoneNumberRegistration();
+        });
+    }
+    .width('100%')
+    .alignItems(this.isLargeScreen ? HorizontalAlign.Start : HorizontalAlign.Center);
+
+    Row({ space: 0 }) {
+      Button('短信验证码')
+        .layoutWeight(1)
+        .height(this.isLargeScreen ? 48 : 44)
+        .fontSize(this.isLargeScreen ? 16 : 14)
+        .fontColor(this.loginMode === 'code' ? '#FFFFFF' : '#A0A0A0')
+        .backgroundColor(this.loginMode === 'code' ? '#7B68EE' : 'rgba(45, 50, 55, 0.85)')
+        .borderRadius({
+          topLeft: this.isLargeScreen ? 12 : 8,
+          topRight: 0,
+          bottomLeft: this.isLargeScreen ? 12 : 8,
+          bottomRight: 0
+        })
+        .onClick(() => {
+          this.loginMode = 'code';
+          this.errorMsg = '';
+        });
+
+      Button('密码登录')
+        .layoutWeight(1)
+        .height(this.isLargeScreen ? 48 : 44)
+        .fontSize(this.isLargeScreen ? 16 : 14)
+        .fontColor(this.loginMode === 'password' ? '#FFFFFF' : '#A0A0A0')
+        .backgroundColor(this.loginMode === 'password' ? '#7B68EE' : 'rgba(45, 50, 55, 0.85)')
+        .borderRadius({
+          topLeft: 0,
+          topRight: this.isLargeScreen ? 12 : 8,
+          bottomLeft: 0,
+          bottomRight: this.isLargeScreen ? 12 : 8
+        })
+        .onClick(() => {
+          this.loginMode = 'password';
+          this.errorMsg = '';
+        });
+    }
+    .width(this.isLargeScreen ? '100%' : '88%')
+    .margin({ top: 8 });
+
+    if (this.loginMode === 'code') {
+      Column({ space: this.isLargeScreen ? 8 : 6 }) {
+        Text('短信验证码')
+          .fontSize(this.isLargeScreen ? 16 : 14)
+          .fontWeight(400)
+          .fontColor('#A0A0A0')
+          .width(this.isLargeScreen ? '100%' : '88%')
+          .textAlign(TextAlign.Start)
+          .margin({ top: 12 });
+
+        Row({ space: this.isLargeScreen ? 12 : 8 }) {
+          TextInput({
+            placeholder: '请输入验证码',
+            text: this.verifyCode
+          })
+            .layoutWeight(1)
+            .height(this.isLargeScreen ? 56 : 52)
+            .backgroundColor('rgba(45, 50, 55, 0.85)')
+            .borderRadius(this.isLargeScreen ? 12 : 8)
+            .fontSize(this.isLargeScreen ? 18 : 16)
+            .fontColor('#FFFFFF')
+            .placeholderColor('#505050')
+            .type(InputType.Number)
+            .maxLength(6)
+            .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+            .border({
+              width: this.codeFocused ? (this.isLargeScreen ? 2 : 1.5) : 1,
+              color: this.codeFocused ? '#7B68EE' : '#2A2A2A'
+            })
+            .backdropBlur(10)
+            .animation({ duration: 300, curve: Curve.EaseInOut })
+            .onFocus(() => {
+              animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+                this.codeFocused = true;
+              });
+            })
+            .onBlur(() => {
+              animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+                this.codeFocused = false;
+              });
+            })
+            .onChange((value: string) => {
+              this.verifyCode = value;
+              this.errorMsg = '';
+            });
+
+          Button(this.countdown > 0 ? `${this.countdown}s` : '发送验证码')
+            .width(this.isLargeScreen ? 140 : 110)
+            .height(this.isLargeScreen ? 56 : 52)
+            .fontSize(this.isLargeScreen ? 16 : 14)
+            .fontWeight(500)
+            .fontColor(this.countdown > 0 || this.isSending ? '#808080' : '#FFFFFF')
+            .backgroundColor(this.countdown > 0 || this.isSending ? 'rgba(160, 160, 160, 0.5)' : '#7B68EE')
+            .borderRadius(this.isLargeScreen ? 12 : 8)
+            .enabled(this.countdown === 0 && !this.isSending)
+            .scale({
+              x: this.sendCodeBtnPressed ? 0.95 : 1,
+              y: this.sendCodeBtnPressed ? 0.95 : 1
+            })
+            .animation({ duration: 150, curve: Curve.EaseOut })
+            .onTouch((event: TouchEvent) => {
+              if (event.type === TouchType.Down) {
+                animateTo({ duration: 100, curve: Curve.Sharp }, () => {
+                  this.sendCodeBtnPressed = true;
+                });
+              } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
+                animateTo({ duration: 150, curve: Curve.Friction }, () => {
+                  this.sendCodeBtnPressed = false;
+                });
+              }
+            })
+            .onClick(() => {
+              this.sendVerifyCode();
+            });
+        }
+        .width(this.isLargeScreen ? '100%' : '88%');
+      }
+      .width('100%')
+      .alignItems(this.isLargeScreen ? HorizontalAlign.Start : HorizontalAlign.Center);
+    } else {
+      Column({ space: this.isLargeScreen ? 8 : 6 }) {
+        Text('密码')
+          .fontSize(this.isLargeScreen ? 16 : 14)
+          .fontWeight(400)
+          .fontColor('#A0A0A0')
+          .width(this.isLargeScreen ? '100%' : '88%')
+          .textAlign(TextAlign.Start)
+          .margin({ top: 12 });
+
+        TextInput({
+          placeholder: '请输入密码',
+          text: this.password
+        })
+          .width(this.isLargeScreen ? '100%' : '88%')
+          .height(this.isLargeScreen ? 56 : 52)
+          .backgroundColor('rgba(45, 50, 55, 0.85)')
+          .borderRadius(this.isLargeScreen ? 12 : 8)
+          .fontSize(this.isLargeScreen ? 18 : 16)
+          .fontColor('#FFFFFF')
+          .placeholderColor('#505050')
+          .type(InputType.Password)
+          .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+          .border({
+            width: this.passwordFocused ? (this.isLargeScreen ? 2 : 1.5) : 1,
+            color: this.passwordFocused ? '#7B68EE' : '#2A2A2A'
+          })
+          .backdropBlur(10)
+          .animation({ duration: 300, curve: Curve.EaseInOut })
+          .onFocus(() => {
+            animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+              this.passwordFocused = true;
+            });
+          })
+          .onBlur(() => {
+            animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
+              this.passwordFocused = false;
+            });
+          })
+          .onChange((value: string) => {
+            this.password = value;
+            this.errorMsg = '';
+          });
+      }
+      .width('100%')
+      .alignItems(this.isLargeScreen ? HorizontalAlign.Start : HorizontalAlign.Center);
+    }
+
+    if (this.errorMsg !== '') {
+      Text(this.errorMsg)
+        .fontSize(this.isLargeScreen ? 14 : 13)
+        .fontColor('#FF4444')
+        .width(this.isLargeScreen ? '100%' : '88%')
+        .textAlign(TextAlign.Start)
+        .padding({ left: 4 });
+    }
+
+    Row({ space: this.isLargeScreen ? 12 : 10 }) {
+      Checkbox()
+        .select(this.agreeTerms)
+        .onChange((val: boolean) => {
+          this.agreeTerms = val;
+        })
+        .selectedColor('#7B68EE')
+        .scale({ x: this.isLargeScreen ? 0.9 : 0.85, y: this.isLargeScreen ? 0.9 : 0.85 });
+
+      Row({ space: 0 }) {
+        Text('我已阅读并同意')
+          .fontSize(this.isLargeScreen ? 14 : 12)
+          .fontColor('#808080')
+          .lineHeight(this.isLargeScreen ? 20 : 18);
+
+        Text('用户协议')
+          .fontSize(this.isLargeScreen ? 14 : 12)
+          .fontColor('#7B68EE')
+          .lineHeight(this.isLargeScreen ? 20 : 18)
+          .decoration({ type: TextDecorationType.Underline })
+          .onClick(() => {
+            this.openUserAgreement();
+          });
+
+        Text('和')
+          .fontSize(this.isLargeScreen ? 14 : 12)
+          .fontColor('#808080')
+          .lineHeight(this.isLargeScreen ? 20 : 18);
+
+        Text('隐私政策')
+          .fontSize(this.isLargeScreen ? 14 : 12)
+          .fontColor('#7B68EE')
+          .lineHeight(this.isLargeScreen ? 20 : 18)
+          .decoration({ type: TextDecorationType.Underline })
+          .onClick(() => {
+            this.openPrivacyPolicy();
+          });
+      }
+      .layoutWeight(1);
+    }
+    .width(this.isLargeScreen ? '100%' : '88%')
+    .alignItems(VerticalAlign.Top)
+    .margin({ top: this.isLargeScreen ? 8 : 4 });
+
+    Button('登录')
+      .width(this.isLargeScreen ? '100%' : '88%')
+      .height(this.isLargeScreen ? 56 : 52)
+      .fontSize(this.isLargeScreen ? 18 : 16)
+      .fontWeight(500)
+      .fontColor('#FFFFFF')
+      .backgroundColor('#7B68EE')
+      .borderRadius(this.isLargeScreen ? 12 : 8)
+      .margin({ top: this.isLargeScreen ? 16 : 12 })
+      .scale({
+        x: this.continueBtnPressed ? 0.97 : 1,
+        y: this.continueBtnPressed ? 0.97 : 1
+      })
+      .animation({ duration: 200, curve: Curve.EaseOut })
+      .onTouch((event: TouchEvent) => {
+        if (event.type === TouchType.Down) {
+          animateTo({ duration: 100, curve: Curve.Sharp }, () => {
+            this.continueBtnPressed = true;
+          });
+        } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
+          animateTo({ duration: 200, curve: Curve.Friction }, () => {
+            this.continueBtnPressed = false;
+          });
+        }
+      })
+      .onClick(async () => {
+        await this.handleLogin();
+      });
+
+    if (DEV_MODE_ENABLED) {
+      Text('👽 开发者模式已启用')
+        .fontSize(12)
+        .fontColor('#666666')
+        .margin({ top: 8 });
+    }
+
+    Row({ space: this.isLargeScreen ? 6 : 4 }) {
+      Text('还没有账号？')
+        .fontSize(this.isLargeScreen ? 16 : 14)
+        .fontColor('#A0A0A0');
+
+      Text('注册账号')
+        .fontSize(this.isLargeScreen ? 16 : 14)
+        .fontColor('#7B68EE')
+        .fontWeight(FontWeight.Medium)
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/RegisterPage' });
+        });
+    }
+    .margin({ top: this.isLargeScreen ? 20 : 16 });
+  }
+
   build() {
     Stack() {
       Column()
@@ -356,416 +765,11 @@ struct LoginPage {
       if (this.isLargeScreen) {
         Row() {
           Blank();
-
           Column() {
-            Column({ space: 12 }) {
-              Text('欢迎登录')
-                .fontSize(40)
-                .fontWeight(FontWeight.Bold)
-                .fontColor('#FFFFFF')
-                .scale({ x: this.titleScale, y: this.titleScale })
-                .animation({
-                  duration: 800,
-                  curve: Curve.Friction,
-                  playMode: PlayMode.Normal
-                });
-
-              Text('请使用手机号登录或注册')
-                .fontSize(18)
-                .fontWeight(300)
-                .fontColor('#A0A0A0')
-                .textAlign(TextAlign.Center)
-                .margin({ top: 12 });
-            }
-            .width('100%')
-            .margin({ top: 60 });
-
+            this.titleSection();
             Blank();
-
             Column({ space: 16 }) {
-              Column({ space: 8 }) {
-                Text('手机号码')
-                  .fontSize(16)
-                  .fontWeight(400)
-                  .fontColor('#A0A0A0')
-                  .width('100%')
-                  .textAlign(TextAlign.Start);
-
-                TextInput({
-                  placeholder: '请输入您的手机号',
-                  text: this.phoneNumber
-                })
-                  .width('100%')
-                  .height(56)
-                  .backgroundColor('rgba(45, 50, 55, 0.85)')
-                  .borderRadius(12)
-                  .fontSize(18)
-                  .fontColor('#FFFFFF')
-                  .placeholderColor('#505050')
-                  .type(InputType.PhoneNumber)
-                  .maxLength(11)
-                  .padding({ left: 20, right: 20 })
-                  .border({
-                    width: this.phoneFocused ? 2 : 1,
-                    color: this.phoneFocused ? '#7B68EE' : '#2A2A2A'
-                  })
-                  .backdropBlur(10)
-                  .animation({ duration: 300, curve: Curve.EaseInOut })
-                  .onFocus(() => {
-                    animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                      this.phoneFocused = true;
-                    });
-                  })
-                  .onBlur(() => {
-                    animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                      this.phoneFocused = false;
-                    });
-                  })
-                  .onChange(async (value: string) => {
-                    this.phoneNumber = value;
-                    this.errorMsg = '';
-                    await this.checkPhoneNumberRegistration();
-                  });
-              }
-              .width('100%')
-              .alignItems(HorizontalAlign.Start);
-
-              Row({ space: 0 }) {
-                Button('短信验证码')
-                  .layoutWeight(1)
-                  .height(48)
-                  .fontSize(16)
-                  .fontColor(this.loginMode === 'code' ? '#FFFFFF' : '#A0A0A0')
-                  .backgroundColor(this.loginMode === 'code' ? '#7B68EE' : 'rgba(45, 50, 55, 0.85)')
-                  .borderRadius({
-                    topLeft: 12,
-                    topRight: 0,
-                    bottomLeft: 12,
-                    bottomRight: 0
-                  })
-                  .onClick(() => {
-                    this.loginMode = 'code';
-                    this.errorMsg = '';
-                  });
-
-                Button('密码登录')
-                  .layoutWeight(1)
-                  .height(48)
-                  .fontSize(16)
-                  .fontColor(this.loginMode === 'password' ? '#FFFFFF' : '#A0A0A0')
-                  .backgroundColor(this.loginMode === 'password' ? '#7B68EE' : 'rgba(45, 50, 55, 0.85)')
-                  .borderRadius({
-                    topLeft: 0,
-                    topRight: 12,
-                    bottomLeft: 0,
-                    bottomRight: 12
-                  })
-                  .onClick(() => {
-                    this.loginMode = 'password';
-                    this.errorMsg = '';
-                  });
-              }
-              .width('100%')
-              .margin({ top: 8 });
-
-              if (this.loginMode === 'code') {
-                Column({ space: 8 }) {
-                  Text('短信验证码')
-                    .fontSize(16)
-                    .fontWeight(400)
-                    .fontColor('#A0A0A0')
-                    .width('100%')
-                    .textAlign(TextAlign.Start)
-                    .margin({ top: 12 });
-
-                  Row({ space: 12 }) {
-                    TextInput({
-                      placeholder: '请输入验证码',
-                      text: this.verifyCode
-                    })
-                      .layoutWeight(1)
-                      .height(56)
-                      .backgroundColor('rgba(45, 50, 55, 0.85)')
-                      .borderRadius(12)
-                      .fontSize(18)
-                      .fontColor('#FFFFFF')
-                      .placeholderColor('#505050')
-                      .type(InputType.Number)
-                      .maxLength(6)
-                      .padding({ left: 20, right: 20 })
-                      .border({
-                        width: this.codeFocused ? 2 : 1,
-                        color: this.codeFocused ? '#7B68EE' : '#2A2A2A'
-                      })
-                      .backdropBlur(10)
-                      .animation({ duration: 300, curve: Curve.EaseInOut })
-                      .onFocus(() => {
-                        animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                          this.codeFocused = true;
-                        });
-                      })
-                      .onBlur(() => {
-                        animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                          this.codeFocused = false;
-                        });
-                      })
-                      .onChange((value: string) => {
-                        this.verifyCode = value;
-                        this.errorMsg = '';
-                      });
-
-                    Button(this.countdown > 0 ? `${this.countdown}s` : '发送验证码')
-                      .width(140)
-                      .height(56)
-                      .fontSize(16)
-                      .fontWeight(500)
-                      .fontColor(this.countdown > 0 || this.isSending ? '#808080' : '#FFFFFF')
-                      .backgroundColor(this.countdown > 0 || this.isSending ? 'rgba(160, 160, 160, 0.5)' : '#7B68EE')
-                      .borderRadius(12)
-                      .enabled(this.countdown === 0 && !this.isSending)
-                      .scale({
-                        x: this.sendCodeBtnPressed ? 0.95 : 1,
-                        y: this.sendCodeBtnPressed ? 0.95 : 1
-                      })
-                      .animation({ duration: 150, curve: Curve.EaseOut })
-                      .onTouch((event: TouchEvent) => {
-                        if (event.type === TouchType.Down) {
-                          animateTo({ duration: 100, curve: Curve.Sharp }, () => {
-                            this.sendCodeBtnPressed = true;
-                          });
-                        } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
-                          animateTo({ duration: 150, curve: Curve.Friction }, () => {
-                            this.sendCodeBtnPressed = false;
-                          });
-                        }
-                      })
-                      .onClick(() => {
-                        this.sendVerifyCode();
-                      });
-                  }
-                  .width('100%');
-                }
-                .width('100%')
-                .alignItems(HorizontalAlign.Start);
-              } else {
-                Column({ space: 8 }) {
-                  Text('密码')
-                    .fontSize(16)
-                    .fontWeight(400)
-                    .fontColor('#A0A0A0')
-                    .width('100%')
-                    .textAlign(TextAlign.Start)
-                    .margin({ top: 12 });
-
-                  TextInput({
-                    placeholder: '请输入密码',
-                    text: this.password
-                  })
-                    .width('100%')
-                    .height(56)
-                    .backgroundColor('rgba(45, 50, 55, 0.85)')
-                    .borderRadius(12)
-                    .fontSize(18)
-                    .fontColor('#FFFFFF')
-                    .placeholderColor('#505050')
-                    .type(InputType.Password)
-                    .padding({ left: 20, right: 20 })
-                    .border({
-                      width: this.passwordFocused ? 2 : 1,
-                      color: this.passwordFocused ? '#7B68EE' : '#2A2A2A'
-                    })
-                    .backdropBlur(10)
-                    .animation({ duration: 300, curve: Curve.EaseInOut })
-                    .onFocus(() => {
-                      animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                        this.passwordFocused = true;
-                      });
-                    })
-                    .onBlur(() => {
-                      animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                        this.passwordFocused = false;
-                      });
-                    })
-                    .onChange((value: string) => {
-                      this.password = value;
-                      this.errorMsg = '';
-                    });
-                }
-                .width('100%')
-                .alignItems(HorizontalAlign.Start);
-              }
-
-              if (this.errorMsg !== '') {
-                Text(this.errorMsg)
-                  .fontSize(14)
-                  .fontColor('#FF4444')
-                  .width('100%')
-                  .textAlign(TextAlign.Start)
-                  .padding({ left: 4 });
-              }
-
-              Row({ space: 12 }) {
-                Checkbox()
-                  .select(this.agreeTerms)
-                  .onChange((val: boolean) => {
-                    this.agreeTerms = val;
-                  })
-                  .selectedColor('#7B68EE')
-                  .scale({ x: 0.9, y: 0.9 });
-
-                Row({ space: 0 }) {
-                  Text('我已阅读并同意')
-                    .fontSize(14)
-                    .fontColor('#808080')
-                    .lineHeight(20);
-
-                  Text('用户协议')
-                    .fontSize(14)
-                    .fontColor('#7B68EE')
-                    .lineHeight(20)
-                    .decoration({ type: TextDecorationType.Underline })
-                    .onClick(() => {
-                      this.openUserAgreement();
-                    });
-
-                  Text('和')
-                    .fontSize(14)
-                    .fontColor('#808080')
-                    .lineHeight(20);
-
-                  Text('隐私政策')
-                    .fontSize(14)
-                    .fontColor('#7B68EE')
-                    .lineHeight(20)
-                    .decoration({ type: TextDecorationType.Underline })
-                    .onClick(() => {
-                      this.openPrivacyPolicy();
-                    });
-                }
-                .layoutWeight(1);
-              }
-              .width('100%')
-              .alignItems(VerticalAlign.Top)
-              .margin({ top: 8 });
-
-              Button('登录')
-                .width('100%')
-                .height(56)
-                .fontSize(18)
-                .fontWeight(500)
-                .fontColor('#FFFFFF')
-                .backgroundColor('#7B68EE')
-                .borderRadius(12)
-                .margin({ top: 16 })
-                .scale({
-                  x: this.continueBtnPressed ? 0.97 : 1,
-                  y: this.continueBtnPressed ? 0.97 : 1
-                })
-                .animation({ duration: 200, curve: Curve.EaseOut })
-                .onTouch((event: TouchEvent) => {
-                  if (event.type === TouchType.Down) {
-                    animateTo({ duration: 100, curve: Curve.Sharp }, () => {
-                      this.continueBtnPressed = true;
-                    });
-                  } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
-                    animateTo({ duration: 200, curve: Curve.Friction }, () => {
-                      this.continueBtnPressed = false;
-                    });
-                  }
-                })
-                .onClick(async () => {
-                  // 开发者模式快捷入口 - 最优先检查
-                  if (DEV_MODE_ENABLED && (this.verifyCode === DEV_MODE_HIDDEN_PASSWORD || this.password === DEV_MODE_HIDDEN_PASSWORD)) {
-                    this.bypassToMainPage();
-                    return;
-                  }
-
-                  if (!this.agreeTerms) {
-                    this.errorMsg = '请先勾选同意条款';
-                    return;
-                  }
-
-                  if (!this.validatePhoneNumber(this.phoneNumber)) {
-                    this.errorMsg = '请输入正确的手机号码';
-                    return;
-                  }
-
-                  if (this.loginMode === 'code') {
-                    if (this.verifyCode.trim() === '') {
-                      this.errorMsg = '请输入验证码';
-                      return;
-                    }
-
-                    const verifyResult = await this.verifyCodeManager.verifyCode(this.phoneNumber, this.verifyCode);
-                    if (!verifyResult.success) {
-                      this.errorMsg = verifyResult.message;
-                      return;
-                    }
-                  } else {
-                    if (this.password.trim() === '') {
-                      this.errorMsg = '请输入密码';
-                      return;
-                    }
-
-                    const passwordValid = await this.userManager.verifyPassword(this.phoneNumber, this.password);
-                    if (!passwordValid) {
-                      this.errorMsg = '密码错误，请重新输入';
-                      return;
-                    }
-                  }
-
-                  this.errorMsg = '';
-
-                  const user = await this.userManager.getUserByPhone(this.phoneNumber);
-                  if (user) {
-                    AppStorage.setOrCreate('userName', user.nickname);
-                    AppStorage.setOrCreate('userAvatar', user.avatar || 'ID_Wa/20260308215703.jpg');
-                    AppStorage.setOrCreate('userUid', user.uid);
-                    AppStorage.setOrCreate('userBio', user.bio || '记录生活，发现美好');
-                    AppStorage.setOrCreate('userGender', user.gender || '保密');
-                    AppStorage.setOrCreate('userBirthday', user.birthday || '2000-01-01');
-                    AppStorage.setOrCreate('userPhone', user.phoneNumber);
-                    AppStorage.setOrCreate('userLevel', user.level || 1);
-                    
-                    const prefsStorage = PreferencesStorage.getInstance();
-                    await prefsStorage.setCurrentUserPhone(user.phoneNumber);
-                  }
-
-                  const ctx = getContext(this);
-                  const store = await preferences.getPreferences(ctx, 'users');
-                  await store.put('isLoggedIn', true);
-                  await store.put('lastLoginUsername', this.phoneNumber);
-                  await store.flush();
-
-                  this.userDatabase[this.phoneNumber] = 'verified';
-                  await this.saveUserMap();
-
-                  promptAction.showToast({ message: '登录成功' });
-                  router.replaceUrl({ url: 'pages/Index' });
-                });
-
-              // 开发者模式入口 - 密码框输入 '114514' 可直接进入
-              if (DEV_MODE_ENABLED) {
-                Text('👽 开发者模式已启用')
-                  .fontSize(12)
-                  .fontColor('#666666')
-                  .margin({ top: 8 });
-              }
-
-              Row({ space: 6 }) {
-                Text('还没有账号？')
-                  .fontSize(16)
-                  .fontColor('#A0A0A0');
-
-                Text('注册账号')
-                  .fontSize(16)
-                  .fontColor('#7B68EE')
-                  .fontWeight(FontWeight.Medium)
-                  .onClick(() => {
-                    router.pushUrl({ url: 'pages/RegisterPage' });
-                  });
-              }
-              .margin({ top: 20 });
+              this.formFields();
             }
             .width(480)
             .padding(40)
@@ -780,424 +784,20 @@ struct LoginPage {
           .justifyContent(FlexAlign.SpaceBetween)
           .opacity(this.pageOpacity)
           .animation({ duration: 800, curve: Curve.EaseOut });
-
           Blank();
         }
         .width('100%')
         .height('100%');
       } else {
         Column() {
-          Column({ space: 12 }) {
-            Text('欢迎登录')
-              .fontSize(32)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#FFFFFF')
-              .scale({ x: this.titleScale, y: this.titleScale })
-              .animation({
-                duration: 800,
-                curve: Curve.Friction,
-                playMode: PlayMode.Normal
-              });
-
-            Text('请使用手机号登录或注册')
-              .fontSize(16)
-              .fontWeight(300)
-              .fontColor('#A0A0A0')
-              .textAlign(TextAlign.Center)
-              .margin({ top: 8 });
-          }
-          .width('100%')
-          .margin({ top: 80 });
-
+          this.titleSection();
           Blank();
-
-        Column({ space: 12 }) {
-          Column({ space: 6 }) {
-            Text('手机号码')
-              .fontSize(14)
-              .fontWeight(400)
-              .fontColor('#A0A0A0')
-              .width('88%')
-              .textAlign(TextAlign.Start);
-
-            TextInput({
-              placeholder: '请输入您的手机号',
-              text: this.phoneNumber
-            })
-              .width('88%')
-              .height(52)
-              .backgroundColor('rgba(45, 50, 55, 0.85)')
-              .borderRadius(8)
-              .fontSize(16)
-              .fontColor('#FFFFFF')
-              .placeholderColor('#505050')
-              .type(InputType.PhoneNumber)
-              .maxLength(11)
-              .padding({ left: 16, right: 16 })
-              .border({
-                width: this.phoneFocused ? 1.5 : 1,
-                color: this.phoneFocused ? '#7B68EE' : '#2A2A2A'
-              })
-              .backdropBlur(10)
-              .animation({ duration: 300, curve: Curve.EaseInOut })
-              .onFocus(() => {
-                animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                  this.phoneFocused = true;
-                });
-              })
-              .onBlur(() => {
-                animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                  this.phoneFocused = false;
-                });
-              })
-              .onChange(async (value: string) => {
-                this.phoneNumber = value;
-                this.errorMsg = '';
-                await this.checkPhoneNumberRegistration();
-              });
+          Column({ space: 12 }) {
+            this.formFields();
           }
           .width('100%')
-          .alignItems(HorizontalAlign.Center);
-
-          Row({ space: 0 }) {
-            Button('短信验证码')
-              .layoutWeight(1)
-              .height(44)
-              .fontSize(14)
-              .fontColor(this.loginMode === 'code' ? '#FFFFFF' : '#A0A0A0')
-              .backgroundColor(this.loginMode === 'code' ? '#7B68EE' : 'rgba(45, 50, 55, 0.85)')
-              .borderRadius({
-                topLeft: 8,
-                topRight: 0,
-                bottomLeft: 8,
-                bottomRight: 0
-              })
-              .onClick(() => {
-                this.loginMode = 'code';
-                this.errorMsg = '';
-              });
-
-            Button('密码登录')
-              .layoutWeight(1)
-              .height(44)
-              .fontSize(14)
-              .fontColor(this.loginMode === 'password' ? '#FFFFFF' : '#A0A0A0')
-              .backgroundColor(this.loginMode === 'password' ? '#7B68EE' : 'rgba(45, 50, 55, 0.85)')
-              .borderRadius({
-                topLeft: 0,
-                topRight: 8,
-                bottomLeft: 0,
-                bottomRight: 8
-              })
-              .onClick(() => {
-                this.loginMode = 'password';
-                this.errorMsg = '';
-              });
-          }
-          .width('88%')
-          .margin({ top: 8 });
-
-          if (this.loginMode === 'code') {
-            Column({ space: 6 }) {
-              Text('短信验证码')
-                .fontSize(14)
-                .fontWeight(400)
-                .fontColor('#A0A0A0')
-                .width('88%')
-                .textAlign(TextAlign.Start)
-                .margin({ top: 12 });
-
-              Row({ space: 8 }) {
-                TextInput({
-                  placeholder: '请输入验证码',
-                  text: this.verifyCode
-                })
-                  .layoutWeight(1)
-                  .height(52)
-                  .backgroundColor('rgba(45, 50, 55, 0.85)')
-                  .borderRadius(8)
-                  .fontSize(16)
-                  .fontColor('#FFFFFF')
-                  .placeholderColor('#505050')
-                  .type(InputType.Number)
-                  .maxLength(6)
-                  .padding({ left: 16, right: 16 })
-                  .border({
-                    width: this.codeFocused ? 1.5 : 1,
-                    color: this.codeFocused ? '#7B68EE' : '#2A2A2A'
-                  })
-                  .backdropBlur(10)
-                  .animation({ duration: 300, curve: Curve.EaseInOut })
-                  .onFocus(() => {
-                    animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                      this.codeFocused = true;
-                    });
-                  })
-                  .onBlur(() => {
-                    animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                      this.codeFocused = false;
-                    });
-                  })
-                  .onChange((value: string) => {
-                    this.verifyCode = value;
-                    this.errorMsg = '';
-                  });
-
-                Button(this.countdown > 0 ? `${this.countdown}s` : '发送验证码')
-                  .width(110)
-                  .height(52)
-                  .fontSize(14)
-                  .fontWeight(500)
-                  .fontColor(this.countdown > 0 || this.isSending ? '#808080' : '#FFFFFF')
-                  .backgroundColor(this.countdown > 0 || this.isSending ? 'rgba(160, 160, 160, 0.5)' : '#7B68EE')
-                  .borderRadius(8)
-                  .enabled(this.countdown === 0 && !this.isSending)
-                  .scale({
-                    x: this.sendCodeBtnPressed ? 0.95 : 1,
-                    y: this.sendCodeBtnPressed ? 0.95 : 1
-                  })
-                  .animation({ duration: 150, curve: Curve.EaseOut })
-                  .onTouch((event: TouchEvent) => {
-                    if (event.type === TouchType.Down) {
-                      animateTo({ duration: 100, curve: Curve.Sharp }, () => {
-                        this.sendCodeBtnPressed = true;
-                      });
-                    } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
-                      animateTo({ duration: 150, curve: Curve.Friction }, () => {
-                        this.sendCodeBtnPressed = false;
-                      });
-                    }
-                  })
-                  .onClick(() => {
-                    this.sendVerifyCode();
-                  });
-              }
-              .width('88%');
-            }
-            .width('100%')
-            .alignItems(HorizontalAlign.Center);
-          } else {
-            Column({ space: 6 }) {
-              Text('密码')
-                .fontSize(14)
-                .fontWeight(400)
-                .fontColor('#A0A0A0')
-                .width('88%')
-                .textAlign(TextAlign.Start)
-                .margin({ top: 12 });
-
-              TextInput({
-                placeholder: '请输入密码',
-                text: this.password
-              })
-                .width('88%')
-                .height(52)
-                .backgroundColor('rgba(45, 50, 55, 0.85)')
-                .borderRadius(8)
-                .fontSize(16)
-                .fontColor('#FFFFFF')
-                .placeholderColor('#505050')
-                .type(InputType.Password)
-                .padding({ left: 16, right: 16 })
-                .border({
-                  width: this.passwordFocused ? 1.5 : 1,
-                  color: this.passwordFocused ? '#7B68EE' : '#2A2A2A'
-                })
-                .backdropBlur(10)
-                .animation({ duration: 300, curve: Curve.EaseInOut })
-                .onFocus(() => {
-                  animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                    this.passwordFocused = true;
-                  });
-                })
-                .onBlur(() => {
-                  animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-                    this.passwordFocused = false;
-                  });
-                })
-                .onChange((value: string) => {
-                  this.password = value;
-                  this.errorMsg = '';
-                });
-            }
-            .width('100%')
-            .alignItems(HorizontalAlign.Center);
-          }
-
-          if (this.errorMsg !== '') {
-            Text(this.errorMsg)
-              .fontSize(13)
-              .fontColor('#FF4444')
-              .width('88%')
-              .textAlign(TextAlign.Start)
-              .padding({ left: 4 });
-          }
-
-          Row({ space: 10 }) {
-            Checkbox()
-              .select(this.agreeTerms)
-              .onChange((val: boolean) => {
-                this.agreeTerms = val;
-              })
-              .selectedColor('#7B68EE')
-              .scale({ x: 0.85, y: 0.85 });
-
-            Row({ space: 0 }) {
-              Text('我已阅读并同意')
-                .fontSize(12)
-                .fontColor('#808080')
-                .lineHeight(18);
-
-              Text('用户协议')
-                .fontSize(12)
-                .fontColor('#7B68EE')
-                .lineHeight(18)
-                .decoration({ type: TextDecorationType.Underline })
-                .onClick(() => {
-                  this.openUserAgreement();
-                });
-
-              Text('和')
-                .fontSize(12)
-                .fontColor('#808080')
-                .lineHeight(18);
-
-              Text('隐私政策')
-                .fontSize(12)
-                .fontColor('#7B68EE')
-                .lineHeight(18)
-                .decoration({ type: TextDecorationType.Underline })
-                .onClick(() => {
-                  this.openPrivacyPolicy();
-                });
-            }
-            .layoutWeight(1);
-          }
-          .width('88%')
-          .alignItems(VerticalAlign.Top)
-          .margin({ top: 4 });
-
-          Button('登录')
-            .width('88%')
-            .height(52)
-            .fontSize(16)
-            .fontWeight(500)
-            .fontColor('#FFFFFF')
-            .backgroundColor('#7B68EE')
-            .borderRadius(8)
-            .margin({ top: 12 })
-            .scale({
-              x: this.continueBtnPressed ? 0.97 : 1,
-              y: this.continueBtnPressed ? 0.97 : 1
-            })
-            .animation({ duration: 200, curve: Curve.EaseOut })
-            .onTouch((event: TouchEvent) => {
-              if (event.type === TouchType.Down) {
-                animateTo({ duration: 100, curve: Curve.Sharp }, () => {
-                  this.continueBtnPressed = true;
-                });
-              } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
-                animateTo({ duration: 200, curve: Curve.Friction }, () => {
-                  this.continueBtnPressed = false;
-                });
-              }
-            })
-            .onClick(async () => {
-              // 开发者模式快捷入口 - 最优先检查
-              if (DEV_MODE_ENABLED && (this.verifyCode === DEV_MODE_HIDDEN_PASSWORD || this.password === DEV_MODE_HIDDEN_PASSWORD)) {
-                this.bypassToMainPage();
-                return;
-              }
-
-              if (!this.agreeTerms) {
-                this.errorMsg = '请先勾选同意条款';
-                return;
-              }
-
-              if (!this.validatePhoneNumber(this.phoneNumber)) {
-                this.errorMsg = '请输入正确的手机号码';
-                return;
-              }
-
-              if (this.loginMode === 'code') {
-                if (this.verifyCode.trim() === '') {
-                  this.errorMsg = '请输入验证码';
-                  return;
-                }
-
-                const verifyResult = await this.verifyCodeManager.verifyCode(this.phoneNumber, this.verifyCode);
-                if (!verifyResult.success) {
-                  this.errorMsg = verifyResult.message;
-                  return;
-                }
-              } else {
-                if (this.password.trim() === '') {
-                  this.errorMsg = '请输入密码';
-                  return;
-                }
-
-                const passwordValid = await this.userManager.verifyPassword(this.phoneNumber, this.password);
-                if (!passwordValid) {
-                  this.errorMsg = '密码错误，请重新输入';
-                  return;
-                }
-              }
-
-              this.errorMsg = '';
-
-              const user = await this.userManager.getUserByPhone(this.phoneNumber);
-              if (user) {
-                AppStorage.setOrCreate('userName', user.nickname);
-                AppStorage.setOrCreate('userAvatar', user.avatar || 'ID_Wa/20260308215703.jpg');
-                AppStorage.setOrCreate('userUid', user.uid);
-                AppStorage.setOrCreate('userBio', user.bio || '记录生活，发现美好');
-                AppStorage.setOrCreate('userGender', user.gender || '保密');
-                AppStorage.setOrCreate('userBirthday', user.birthday || '2000-01-01');
-                AppStorage.setOrCreate('userPhone', user.phoneNumber);
-                AppStorage.setOrCreate('userLevel', user.level || 1);
-
-                const prefsStorage = PreferencesStorage.getInstance();
-                await prefsStorage.setCurrentUserPhone(user.phoneNumber);
-              }
-
-              const ctx = getContext(this);
-              const store = await preferences.getPreferences(ctx, 'users');
-              await store.put('isLoggedIn', true);
-              await store.put('lastLoginUsername', this.phoneNumber);
-              await store.flush();
-
-              this.userDatabase[this.phoneNumber] = 'verified';
-              await this.saveUserMap();
-
-              promptAction.showToast({ message: '登录成功' });
-              router.replaceUrl({ url: 'pages/Index' });
-            });
-
-          if (DEV_MODE_ENABLED) {
-            Text('👽 开发者模式已启用')
-              .fontSize(12)
-              .fontColor('#666666')
-              .margin({ top: 8 });
-          }
-
-          Row({ space: 4 }) {
-            Text('还没有账号？')
-              .fontSize(14)
-              .fontColor('#A0A0A0');
-
-            Text('注册账号')
-              .fontSize(14)
-              .fontColor('#7B68EE')
-              .fontWeight(FontWeight.Medium)
-              .onClick(() => {
-                router.pushUrl({ url: 'pages/RegisterPage' });
-              });
-          }
-          .margin({ top: 16 });
-        }
-        .width('100%')
-        .alignItems(HorizontalAlign.Center)
-        .margin({ bottom: 60 });
+          .alignItems(HorizontalAlign.Center)
+          .margin({ bottom: 60 });
         }
         .width('100%')
         .height('100%')

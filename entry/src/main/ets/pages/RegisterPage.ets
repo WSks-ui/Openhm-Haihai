@@ -62,7 +62,7 @@ struct RegisterPage {
       const ctx = getContext(this);
       await this.userManager.init(ctx);
       await this.verifyCodeManager.init(ctx);
-      
+
       this.screenWidth = px2vp(display.getDefaultDisplaySync().width);
       this.isLargeScreen = this.screenWidth >= 600;
     } catch (error) {
@@ -70,9 +70,6 @@ struct RegisterPage {
     }
   }
 
-  /**
-   * 检查手机号
-   */
   private async checkPhoneNumber() {
     if (this.phoneNumber.length === 0) {
       this.phoneValid = false;
@@ -90,9 +87,6 @@ struct RegisterPage {
     }
   }
 
-  /**
-   * 检查昵称
-   */
   private async checkNickname() {
     if (this.nickname.length === 0) {
       this.nicknameValid = false;
@@ -105,9 +99,6 @@ struct RegisterPage {
     this.nicknameValid = result.isValid;
   }
 
-  /**
-   * 检查UID
-   */
   private async checkUID() {
     if (this.customUid.length === 0) {
       this.uidValid = true;
@@ -120,9 +111,6 @@ struct RegisterPage {
     this.uidValid = result.isValid;
   }
 
-  /**
-   * 检查密码
-   */
   private checkPassword() {
     if (this.password.length === 0) {
       this.passwordValid = false;
@@ -137,9 +125,6 @@ struct RegisterPage {
     this.checkConfirmPassword();
   }
 
-  /**
-   * 检查确认密码
-   */
   private checkConfirmPassword() {
     if (this.confirmPassword.length === 0) {
       this.confirmPasswordValid = false;
@@ -156,9 +141,6 @@ struct RegisterPage {
     }
   }
 
-  /**
-   * 打开滑块验证弹窗
-   */
   private openSliderCaptchaDialog() {
     this.sliderCaptchaDialogController = new CustomDialogController({
       builder: SliderCaptchaDialog({
@@ -178,13 +160,10 @@ struct RegisterPage {
       autoCancel: true,
       customStyle: true
     });
-    
+
     this.sliderCaptchaDialogController.open();
   }
 
-  /**
-   * 发送验证码
-   */
   private async sendVerifyCode() {
     if (!this.phoneValid) {
       this.showError(this.phoneCheckResult.message || '请输入正确的手机号');
@@ -207,9 +186,6 @@ struct RegisterPage {
     this.isSendingCode = false;
   }
 
-  /**
-   * 开始倒计时
-   */
   private startCountdown() {
     this.countdown = 60;
     const timer = setInterval(() => {
@@ -220,9 +196,6 @@ struct RegisterPage {
     }, 1000);
   }
 
-  /**
-   * 完成注册
-   */
   private async completeRegistration() {
     if (!this.canSubmit()) {
       return;
@@ -238,9 +211,9 @@ struct RegisterPage {
       }
 
       await this.userManager.createUser(this.phoneNumber, this.nickname, this.password, this.customUid || undefined);
-      
+
       this.showSuccess('注册成功，请登录');
-      
+
       setTimeout(() => {
         router.replaceUrl({ url: 'pages/LoginPage', params: { phoneNumber: this.phoneNumber } });
       }, 1500);
@@ -250,9 +223,6 @@ struct RegisterPage {
     this.isRegistering = false;
   }
 
-  /**
-   * 检查是否可以提交
-   */
   private canSubmit(): boolean {
     return this.phoneValid &&
            this.nicknameValid &&
@@ -264,23 +234,14 @@ struct RegisterPage {
            !this.isRegistering;
   }
 
-  /**
-   * 显示成功提示
-   */
   private showSuccess(message: string) {
     promptAction.showToast({ message: message, duration: 2000 });
   }
 
-  /**
-   * 显示错误提示
-   */
   private showError(message: string) {
     promptAction.showToast({ message: message, duration: 2000 });
   }
 
-  /**
-   * 获取主题颜色
-   */
   private getThemeColors(): ThemeColors {
     const isDark = this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
     return {
@@ -295,591 +256,328 @@ struct RegisterPage {
     };
   }
 
+  @Builder headerSection() {
+    Row() {
+      SymbolGlyph($r('sys.symbol.chevron_left'))
+        .fontSize(this.isLargeScreen ? 28 : 24)
+        .fontColor([this.getThemeColors().subTextColor])
+        .onClick(() => {
+          router.back();
+        });
+      Text('注册账号')
+        .fontSize(this.isLargeScreen ? 24 : 20)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.getThemeColors().textColor)
+        .margin({ left: this.isLargeScreen ? 16 : 12 });
+    }
+    .width('100%')
+    .height(this.isLargeScreen ? 64 : 56)
+    .padding({ left: this.isLargeScreen ? 24 : 16, right: this.isLargeScreen ? 24 : 16 })
+    .margin({ top: this.isLargeScreen ? 20 : 0 });
+  }
+
+  @Builder scrollContent() {
+    Column({ space: this.isLargeScreen ? 24 : 20 }) {
+      Text('创建新账号')
+        .fontSize(this.isLargeScreen ? 36 : 28)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.getThemeColors().textColor)
+        .width('100%')
+        .margin({ top: this.isLargeScreen ? 24 : 20, bottom: this.isLargeScreen ? 12 : 8 });
+
+      Text('手机号快速注册，登录更便捷')
+        .fontSize(this.isLargeScreen ? 16 : 14)
+        .fontColor(this.getThemeColors().subTextColor)
+        .width('100%')
+        .margin({ bottom: this.isLargeScreen ? 32 : 24 });
+
+      LiquidGlass({
+        glassWidth: this.isLargeScreen ? 520 : '92%',
+        glassRadius: 24,
+        blurRadius: 30,
+        glassPadding: this.isLargeScreen ? 48 : 20,
+        glassColor: this.getThemeColors().glassColor
+      }) {
+        Column({ space: this.isLargeScreen ? 20 : 16 }) {
+          Column({ space: this.isLargeScreen ? 10 : 8 }) {
+            Text('手机号')
+              .fontSize(this.isLargeScreen ? 16 : 14)
+              .fontColor(this.getThemeColors().subTextColor)
+              .width('100%');
+
+            TextInput({ text: this.phoneNumber, placeholder: '请输入手机号' })
+              .type(InputType.PhoneNumber)
+              .width('100%')
+              .height(this.isLargeScreen ? 56 : 50)
+              .backgroundColor(this.getThemeColors().inputBg)
+              .borderRadius(this.isLargeScreen ? 12 : 8)
+              .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+              .fontSize(this.isLargeScreen ? 18 : 16)
+              .fontColor(this.getThemeColors().textColor)
+              .placeholderColor(this.getThemeColors().subTextColor)
+              .border({ width: this.isLargeScreen ? 1 : 0, color: this.getThemeColors().inputBorder })
+              .backdropBlur(10)
+              .onChange((value: string) => {
+                this.phoneNumber = value;
+                this.checkPhoneNumber();
+              });
+
+            if (this.phoneCheckResult.message) {
+              Text(this.phoneCheckResult.message)
+                .fontSize(this.isLargeScreen ? 14 : 12)
+                .fontColor(this.phoneValid ? '#52C41A' : '#FF4444')
+                .width('100%');
+            }
+          }
+
+          Column({ space: this.isLargeScreen ? 10 : 8 }) {
+            Text('昵称')
+              .fontSize(this.isLargeScreen ? 16 : 14)
+              .fontColor(this.getThemeColors().subTextColor)
+              .width('100%');
+
+            TextInput({ text: this.nickname, placeholder: '请输入昵称（2-20个字符）' })
+              .width('100%')
+              .height(this.isLargeScreen ? 56 : 50)
+              .backgroundColor(this.getThemeColors().inputBg)
+              .borderRadius(this.isLargeScreen ? 12 : 8)
+              .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+              .fontSize(this.isLargeScreen ? 18 : 16)
+              .fontColor(this.getThemeColors().textColor)
+              .placeholderColor(this.getThemeColors().subTextColor)
+              .border({ width: this.isLargeScreen ? 1 : 0, color: this.getThemeColors().inputBorder })
+              .backdropBlur(10)
+              .onChange((value: string) => {
+                this.nickname = value;
+                this.checkNickname();
+              });
+
+            if (this.nicknameCheckResult.message) {
+              Text(this.nicknameCheckResult.message)
+                .fontSize(this.isLargeScreen ? 14 : 12)
+                .fontColor(this.nicknameValid ? '#52C41A' : '#FF4444')
+                .width('100%');
+            }
+          }
+
+          Column({ space: this.isLargeScreen ? 10 : 8 }) {
+            Text('UID（可选）')
+              .fontSize(this.isLargeScreen ? 16 : 14)
+              .fontColor(this.getThemeColors().subTextColor)
+              .width('100%');
+
+            TextInput({ text: this.customUid, placeholder: '自定义UID（4-16位字母数字下划线）' })
+              .width('100%')
+              .height(this.isLargeScreen ? 56 : 50)
+              .backgroundColor(this.getThemeColors().inputBg)
+              .borderRadius(this.isLargeScreen ? 12 : 8)
+              .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+              .fontSize(this.isLargeScreen ? 18 : 16)
+              .fontColor(this.getThemeColors().textColor)
+              .placeholderColor(this.getThemeColors().subTextColor)
+              .border({ width: this.isLargeScreen ? 1 : 0, color: this.getThemeColors().inputBorder })
+              .backdropBlur(10)
+              .onChange((value: string) => {
+                this.customUid = value;
+                this.checkUID();
+              });
+
+            if (this.uidCheckResult.message && this.customUid.length > 0) {
+              Text(this.uidCheckResult.message)
+                .fontSize(this.isLargeScreen ? 14 : 12)
+                .fontColor(this.uidValid ? '#52C41A' : '#FF4444')
+                .width('100%');
+            }
+          }
+
+          Column({ space: this.isLargeScreen ? 10 : 8 }) {
+            Text('密码')
+              .fontSize(this.isLargeScreen ? 16 : 14)
+              .fontColor(this.getThemeColors().subTextColor)
+              .width('100%');
+
+            TextInput({ text: this.password, placeholder: '请设置密码（6-20位，含字母和数字）' })
+              .type(InputType.Password)
+              .width('100%')
+              .height(this.isLargeScreen ? 56 : 50)
+              .backgroundColor(this.getThemeColors().inputBg)
+              .borderRadius(this.isLargeScreen ? 12 : 8)
+              .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+              .fontSize(this.isLargeScreen ? 18 : 16)
+              .fontColor(this.getThemeColors().textColor)
+              .placeholderColor(this.getThemeColors().subTextColor)
+              .border({ width: this.isLargeScreen ? 1 : 0, color: this.getThemeColors().inputBorder })
+              .backdropBlur(10)
+              .onChange((value: string) => {
+                this.password = value;
+                this.checkPassword();
+              });
+
+            if (this.passwordCheckResult.message) {
+              Text(this.passwordCheckResult.message)
+                .fontSize(this.isLargeScreen ? 14 : 12)
+                .fontColor(this.passwordValid ? '#52C41A' : '#FF4444')
+                .width('100%');
+            }
+          }
+
+          Column({ space: this.isLargeScreen ? 10 : 8 }) {
+            Text('确认密码')
+              .fontSize(this.isLargeScreen ? 16 : 14)
+              .fontColor(this.getThemeColors().subTextColor)
+              .width('100%');
+
+            TextInput({ text: this.confirmPassword, placeholder: '请再次输入密码' })
+              .type(InputType.Password)
+              .width('100%')
+              .height(this.isLargeScreen ? 56 : 50)
+              .backgroundColor(this.getThemeColors().inputBg)
+              .borderRadius(this.isLargeScreen ? 12 : 8)
+              .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+              .fontSize(this.isLargeScreen ? 18 : 16)
+              .fontColor(this.getThemeColors().textColor)
+              .placeholderColor(this.getThemeColors().subTextColor)
+              .border({ width: this.isLargeScreen ? 1 : 0, color: this.getThemeColors().inputBorder })
+              .backdropBlur(10)
+              .onChange((value: string) => {
+                this.confirmPassword = value;
+                this.checkConfirmPassword();
+              });
+
+            if (this.confirmPasswordCheckResult.message) {
+              Text(this.confirmPasswordCheckResult.message)
+                .fontSize(this.isLargeScreen ? 14 : 12)
+                .fontColor(this.confirmPasswordValid ? '#52C41A' : '#FF4444')
+                .width('100%');
+            }
+          }
+
+          Column({ space: this.isLargeScreen ? 10 : 8 }) {
+            Text('验证码')
+              .fontSize(this.isLargeScreen ? 16 : 14)
+              .fontColor(this.getThemeColors().subTextColor)
+              .width('100%');
+
+            Row({ space: this.isLargeScreen ? 12 : 0 }) {
+              TextInput({ text: this.verifyCode, placeholder: '请输入验证码' })
+                .type(InputType.Number)
+                .layoutWeight(1)
+                .height(this.isLargeScreen ? 56 : 50)
+                .backgroundColor(this.getThemeColors().inputBg)
+                .borderRadius(this.isLargeScreen ? 12 : 8)
+                .padding({ left: this.isLargeScreen ? 20 : 16, right: this.isLargeScreen ? 20 : 16 })
+                .fontSize(this.isLargeScreen ? 18 : 16)
+                .fontColor(this.getThemeColors().textColor)
+                .placeholderColor(this.getThemeColors().subTextColor)
+                .border({ width: this.isLargeScreen ? 1 : 0, color: this.getThemeColors().inputBorder })
+                .backdropBlur(10)
+                .onChange((value: string) => {
+                  this.verifyCode = value;
+                });
+
+              Button(this.countdown > 0 ? `${this.countdown}s` : '获取验证码')
+                .fontSize(this.isLargeScreen ? 16 : 14)
+                .fontColor(this.countdown > 0 || !this.phoneValid ? '#808080' : '#FFFFFF')
+                .backgroundColor(this.countdown > 0 || !this.phoneValid ? 'rgba(160, 160, 160, 0.5)' : '#7B68EE')
+                .height(this.isLargeScreen ? 56 : 50)
+                .width(this.isLargeScreen ? 140 : 110)
+                .borderRadius(this.isLargeScreen ? 12 : 8)
+                .margin({ left: this.isLargeScreen ? 0 : 12 })
+                .enabled(this.countdown <= 0 && this.phoneValid && !this.isSendingCode)
+                .onClick(() => {
+                  this.sendVerifyCode();
+                });
+            }
+            .width('100%');
+          }
+
+          Column({ space: this.isLargeScreen ? 16 : 16 }) {
+            Text('安全验证')
+              .fontSize(this.isLargeScreen ? 16 : 14)
+              .fontColor(this.getThemeColors().subTextColor)
+              .width('100%');
+
+            Button(this.isSliderVerified ? '已验证 ✓' : '点击进行验证')
+              .fontSize(this.isLargeScreen ? 16 : 14)
+              .fontColor(this.isSliderVerified ? '#52C41A' : '#FFFFFF')
+              .backgroundColor(this.isSliderVerified ? '#F6FFED' : '#7B68EE')
+              .width('100%')
+              .height(this.isLargeScreen ? 56 : 50)
+              .borderRadius(this.isLargeScreen ? 12 : 8)
+              .enabled(!this.isSliderVerified)
+              .onClick(() => {
+                this.openSliderCaptchaDialog();
+              });
+          }
+        }
+      }
+
+      Button('完成注册')
+        .fontSize(this.isLargeScreen ? 18 : 16)
+        .fontColor(this.canSubmit() ? '#FFFFFF' : '#808080')
+        .backgroundColor(this.canSubmit() ? '#7B68EE' : 'rgba(160, 160, 160, 0.5)')
+        .width(this.isLargeScreen ? 520 : '90%')
+        .height(this.isLargeScreen ? 56 : 50)
+        .borderRadius(this.isLargeScreen ? 28 : 25)
+        .enabled(this.canSubmit())
+        .margin({ top: this.isLargeScreen ? 0 : 20, bottom: this.isLargeScreen ? 24 : 40 })
+        .onClick(() => {
+          this.completeRegistration();
+        });
+
+      Row() {
+        Text('已有账号？')
+          .fontSize(this.isLargeScreen ? 16 : 14)
+          .fontColor(this.getThemeColors().subTextColor);
+
+        Text('去登录')
+          .fontSize(this.isLargeScreen ? 16 : 14)
+          .fontColor('#7B68EE')
+          .fontWeight(FontWeight.Medium)
+          .onClick(() => {
+            router.replaceUrl({ url: 'pages/LoginPage' });
+          });
+      }
+      .margin({ bottom: 40 });
+    }
+    .width('100%')
+    .alignItems(HorizontalAlign.Center);
+  }
+
   build() {
     Stack() {
       AnimatedBackground() {
         if (this.isLargeScreen) {
           Row() {
             Blank();
-
             Column() {
-              Row() {
-                SymbolGlyph($r('sys.symbol.chevron_left'))
-                  .fontSize(28)
-                  .fontColor([this.getThemeColors().subTextColor])
-                  .onClick(() => {
-                    router.back();
-                  })
-                Text('注册账号')
-                  .fontSize(24)
-                  .fontWeight(FontWeight.Bold)
-                  .fontColor(this.getThemeColors().textColor)
-                  .margin({ left: 16 })
-              }
-              .width('100%')
-              .height(64)
-              .padding({ left: 24, right: 24 })
-              .margin({ top: 20 });
-
+              this.headerSection();
               Scroll() {
-                Column({ space: 24 }) {
-                  Text('创建新账号')
-                    .fontSize(36)
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor(this.getThemeColors().textColor)
-                    .width('100%')
-                    .margin({ top: 24, bottom: 12 })
-
-                  Text('手机号快速注册，登录更便捷')
-                    .fontSize(16)
-                    .fontColor(this.getThemeColors().subTextColor)
-                    .width('100%')
-                    .margin({ bottom: 32 })
-
-                  LiquidGlass({
-                    glassWidth: 520,
-                    glassRadius: 24,
-                    blurRadius: 30,
-                    glassPadding: 48,
-                    glassColor: this.getThemeColors().glassColor
-                  }) {
-                    Column({ space: 20 }) {
-                      Column({ space: 10 }) {
-                        Text('手机号')
-                          .fontSize(16)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.phoneNumber, placeholder: '请输入手机号' })
-                          .type(InputType.PhoneNumber)
-                          .width('100%')
-                          .height(56)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(12)
-                          .padding({ left: 20, right: 20 })
-                          .fontSize(18)
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .border({ width: 1, color: this.getThemeColors().inputBorder })
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.phoneNumber = value;
-                            this.checkPhoneNumber();
-                          })
-
-                        if (this.phoneCheckResult.message) {
-                          Text(this.phoneCheckResult.message)
-                            .fontSize(14)
-                            .fontColor(this.phoneValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 10 }) {
-                        Text('昵称')
-                          .fontSize(16)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.nickname, placeholder: '请输入昵称（2-20个字符）' })
-                          .width('100%')
-                          .height(56)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(12)
-                          .padding({ left: 20, right: 20 })
-                          .fontSize(18)
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .border({ width: 1, color: this.getThemeColors().inputBorder })
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.nickname = value;
-                            this.checkNickname();
-                          })
-
-                        if (this.nicknameCheckResult.message) {
-                          Text(this.nicknameCheckResult.message)
-                            .fontSize(14)
-                            .fontColor(this.nicknameValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 10 }) {
-                        Text('UID（可选）')
-                          .fontSize(16)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.customUid, placeholder: '自定义UID（4-16位字母数字下划线）' })
-                          .width('100%')
-                          .height(56)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(12)
-                          .padding({ left: 20, right: 20 })
-                          .fontSize(18)
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .border({ width: 1, color: this.getThemeColors().inputBorder })
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.customUid = value;
-                            this.checkUID();
-                          })
-
-                        if (this.uidCheckResult.message && this.customUid.length > 0) {
-                          Text(this.uidCheckResult.message)
-                            .fontSize(14)
-                            .fontColor(this.uidValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 10 }) {
-                        Text('密码')
-                          .fontSize(16)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.password, placeholder: '请设置密码（6-20位，含字母和数字）' })
-                          .type(InputType.Password)
-                          .width('100%')
-                          .height(56)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(12)
-                          .padding({ left: 20, right: 20 })
-                          .fontSize(18)
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .border({ width: 1, color: this.getThemeColors().inputBorder })
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.password = value;
-                            this.checkPassword();
-                          })
-
-                        if (this.passwordCheckResult.message) {
-                          Text(this.passwordCheckResult.message)
-                            .fontSize(14)
-                            .fontColor(this.passwordValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 10 }) {
-                        Text('确认密码')
-                          .fontSize(16)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.confirmPassword, placeholder: '请再次输入密码' })
-                          .type(InputType.Password)
-                          .width('100%')
-                          .height(56)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(12)
-                          .padding({ left: 20, right: 20 })
-                          .fontSize(18)
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .border({ width: 1, color: this.getThemeColors().inputBorder })
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.confirmPassword = value;
-                            this.checkConfirmPassword();
-                          })
-
-                        if (this.confirmPasswordCheckResult.message) {
-                          Text(this.confirmPasswordCheckResult.message)
-                            .fontSize(14)
-                            .fontColor(this.confirmPasswordValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 10 }) {
-                        Text('验证码')
-                          .fontSize(16)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        Row({ space: 12 }) {
-                          TextInput({ text: this.verifyCode, placeholder: '请输入验证码' })
-                            .type(InputType.Number)
-                            .layoutWeight(1)
-                            .height(56)
-                            .backgroundColor(this.getThemeColors().inputBg)
-                            .borderRadius(12)
-                            .padding({ left: 20, right: 20 })
-                            .fontSize(18)
-                            .fontColor(this.getThemeColors().textColor)
-                            .placeholderColor(this.getThemeColors().subTextColor)
-                            .border({ width: 1, color: this.getThemeColors().inputBorder })
-                            .backdropBlur(10)
-                            .onChange((value: string) => {
-                              this.verifyCode = value;
-                            })
-
-                          Button(this.countdown > 0 ? `${this.countdown}s` : '获取验证码')
-                            .fontSize(16)
-                            .fontColor(this.countdown > 0 || !this.phoneValid ? '#808080' : '#FFFFFF')
-                            .backgroundColor(this.countdown > 0 || !this.phoneValid ? 'rgba(160, 160, 160, 0.5)' :
-                              '#7B68EE')
-                            .height(56)
-                            .width(140)
-                            .borderRadius(12)
-                            .enabled(this.countdown <= 0 && this.phoneValid && !this.isSendingCode)
-                            .onClick(() => {
-                              this.sendVerifyCode();
-                            })
-                        }
-                        .width('100%')
-                      }
-
-                      Column({ space: 16 }) {
-                        Text('安全验证')
-                          .fontSize(16)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        Button(this.isSliderVerified ? '已验证 ✓' : '点击进行验证')
-                          .fontSize(16)
-                          .fontColor(this.isSliderVerified ? '#52C41A' : '#FFFFFF')
-                          .backgroundColor(this.isSliderVerified ? '#F6FFED' : '#7B68EE')
-                          .width('100%')
-                          .height(56)
-                          .borderRadius(12)
-                          .enabled(!this.isSliderVerified)
-                          .onClick(() => {
-                            this.openSliderCaptchaDialog();
-                          })
-                      }
-                    }
-                  }
-
-                  Button('完成注册')
-                    .fontSize(18)
-                    .fontColor(this.canSubmit() ? '#FFFFFF' : '#808080')
-                    .backgroundColor(this.canSubmit() ? '#7B68EE' : 'rgba(160, 160, 160, 0.5)')
-                    .width(520)
-                    .height(56)
-                    .borderRadius(28)
-                    .enabled(this.canSubmit())
-                    .margin({ bottom: 24 })
-                    .onClick(() => {
-                      this.completeRegistration();
-                    })
-
-                  Row() {
-                    Text('已有账号？')
-                      .fontSize(16)
-                      .fontColor(this.getThemeColors().subTextColor)
-
-                    Text('去登录')
-                      .fontSize(16)
-                      .fontColor('#7B68EE')
-                      .fontWeight(FontWeight.Medium)
-                      .onClick(() => {
-                        router.replaceUrl({ url: 'pages/LoginPage' });
-                      })
-                  }
-                  .margin({ bottom: 40 })
-                }
-                .width('100%')
-                .alignItems(HorizontalAlign.Center)
+                this.scrollContent();
               }
               .layoutWeight(1)
               .scrollBar(BarState.Off)
-              .width(600)
+              .width(600);
             }
             .width(600)
             .height('100%')
             .alignItems(HorizontalAlign.Center);
-
             Blank();
           }
         } else {
-            Column() {
-              Row() {
-                SymbolGlyph($r('sys.symbol.chevron_left'))
-                  .fontSize(24)
-                  .fontColor([this.getThemeColors().subTextColor])
-                  .onClick(() => {
-                    router.back();
-                  })
-                Text('注册账号')
-                  .fontSize(20)
-                  .fontWeight(FontWeight.Bold)
-                  .fontColor(this.getThemeColors().textColor)
-                  .margin({ left: 12 })
-              }
-              .width('100%')
-              .height(56)
-              .padding({ left: 16, right: 16 })
-
-              Scroll() {
-                Column({ space: 20 }) {
-                  Text('创建新账号')
-                    .fontSize(28)
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor(this.getThemeColors().textColor)
-                    .width('100%')
-                    .margin({ top: 20, bottom: 8 })
-
-                  Text('手机号快速注册，登录更便捷')
-                    .fontSize(14)
-                    .fontColor(this.getThemeColors().subTextColor)
-                    .width('100%')
-                    .margin({ bottom: 24 })
-
-                  LiquidGlass({
-                    glassWidth: '92%',
-                    glassRadius: 24,
-                    blurRadius: 30,
-                    glassPadding: 20,
-                    glassColor: this.getThemeColors().glassColor
-                  }) {
-                    Column({ space: 16 }) {
-                      Column({ space: 8 }) {
-                        Text('手机号')
-                          .fontSize(14)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.phoneNumber, placeholder: '请输入手机号' })
-                          .type(InputType.PhoneNumber)
-                          .width('100%')
-                          .height(50)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(8)
-                          .padding({ left: 16, right: 16 })
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.phoneNumber = value;
-                            this.checkPhoneNumber();
-                          })
-
-                        if (this.phoneCheckResult.message) {
-                          Text(this.phoneCheckResult.message)
-                            .fontSize(12)
-                            .fontColor(this.phoneValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 8 }) {
-                        Text('昵称')
-                          .fontSize(14)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.nickname, placeholder: '请输入昵称（2-20个字符）' })
-                          .width('100%')
-                          .height(50)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(8)
-                          .padding({ left: 16, right: 16 })
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.nickname = value;
-                            this.checkNickname();
-                          })
-
-                        if (this.nicknameCheckResult.message) {
-                          Text(this.nicknameCheckResult.message)
-                            .fontSize(12)
-                            .fontColor(this.nicknameValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 8 }) {
-                        Text('UID（可选）')
-                          .fontSize(14)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.customUid, placeholder: '自定义UID（4-16位字母数字下划线）' })
-                          .width('100%')
-                          .height(50)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(8)
-                          .padding({ left: 16, right: 16 })
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.customUid = value;
-                            this.checkUID();
-                          })
-
-                        if (this.uidCheckResult.message && this.customUid.length > 0) {
-                          Text(this.uidCheckResult.message)
-                            .fontSize(12)
-                            .fontColor(this.uidValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 8 }) {
-                        Text('密码')
-                          .fontSize(14)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.password, placeholder: '请设置密码（6-20位，含字母和数字）' })
-                          .type(InputType.Password)
-                          .width('100%')
-                          .height(50)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(8)
-                          .padding({ left: 16, right: 16 })
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.password = value;
-                            this.checkPassword();
-                          })
-
-                        if (this.passwordCheckResult.message) {
-                          Text(this.passwordCheckResult.message)
-                            .fontSize(12)
-                            .fontColor(this.passwordValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 8 }) {
-                        Text('确认密码')
-                          .fontSize(14)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        TextInput({ text: this.confirmPassword, placeholder: '请再次输入密码' })
-                          .type(InputType.Password)
-                          .width('100%')
-                          .height(50)
-                          .backgroundColor(this.getThemeColors().inputBg)
-                          .borderRadius(8)
-                          .padding({ left: 16, right: 16 })
-                          .fontColor(this.getThemeColors().textColor)
-                          .placeholderColor(this.getThemeColors().subTextColor)
-                          .backdropBlur(10)
-                          .onChange((value: string) => {
-                            this.confirmPassword = value;
-                            this.checkConfirmPassword();
-                          })
-
-                        if (this.confirmPasswordCheckResult.message) {
-                          Text(this.confirmPasswordCheckResult.message)
-                            .fontSize(12)
-                            .fontColor(this.confirmPasswordValid ? '#52C41A' : '#FF4444')
-                            .width('100%')
-                        }
-                      }
-
-                      Column({ space: 8 }) {
-                        Text('验证码')
-                          .fontSize(14)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        Row() {
-                          TextInput({ text: this.verifyCode, placeholder: '请输入验证码' })
-                            .type(InputType.Number)
-                            .layoutWeight(1)
-                            .height(50)
-                            .backgroundColor(this.getThemeColors().inputBg)
-                            .borderRadius(8)
-                            .padding({ left: 16, right: 16 })
-                            .fontColor(this.getThemeColors().textColor)
-                            .placeholderColor(this.getThemeColors().subTextColor)
-                            .backdropBlur(10)
-                            .onChange((value: string) => {
-                              this.verifyCode = value;
-                            })
-
-                          Button(this.countdown > 0 ? `${this.countdown}s` : '获取验证码')
-                            .fontSize(14)
-                            .fontColor(this.countdown > 0 || !this.phoneValid ? '#808080' : '#FFFFFF')
-                            .backgroundColor(this.countdown > 0 || !this.phoneValid ? 'rgba(160, 160, 160, 0.5)' :
-                              '#7B68EE')
-                            .height(50)
-                            .margin({ left: 12 })
-                            .enabled(this.countdown <= 0 && this.phoneValid && !this.isSendingCode)
-                            .onClick(() => {
-                              this.sendVerifyCode();
-                            })
-                        }
-                        .width('100%')
-                      }
-
-                      Column({ space: 16 }) {
-                        Text('安全验证')
-                          .fontSize(14)
-                          .fontColor(this.getThemeColors().subTextColor)
-                          .width('100%')
-
-                        Button(this.isSliderVerified ? '已验证 ✓' : '点击进行验证')
-                          .fontSize(14)
-                          .fontColor(this.isSliderVerified ? '#52C41A' : '#FFFFFF')
-                          .backgroundColor(this.isSliderVerified ? '#F6FFED' : '#7B68EE')
-                          .width('100%')
-                          .height(50)
-                          .borderRadius(8)
-                          .enabled(!this.isSliderVerified)
-                          .onClick(() => {
-                            this.openSliderCaptchaDialog();
-                          })
-                      }
-                    }
-                  }
-
-                  Button('完成注册')
-                    .fontSize(16)
-                    .fontColor(this.canSubmit() ? '#FFFFFF' : '#808080')
-                    .backgroundColor(this.canSubmit() ? '#7B68EE' : 'rgba(160, 160, 160, 0.5)')
-                    .width('90%')
-                    .height(50)
-                    .borderRadius(25)
-                    .enabled(this.canSubmit())
-                    .margin({ top: 20, bottom: 40 })
-                    .onClick(() => {
-                      this.completeRegistration();
-                    })
-
-                  Row() {
-                    Text('已有账号？')
-                      .fontSize(14)
-                      .fontColor(this.getThemeColors().subTextColor)
-
-                    Text('去登录')
-                      .fontSize(14)
-                      .fontColor('#7B68EE')
-                      .fontWeight(FontWeight.Medium)
-                      .onClick(() => {
-                        router.replaceUrl({ url: 'pages/LoginPage' });
-                      })
-                  }
-                  .margin({ bottom: 40 })
-                }
-                .width('100%')
-                .padding({ left: 20, right: 20 })
-              }
-              .layoutWeight(1)
-              .scrollBar(BarState.Off)
+          Column() {
+            this.headerSection();
+            Scroll() {
+              this.scrollContent();
             }
-            .width('100%')
-            .height('100%')
-            .justifyContent(FlexAlign.SpaceBetween)
+            .layoutWeight(1)
+            .scrollBar(BarState.Off);
           }
+          .width('100%')
+          .height('100%')
+          .justifyContent(FlexAlign.SpaceBetween);
         }
       }
     }
   }
-
+}
