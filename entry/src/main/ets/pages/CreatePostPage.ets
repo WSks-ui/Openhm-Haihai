@@ -6,6 +6,7 @@ import { common } from '@kit.AbilityKit';
 import { Post, mockPosts } from '../model/Post';
 import { PhotoPickerService } from '../utils/PhotoPickerService';
 import { DraftManager } from '../utils/DraftManager';
+import { COLOR_DARK_BG_PRIMARY, COLOR_DARK_BG_SECONDARY } from '../constants/ThemeTokens';
 
 interface PageParams {
   selectedImage?: string;
@@ -127,7 +128,7 @@ struct CreatePostPage {
       Row() {
         Text('取消')
           .fontSize(16)
-          .fontColor('#666')
+          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#666666')
           .onClick(() => {
             router.back();
           })
@@ -135,6 +136,7 @@ struct CreatePostPage {
         Text('发布帖子')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
+          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#333333')
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
 
@@ -142,8 +144,8 @@ struct CreatePostPage {
           Button('保存草稿')
             .fontSize(14)
             .height(32)
-            .backgroundColor('#F0F0F0')
-            .fontColor('#666')
+            .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F0F0F0')
+            .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#666666')
             .borderRadius(16)
             .onClick(() => {
               this.saveDraft();
@@ -152,8 +154,10 @@ struct CreatePostPage {
           Button('发布')
             .fontSize(14)
             .height(32)
-            .backgroundColor((this.content.length > 0 || this.images.length > 0) ? '#FFD700' : '#F0F0F0')
-            .fontColor((this.content.length > 0 || this.images.length > 0) ? Color.White : '#999')
+            .backgroundColor((this.content.length > 0 || this.images.length > 0) ? '#FFD700' :
+              (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F0F0F0'))
+            .fontColor((this.content.length > 0 || this.images.length > 0) ? Color.White :
+              (this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999'))
             .borderRadius(16)
             .enabled(this.content.length > 0 || this.images.length > 0)
             .onClick(() => {
@@ -163,7 +167,7 @@ struct CreatePostPage {
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 12, bottom: 12 })
-      .backgroundColor(Color.White)
+      .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? COLOR_DARK_BG_PRIMARY : Color.White)
       .shadow({ radius: 2, color: '#0D000000', offsetY: 1 })
 
       // Content Area
@@ -172,6 +176,8 @@ struct CreatePostPage {
           .width('100%')
           .height(150)
           .fontSize(16)
+          .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#333333')
+          .placeholderColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#666666' : '#999999')
           .backgroundColor(Color.Transparent)
           .padding(0)
           .margin({ top: 16 })
@@ -212,11 +218,11 @@ struct CreatePostPage {
               .margin({ bottom: 8 })
             Text('添加图片')
               .fontSize(14)
-              .fontColor('#999')
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888888' : '#999999')
           }
           .width('100%')
           .height(200)
-          .backgroundColor('#F5F5F5')
+          .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F5F5F5')
           .borderRadius(12)
           .justifyContent(FlexAlign.Center)
           .margin({ top: 16 })
@@ -237,9 +243,9 @@ struct CreatePostPage {
               .margin({ right: 6 })
             Text('添加话题')
               .fontSize(14)
-              .fontColor('#666')
+              .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#FFFFFF' : '#666666')
           }
-          .backgroundColor('#F5F5F5')
+          .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#2C2C2E' : '#F5F5F5')
           .padding({ left: 12, right: 12, top: 6, bottom: 6 })
           .borderRadius(16)
         }
@@ -248,11 +254,11 @@ struct CreatePostPage {
       }
       .padding(16)
       .layoutWeight(1)
-      .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : Color.White)
+      .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? COLOR_DARK_BG_SECONDARY : Color.White)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#000000' : Color.White)
+    .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#000000' : COLOR_DARK_BG_PRIMARY)
     // 沉浸式效果：扩展整个页面到顶部和底部安全区域
     .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.CUTOUT], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
