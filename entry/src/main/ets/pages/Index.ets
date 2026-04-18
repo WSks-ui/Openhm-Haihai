@@ -57,6 +57,7 @@ struct Index {
 
   // ---------------- 全局存储链接 (双向绑定) ----------------
   @StorageLink('isSidebarOpen') isSidebarOpen: boolean = false; // 侧边栏开关 — 通过AppStorage跨组件共享，避免层层传递
+  @State sidebarFromRight: boolean = true; // 侧边栏滑出方向：true=右侧滑入，false=左侧滑入
 
   // ---------------- 全局存储属性 (单向读取) ----------------
   @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm'; // 当前响应式断点 — 从BreakpointSystem写入
@@ -71,6 +72,7 @@ struct Index {
   private holdingHandManager: HoldingHandManager = HoldingHandManager.getInstance(); // 握持手势管理器 — 单例模式，节省资源
 
   @State private holdingHandStatus: HoldingHandStatus = HoldingHandStatus.UNKNOWN_STATUS; // 当前握持状态 — 用于UI调整
+  @StorageLink('holdingHandStatus') @Watch('onHoldingStatusChange') globalHoldingStatus: HoldingHandStatus = HoldingHandStatus.UNKNOWN_STATUS; // 全局握持状态（由 HoldingHandManager 同步）
   @StorageLink('showTopicList') showTopicList: boolean = false; // 控制发现页话题列表显示 — 全局状态，便于子组件响应
 
   // ---------------- 握持手势监听回调（存为成员变量以便正确移除） ----------------
@@ -215,24 +217,111 @@ struct Index {
   }
 
   /**
-   * 悬浮球点击事件处理
-   * 逻辑分支体现了响应式设计：平板横屏下发现页点击切换话题列表，其他场景展示握持状态
+   * 握持状态变化监听 — 同步全局状态到本地状态，并更新侧边栏方向
+   */
+  private onHoldingStatusChange(): void {
+    this.holdingHandStatus = this.globalHoldingStatus;
+    // 左手握持时侧边栏从右侧滑入，右手握持时从左侧滑入
+    this.sidebarFromRight = (this.holdingHandStatus === HoldingHandStatus.LEFT_HAND_HELD);
+  }
+
+  /**
+   * 悬浮球点击事件处理（扩展版）
+   * 逻辑分支体现了响应式设计：根据当前页面和握持状态执行不同操作
    * HarmonyOS的promptAction提供轻量级提示，不影响用户操作
    */
   private onFloatingBallClick(): void {
-    if (this.currentIndex === 1 && this.currentBreakpoint === 'md') {
-      animateTo({
-        duration: ANIM_NORMAL,
-        curve: CURVE_EASE
-      }, () => {
-        this.showTopicList = !this.showTopicList;
-      });
-    } else {
-      promptAction.showToast({
-        message: `当前握持状态：${this.holdingHandStatus}`,
-        duration: 2000,
-        bottom: 200
-      });
+    switch (this.currentIndex) {
+      case 0: // 首页 - 显示快捷操作
+        this.showQuickActions();
+        break;
+      case 1: // 发现页
+        if (this.currentBreakpoint === 'md') {
+          // 平板模式：切换话题列表
+          animateTo({
+            duration: ANIM_NORMAL,
+            curve: CURVE_EASE
+          }, () => {
+            this.showTopicList = !this.showTopicList;
+          });
+        } else {
+          // 手机模式：显示握持状态详情
+          this.showGripStatusDetail();
+        }
+        break;
+      case 2: // 消息页 - 显示快速回复选项
+        this.showQuickReply();
+        break;
+      case 3: // 我的页 - 切换侧边栏
+        this.toggleSidebarByGrip();
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * 显示快捷操作菜单 — 首页悬浮球点击
+   */
+  private showQuickActions(): void {
+    const statusText = this.getGripStatusText();
+    promptAction.showToast({
+      message: `快捷操作 • ${statusText}`,
+      duration: 2000,
+      bottom: 200
+    });
+  }
+
+  /**
+   * 显示握持状态详情 — 发现页手机模式
+   */
+  private showGripStatusDetail(): void {
+    const statusText = this.getGripStatusText();
+    promptAction.showToast({
+      message: `当前握持状态：${statusText}`,
+      duration: 2000,
+      bottom: 200
+    });
+  }
+
+  /**
+   * 显示快速回复选项 — 消息页
+   */
+  private showQuickReply(): void {
+    promptAction.showToast({
+      message: '快速回复功能开发中...',
+      duration: 2000,
+      bottom: 200
+    });
+  }
+
+  /**
+   * 根据握持状态切换侧边栏 — 我的页
+   */
+  private toggleSidebarByGrip(): void {
+    animateTo({
+      duration: ANIM_NORMAL,
+      curve: CURVE_EASE
+    }, () => {
+      this.isSidebarOpen = !this.isSidebarOpen;
+    });
+  }
+
+  /**
+   * 获取握持状态文本描述
+   */
+  private getGripStatusText(): string {
+    switch (this.holdingHandStatus) {
+      case HoldingHandStatus.LEFT_HAND_HELD:
+        return '左手握持';
+      case HoldingHandStatus.RIGHT_HAND_HELD:
+        return '右手握持';
+      case HoldingHandStatus.BOTH_HANDS_HELD:
+        return '双手握持';
+      case HoldingHandStatus.NOT_HELD:
+        return '未握持';
+      default:
+        return '未知状态';
     }
   }
 
@@ -489,6 +578,9 @@ struct Index {
       }
 
       // --- 第 5 层：侧边栏内容 (MineSidebar) ---
+      // 根据握持状态决定侧边栏位置和滑入方向
+      // 左手握持：侧边栏从右侧滑入，便于左手拇指操作
+      // 右手握持：侧边栏从左侧滑入，便于右手拇指操作
       if (this.isSidebarOpen) {
         Column() {
           MineSidebar()
@@ -497,8 +589,15 @@ struct Index {
         .width(this.currentBreakpoint === 'sm' || this.deviceType === 'wearable' ? '80%' : '300vp')
         .height('100%')
         .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : Color.White)
-        // 从左侧滑入的过渡效果 — TransitionEffect.move由系统实现高性能侧滑动画
-        .transition(TransitionEffect.move(TransitionEdge.START))
+        // 根据握持状态决定位置：左手握持靠右，右手握持靠左
+        .position({
+          x: this.sidebarFromRight ? 'auto' : 0,
+          y: 0
+        })
+        .markAnchor(this.sidebarFromRight ? { x: '100%', y: 0 } : { x: 0, y: 0 })
+        // 动态滑入方向：左手握持从右侧滑入，右手握持从左侧滑入
+        .transition(TransitionEffect.move(this.sidebarFromRight ? TransitionEdge.END : TransitionEdge.START)
+          .animation({ duration: ANIM_NORMAL, curve: CURVE_EASE }))
         .zIndex(300)
       }
 
