@@ -1,5 +1,6 @@
 # Haihai
 开发中的项目
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Platform: HarmonyOS](https://img.shields.io/badge/Platform-HarmonyOS-282c37.svg)](https://www.harmonyos.com/)
 [![Language: ArkTS](https://img.shields.io/badge/Language-ArkTS-4B9EE5.svg)](https://developer.huawei.com/consumer/cn/arkts/)
@@ -21,7 +22,13 @@
 ### 📱 响应式适配
 
 - BreakpointSystem 断点系统 - sm/md/lg/xl 四档适配
-- 握持手势检测（HoldingHandManager）- 左手/右手/双手握持状态
+- **握持手势检测系统 (HoldingHandManager)** - 完整的设备握持状态感知
+  - 左手/右手/双手/未握持 四种状态识别
+  - 全局状态同步 (AppStorage)，支持跨组件响应
+  - 悬浮球位置联动 - 自动跟随握持状态左右移动
+  - 悬浮球分页面功能 - 首页快捷操作、发现页话题切换、消息页快速回复、我的页侧边栏
+  - 侧边栏方向联动 - 左手握持从右侧滑入，右手握持从左侧滑入
+  - 发布菜单镜像布局 - 右手握持时菜单图标自动靠右
 - 多设备支持 - 手机、平板、二合一设备、可穿戴设备
 - 沉浸式安全区域处理（expandSafeArea）
 - 自适应布局 - 底部导航（手机）与侧边导航（平板）
@@ -241,6 +248,42 @@ entry/src/main/ets/
 | 设置 (Settings) | 隐私设置、安全设置、通知设置、资料编辑 |
 | 登录/注册 | 手机号登录、滑块验证码、用户协议、开发者模式 |
 
+## 🖐️ 握持状态检测系统
+
+基于 HarmonyOS MultimodalAwarenessKit 实现的智能握持感知系统，提升单手操作体验。
+
+### 状态定义
+
+| 状态 | 说明 | UI 行为 |
+|------|------|---------|
+| `LEFT_HAND_HELD` | 左手握持 | 悬浮球靠左，侧边栏从右侧滑入 |
+| `RIGHT_HAND_HELD` | 右手握持 | 悬浮球靠右，侧边栏从左侧滑入，菜单镜像 |
+| `BOTH_HANDS_HELD` | 双手握持 | 使用默认布局 |
+| `NOT_HELD` | 未握持 | 使用默认布局 |
+
+### 功能联动
+
+| 功能 | 握持状态联动效果 |
+|------|------------------|
+| **悬浮球位置** | 自动跟随握持状态左右移动，单手可达 |
+| **悬浮球点击** | 分页面功能：首页快捷操作、发现页话题切换、消息页快速回复、我的页侧边栏 |
+| **侧边栏方向** | 左手握持从右侧滑入，右手握持从左侧滑入 |
+| **发布菜单** | 右手握持时菜单项镜像布局，图标靠右 |
+| **快捷操作** | 握持状态下提供分页面快捷功能入口 |
+
+### 技术实现
+
+```typescript
+// 全局状态同步 - HoldingHandManager.ets
+private notifyListeners(status: HoldingHandStatus): void {
+  AppStorage.setOrCreate('holdingHandStatus', status); // 全局同步
+  this.listeners.forEach(callback => callback(status));
+}
+
+// 组件响应式获取
+@StorageProp('holdingHandStatus') gripStatus: HoldingHandStatus = HoldingHandStatus.UNKNOWN_STATUS;
+```
+
 ## 🔧 技术栈
 
 | 分类 | 技术 |
@@ -251,7 +294,8 @@ entry/src/main/ets/
 | AI 服务 | DeepSeek API / Tavily Search API / AISummaryService |
 | 存储 | PreferencesStorage / 本地草稿箱 / 聊天记录存储 |
 | 响应式 | BreakpointSystem 多设备适配 (sm/md/lg/xl) |
-| 手势 | HoldingHandManager 握持检测 / PanGesture 拖拽手势 |
+| 传感器 | HoldingHandManager 握持检测 (@kit.MultimodalAwarenessKit motion API) |
+| 手势 | PanGesture 拖拽手势 / 握持状态联动 |
 | 动画 | ArkUI 动画系统 + 曲线动画 + 脉冲动画 + 弹性回弹 |
 | 安全 | 滑块验证码、短信验证码、密码验证 |
 | 图片 | PhotoPickerService 图片选择器 |
@@ -264,7 +308,7 @@ entry/src/main/ets/
 | `ohos.permission.INTERNET` | 网络访问 |
 | `ohos.permission.MICROPHONE` | 麦克风（语音输入） |
 | `ohos.permission.CAMERA` | 相机（拍照发布） |
-| `ohos.permission.DETECT_GESTURE` | 手势检测（握持状态） |
+| `ohos.permission.MOTION` | 运动传感器（握持状态检测） |
 
 ## 🛠️ 开发者模式
 
