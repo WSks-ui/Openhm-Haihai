@@ -2,6 +2,7 @@ import { ConfigurationConstant } from '@kit.AbilityKit';
 import { common } from '@kit.AbilityKit';
 import router from '@ohos.router';
 import { PhotoPickerService } from '../../utils/PhotoPickerService';
+import { HoldingHandStatus } from '../../utils/HoldingHandManager';
 
 // 中间加号的发布菜单
 @CustomDialog
@@ -10,7 +11,13 @@ export struct PublishMenu {
   action: (type: string) => void = () => {};
   @StorageProp('currentColorMode') currentMode: number = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
   @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
+  @StorageProp('holdingHandStatus') gripStatus: HoldingHandStatus = HoldingHandStatus.UNKNOWN_STATUS;
   private photoPickerService: PhotoPickerService = PhotoPickerService.getInstance();
+
+  // 根据握持状态判断是否右手握持（菜单靠左对齐）
+  private isRightHandHeld(): boolean {
+    return this.gripStatus === HoldingHandStatus.RIGHT_HAND_HELD;
+  }
 
   build() {
     Column() {
@@ -82,7 +89,7 @@ export struct PublishMenu {
   @Builder
   MenuItem(title: string, icon: string, color: string, subtitle: string) {
     Row() {
-      // 图标容器
+      // 图标容器 - 根据握持状态调整位置
       Column() {
         SymbolGlyph($r(icon))
           .fontSize(32)
@@ -103,7 +110,7 @@ export struct PublishMenu {
           .fontWeight(FontWeight.Bold)
           .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#E0E0E0' : '#182431')
           .margin({ bottom: 4 })
-        
+
         Text(subtitle)
           .fontSize(14)
           .fontColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#888' : '#999')
@@ -123,5 +130,7 @@ export struct PublishMenu {
     .padding(16)
     .backgroundColor(this.currentMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK ? '#1C1C1E' : '#F9F9F9')
     .borderRadius(24)
+    // 右手握持时反转布局，图标靠右
+    .reverse(this.isRightHandHeld())
   }
 }
