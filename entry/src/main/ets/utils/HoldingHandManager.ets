@@ -85,6 +85,10 @@ export class HoldingHandManager {
   }
 
   private notifyListeners(status: HoldingHandStatus): void {
+    // 同步到全局存储，使其他组件可通过 @StorageProp 响应式获取握持状态
+    AppStorage.setOrCreate('holdingHandStatus', status);
+
+    // 通知所有监听器
     this.listeners.forEach(callback => {
       try {
         callback(status);
